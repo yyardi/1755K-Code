@@ -75,23 +75,21 @@ void autonomous(void) {
   MyDrive.setTimeout(300, msec);
   MyDrive.setDriveVelocity(40, pct); //we only got 15 sec so need as fast as possible
   MyDrive.setTurnVelocity(30, pct); //modifiable depending on trial and error performance
-  MyDrive.driveFor(reverse, 22.2, inches); //check direction
-  MyDrive.turnFor(right, 30/turnconst, degrees); //the clamp should face the Mogo
-  
+  Intake.setVelocity(100, pct);
+  MyDrive.driveFor(reverse, 30, inches);
+  MyDrive.driveFor(reverse, 30, inches);
+  MyDrive.turnFor(left, 30/turnconst, degrees); //the clamp should face the Mogo
+  wait(10, msec);
   //BLOCK 2
   MyDrive.driveFor(reverse, 7, inches);
-  Clamp.set(true);
-  Intake.spin(forward, 100, pct); //Check Intake direction here and make sure its dropping the ring into the Mogo
-  wait(200, msec);
-  Intake.stop();
-  
+  // Clamp.set(true);
+  Intake.spinFor(fwd, 2, vex::timeUnits::sec);
   //BLOCK 3
-  MyDrive.turnFor(right, 70/turnconst, degrees); //The intake should face the ring stack
+  MyDrive.driveFor(reverse, 10, inches);
+  MyDrive.turnFor(right, 60/turnconst, degrees);
+  MyDrive.turnFor(right, 120/turnconst, degrees); //The intake should face the ring stack
   MyDrive.driveFor(forward, 24, inches);
-  Intake.spin(forward, 100, pct); //Check Intake direction here and make sure its dropping the LOWER ring into the Mogo
-  wait(200, msec);
-  Intake.stop();
-
+  Intake.spinFor(fwd, 2, vex::timeUnits::sec);
   //DONE
 
 }
