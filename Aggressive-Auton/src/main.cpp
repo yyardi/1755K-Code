@@ -75,33 +75,25 @@ void autonomous(void) {
   MyDrive.setTimeout(300, msec);
   MyDrive.setDriveVelocity(40, pct); //we only got 15 sec so need as fast as possible
   MyDrive.setTurnVelocity(30, pct); //modifiable depending on trial and error performance
-  
+  Intake.setVelocity(100, pct);
   //BLOCK 1
   MyDrive.driveFor(reverse, 15, inches); //Should end up in the middle between the ring stack and the mogo
   MyDrive.turnFor(right, 42/turnconst, degrees); //the Clamp should be facing the Mogo
   MyDrive.driveFor(reverse, 5, inches);
   Clamp.set(true); //Shouldve picked up Mogo
-  Intake.spin(forward, 100, pct); //Preload onto the Mogo
-  wait(200, msec);
-  Intake.stop();
+  Intake.spinFor(fwd, 2, vex::timeUnits::sec); //preload
   //BLOCK 2
   MyDrive.driveFor(forward, 13, inches);
-  Intake.spin(forward, 100, pct); //make sure its dropping the TOP ring into the Mogo
-  wait(200, msec);
-  Intake.stop(); //Might need to use IO and II here mess around with it until it works
+  Intake.spinFor(fwd, 2, vex::timeUnits::sec); //make sure it drops the TOP ring into the Mogo, maybe mess with Outtake and Intake here till it works
   //BLOCK 3
   MyDrive.turnFor(left, 90/turnconst, degrees); // this just how it is max turn is 120 just being safe
   MyDrive.turnFor(left, 90/turnconst, degrees); //We need the Intake to be facing the next ring stack (blue line)
   MyDrive.driveFor(forward, 34, inches);
-  Intake.spin(forward, 100, pct);
-  wait(200, msec);
-  Intake.stop(); //Need the Bottom Ring here and need to drop into the Mogo we are still carrying 
+  Intake.spinFor(fwd, 2, vex::timeUnits::sec); //Need the Bottom Ring here and need to drop into the Mogo we are still carrying 
   //BLOCK 4
   MyDrive.turnFor(right, 81/turnconst, degrees); //Need intake to be facing the negative corner for blue or positive for red 
   MyDrive.driveFor(forward, 35, inches); //Should be at the corner
-  Intake.spin(forward, 100, pct);
-  wait(200, msec);
-  Intake.stop(); //Need the bottom of the four rings here, or if you can maybe try getting the second blue one too, but not needed 
+  Intake.spinFor(fwd, 2, vex::timeUnits::sec); //Need the bottom of the four rings here, or if you can maybe try getting the second blue one too, but not needed 
   //BLOCK 5
   MyDrive.turnFor(right, 90/turnconst, degrees); //Should face one of the ladder's bases
   MyDrive.turnFor(right, 57/turnconst, degrees);
@@ -155,9 +147,9 @@ void usercontrol(void) {
     }
 
     if (Controller1.ButtonR2.pressing()){ //Make sure intake and outtake are binded correctly
-      Intake.spin(reverse, 95,pct); //R2 should bring in the rings
+      Intake.spin(reverse, 95,pct); //R2 should spit out the rings
     } else if (Controller1.ButtonR1.pressing()){
-      Intake.spin(fwd, 95, pct); //R1 should spit out the rings
+      Intake.spin(fwd, 95, pct); //R1 should bring in the rings
     } else{
       Intake.stop();
     }

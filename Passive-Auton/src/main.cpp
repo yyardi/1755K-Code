@@ -134,9 +134,9 @@ void usercontrol(void) {
     }
 
     if (Controller1.ButtonR2.pressing()){ //Make sure intake and outtake are binded correctly
-      Intake.spin(reverse, 95,pct); //R2 should bring in the rings
+      Intake.spin(reverse, 95,pct); //R2 should spit out the rings
     } else if (Controller1.ButtonR1.pressing()){
-      Intake.spin(fwd, 95, pct); //R1 should spit out the rings
+      Intake.spin(fwd, 95, pct); //R1 should bring in the rings
     } else{
       Intake.stop();
     }
