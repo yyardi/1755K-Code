@@ -1,6 +1,7 @@
 #include "main.h"
 #include "lemlib/api.hpp" // IWYU pragma: keep
 #include "pros/abstract_motor.hpp"
+#include "pros/adi.h"
 #include "pros/motor_group.hpp"
 /**
  * A callback function for LLEMU's center button.
@@ -11,8 +12,12 @@
 
 //SETUP
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
-pros::MotorGroup left_motors({1,2,3}, pros::MotorGearset::blue); //need ports
-pros::MotorGroup right_motors({4,5,6}, pros::MotorGearset::blue); //find which ones are reversed
+pros::MotorGroup left_motors({10,9,8}, pros::MotorGearset::blue); //need ports
+pros::MotorGroup right_motors({20,19,18}, pros::MotorGearset::blue); //find which ones are reversed
+pros::Motor intake(11, pros::MotorGearset::blue); //check everything here
+pros::ADIDigitalOut clamp ('C', LOW); //port
+bool isClamp = false;
+bool clampLatch = false;
 
 lemlib::Drivetrain drivetrain(&left_motors, // left motor group
                               &right_motors, // right motor group
@@ -22,7 +27,7 @@ lemlib::Drivetrain drivetrain(&left_motors, // left motor group
                               2 // horizontal drift is 2 (for now)
 );
 
-pros::Imu imu(10); // need port
+pros::Imu imu(10); // need port (technically we never use this)
 
 pros::adi::Encoder vertical_encoder('A', 'B');
 lemlib::TrackingWheel vertical_tracking_wheel(&vertical_encoder, lemlib::Omniwheel::NEW_275, -2.5);
@@ -154,7 +159,35 @@ void opcontrol() {
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
 
         // move the robot
-        chassis.arcade(leftY, rightX);
+        chassis.arcade(-1 * rightX, -1 * leftY);
+
+        if (controller.get_digital(DIGITAL_R1)) {
+            intake.move_velocity(100); // This is 100 because it's a 100rpm motor
+        }
+        else if (controller.get_digital(DIGITAL_R2)) {
+            intake.move_velocity(-100);
+        }
+        else {
+            intake.move_velocity(0);
+        }
+
+        if (isClamp){
+            clamp.set_value(HIGH);
+        } 
+        else {
+            clamp.set_value(LOW);
+        }
+        if (controller.get_digital(DIGITAL_L2)) {
+            if (!clampLatch) {
+                isClamp = !isClamp;
+                clampLatch = true;
+            } 
+        } 
+        else {
+            clampLatch = false;
+        }
+
+
 
         // delay to save resources
         pros::delay(25);
