@@ -1,5 +1,6 @@
 #include "main.h"
 #include "okapi/api.hpp"
+#include "api.h"
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -15,8 +16,8 @@ ez::Drive chassis(
     17,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM
-
-
+// intake constructor
+inline pros::Motor intake(10);
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -147,13 +148,15 @@ void opcontrol() {
     //chassis.opcontrol_tank();  // Tank control
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
     
-    // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
-    //chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
-    // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
-
-    // . . .
-    // Put more user control code here!
-    // . . .
+    if (master.get_digital(DIGITAL_L1)) {
+      intake.move(127);
+    } 
+    else if (master.get_digital(DIGITAL_L2)) {
+      intake.move(-127);
+    } 
+    else {
+      intake.move(0);
+    }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
