@@ -1,0 +1,45 @@
+-23.622, -23.622, 100
+-23.652, -21.622, 100
+-23.681, -19.622, 100
+-23.711, -17.623, 100
+-23.74, -15.623, 100
+-23.77, -13.623, 100
+-23.8, -11.623, 100
+-23.829, -9.624, 100
+-23.859, -7.624, 100
+-23.889, -5.624, 100
+-23.918, -3.624, 100
+-23.948, -1.624, 100
+-23.977, 0.375, 100
+-24.007, 2.375, 100
+-24.037, 4.375, 100
+-24.066, 6.375, 100
+-24.096, 8.374, 100
+-24.125, 10.374, 97.693
+-24.155, 12.374, 95.058
+-24.185, 14.374, 92.347
+-24.214, 16.374, 89.554
+-24.244, 18.373, 86.672
+-24.274, 20.373, 83.69
+-24.303, 22.373, 80.598
+-24.333, 24.373, 77.382
+-24.362, 26.373, 74.027
+-24.392, 28.372, 70.512
+-24.422, 30.372, 66.813
+-24.451, 32.372, 62.897
+-24.481, 34.372, 58.72
+-24.51, 36.371, 54.222
+-24.54, 38.371, 49.315
+-24.57, 40.371, 43.863
+-24.599, 42.371, 37.63
+-24.629, 44.371, 30.133
+-24.658, 46.37, 20
+-24.677, 47.633, 0
+-24.677, 47.633, 0
+-24.973, 67.63, 0
+endData
+127
+100
+200
+-23.622, -23.622, -24.15, 12.005, -24.15, 12.005, -24.677, 47.633
+#PATH.JERRYIO-DATA {"appVersion":"0.8.3","format":"LemLib v0.5","gc":{"robotWidth":12,"robotHeight":12,"robotIsHolonomic":false,"showRobot":false,"uol":2.54,"pointDensity":2,"controlMagnetDistance":1.968503937007874,"fieldImage":{"displayName":"V5RC 2025 - High Stakes","signature":"V5RC 2025 - High Stakes","origin":{"__type":"built-in"}},"coordinateSystem":"VEX Gaming Positioning System"},"paths":[{"segments":[{"controls":[{"uid":"W9MZZjtE6u","x":-23.622,"y":-23.622,"lock":false,"visible":true,"heading":0,"__type":"end-point"},{"uid":"98PWSyrCCJ","x":-24.677174241481666,"y":47.63268516379019,"lock":false,"visible":true,"heading":0,"__type":"end-point"}],"speedProfiles":[],"lookaheadKeyframes":[],"uid":"qqWdM12eDP"}],"pc":{"speedLimit":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":127,"label":"127"},"step":1,"from":20,"to":100},"bentRateApplicableRange":{"minLimit":{"value":0,"label":"0"},"maxLimit":{"value":1,"label":"1"},"step":0.001,"from":0,"to":0.1},"maxDecelerationRate":127},"name":"Path","uid":"mklvAOpMDL","lock":false,"visible":true}]}
