@@ -1,4 +1,6 @@
 #include "main.h"
+#include "api.h"
+
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -57,6 +59,12 @@ void turn_example() {
 
 }
 
+// intake test
+void intake_test() {
+  intake.move(127);
+  chassis.pid_wait();
+  intake.move(0);
+}
 
 ///
 // Combining Turn + Drive

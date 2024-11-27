@@ -16,8 +16,6 @@ ez::Drive chassis(
     17,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM
-// intake constructor
-inline pros::Motor intake(10);
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
