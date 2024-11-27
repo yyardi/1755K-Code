@@ -1,4 +1,5 @@
 #include "main.h"
+#include "okapi/api.hpp"
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -13,7 +14,9 @@ ez::Drive chassis(
 
     17,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    300);   // Wheel RPM
+    450);   // Wheel RPM
+
+
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -44,6 +47,7 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       Auton("Example Drive\n\nDrive forward and come back.", drive_example),
+      Auton("Aggressive Auton\n\nBlue + Side", aggressive_auton),
       Auton("Example Turn\n\nTurn 3 times.", turn_example),
       Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
       Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),

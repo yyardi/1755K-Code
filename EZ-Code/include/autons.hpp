@@ -6,6 +6,7 @@ extern Drive chassis;
 
 void drive_example();
 void turn_example();
+void aggressive_auton();
 void drive_and_turn();
 void wait_until_change_speed();
 void swing_example();
