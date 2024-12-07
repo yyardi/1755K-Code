@@ -9,14 +9,21 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-11, -12, -7},     // Left Chassis Ports (negative port will reverse it!)
-    {1, 2, 3},  // Right Chassis Ports (negative port will reverse it!)
+    {-18, -19, -20},     // Left Chassis Ports (negative port will reverse it!)
+    {13, 12, 11},  // Right Chassis Ports (negative port will reverse it!)
 
-    17,      // IMU Port
+    15,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM
 
 
+ez::Piston doinker('B');
+ez::Piston hang('C');
+ez::Piston Clamp('A');
+inline pros::Motor intake(16, pros::v5::MotorGears::blue);
+
+bool isClamp = false;
+bool clampLatch = false;
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -123,8 +130,14 @@ void opcontrol() {
   pros::motor_brake_mode_e_t driver_preference_brake = MOTOR_BRAKE_COAST;
 
   chassis.drive_brake_set(driver_preference_brake);
+  
+  hang.set(false);
+  doinker.set(false);
+  Clamp.set(false);
 
   while (true) {
+
+
     // PID Tuner
     // After you find values that you're happy with, you'll have to set them in auton.cpp
     if (!pros::competition::is_connected()) {
@@ -145,15 +158,27 @@ void opcontrol() {
     }
 
     //chassis.opcontrol_tank();  // Tank control
-    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
-    
     // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
     //chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
     // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
+    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
+    
+    if (master.get_digital(DIGITAL_R1)) {
+      intake.move(127);
+    } 
+    else if (master.get_digital(DIGITAL_R2)) {
+      intake.move(-127);
+    } 
+    else {
+      intake.move(0);
+    }
 
-    // . . .
-    // Put more user control code here!
-    // . . .
+    Clamp.button_toggle(master.get_digital(DIGITAL_L2));    hang.button_toggle(master.get_digital(DIGITAL_Y));
+    doinker.button_toggle(master.get_digital(DIGITAL_L1));
+
+
+
+
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

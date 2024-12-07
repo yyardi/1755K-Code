@@ -215,41 +215,40 @@ void interfered_example() {
 // . . .
 
 void aggressive_auton() {
-    //Intake.setVelocity(100, pct);
+    
     //BLOCK 1
-    chassis.pid_drive_set(15_in, DRIVE_SPEED); //Should end up in the middle between the ring stack and the mogo
-    chassis.pid_wait();
-    chassis.pid_turn_set(42_deg, DRIVE_SPEED); //the Clamp should be facing the Mogo
-    chassis.pid_wait();
-    chassis.pid_drive_set(5_in, TURN_SPEED);
+    chassis.pid_drive_set(-33_in, DRIVE_SPEED, true); //Should end up in the middle between the ring stack and the mogo
     chassis.pid_wait();
     //Clamp.set(true); //Shouldve picked up Mogo
-    //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //preload
-    //BLOCK 2
-    chassis.pid_drive_set(13_in, TURN_SPEED);
+    chassis.pid_turn_set(-114_deg, DRIVE_SPEED); //the Clamp should be facing the Mogo
     chassis.pid_wait();
-    //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //make sure it drops the TOP ring into the Mogo, maybe mess with Outtake and Intake here till it works
-    //BLOCK 3
-    chassis.pid_turn_set(-90_deg, TURN_SPEED); // this just how it is max turn is 120 just being safe
+    chassis.pid_drive_set(15_in, DRIVE_SPEED);
     chassis.pid_wait();
-    chassis.pid_turn_set(-90_deg, TURN_SPEED); //We need the Intake to be facing the next ring stack (blue line)
-    chassis.pid_wait();
-    chassis.pid_drive_set(34_in, DRIVE_SPEED);
-    chassis.pid_wait();
-    //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //Need the Bottom Ring here and need to drop into the Mogo we are still carrying 
-    //BLOCK 4
-    chassis.pid_turn_set(81_deg, TURN_SPEED); //Need intake to be facing the negative corner for blue or positive for red 
-    chassis.pid_wait();
-    chassis.pid_drive_set(35_in, DRIVE_SPEED); //Should be at the corner
-    chassis.pid_wait();
-    //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //Need the bottom of the four rings here, or if you can maybe try getting the second blue one too, but not needed 
-    //BLOCK 5
-    chassis.pid_turn_set(90_deg, TURN_SPEED); //Should face one of the ladder's bases
-    chassis.pid_wait();
-    chassis.pid_turn_set(57_deg, TURN_SPEED);
-    chassis.pid_wait();
-    chassis.pid_drive_set(30_in, DRIVE_SPEED); //Go to ladder after collecting the four rings (or 5 if ur built diff)
-    chassis.pid_wait();
-    chassis.pid_drive_set(30_in, DRIVE_SPEED); //Split into 2 because the limit is 40 in at a time in this command. 
-    chassis.pid_wait();
+    //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //preload and ring 
+    pros::delay(2000); // instead of pid_wait
+    
+    //BLOCK2
+    // chassis.pid_turn_set(90_deg, TURN_SPEED); // this just how it is max turn is 120 just being safe
+    // chassis.pid_wait();
+    // //DOINKER NEEDED
+    // chassis.pid_turn_set(-90_deg, TURN_SPEED); //We need the Intake to be facing the next ring stack (blue line)
+    // chassis.pid_wait();
+    // chassis.pid_drive_set(34_in, DRIVE_SPEED);
+    // chassis.pid_wait();
+    // //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //Need the Bottom Ring here and need to drop into the Mogo we are still carrying 
+    //BLOCK3
+    // chassis.pid_turn_set(81_deg, TURN_SPEED); //Need intake to be facing the negative corner for blue or positive for red 
+    // chassis.pid_wait();
+    // chassis.pid_drive_set(35_in, DRIVE_SPEED); //Should be at the corner
+    // chassis.pid_wait();
+    // //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //Need the bottom of the four rings here, or if you can maybe try getting the second blue one too, but not needed 
+    //BLOCK4
+    // chassis.pid_turn_set(90_deg, TURN_SPEED); //Should face one of the ladder's bases
+    // chassis.pid_wait();
+    // chassis.pid_turn_set(57_deg, TURN_SPEED);
+    // chassis.pid_wait();
+    // chassis.pid_drive_set(30_in, DRIVE_SPEED); //Go to ladder after collecting the four rings (or 5 if ur built diff)
+    // chassis.pid_wait();
+    // chassis.pid_drive_set(30_in, DRIVE_SPEED); //Split into 2 because the limit is 40 in at a time in this command. 
+    // chassis.pid_wait();
 }
