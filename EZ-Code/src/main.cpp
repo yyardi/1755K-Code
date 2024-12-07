@@ -18,6 +18,13 @@ ez::Drive chassis(
     450);   // Wheel RPM
 
 
+ez::Piston doinker('B');
+ez::Piston hang('C');
+ez::Piston Clamp('A');
+inline pros::Motor intake(16, pros::v5::MotorGears::blue);
+
+bool isClamp = false;
+bool clampLatch = false;
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -152,15 +159,27 @@ void opcontrol() {
     }
 
     //chassis.opcontrol_tank();  // Tank control
-    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
-    
     // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
     //chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
     // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
+    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
+    
+    if (master.get_digital(DIGITAL_R1)) {
+      intake.move(127);
+    } 
+    else if (master.get_digital(DIGITAL_R2)) {
+      intake.move(-127);
+    } 
+    else {
+      intake.move(0);
+    }
 
-    // . . .
-    // Put more user control code here!
-    // . . .
+    Clamp.button_toggle(master.get_digital(DIGITAL_L2));    hang.button_toggle(master.get_digital(DIGITAL_Y));
+    doinker.button_toggle(master.get_digital(DIGITAL_L1));
+
+
+
+
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
