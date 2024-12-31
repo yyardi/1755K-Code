@@ -11,17 +11,11 @@
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
     {-18, -19, -20},     // Left Chassis Ports (negative port will reverse it!)
-    {13, 12, 11},  // Right Chassis Ports (negative port will reverse it!)
+    {8, 9, 10},  // Right Chassis Ports (negative port will reverse it!)
 
-    15,      // IMU Port
+    17,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM
-
-
-ez::Piston doinker('B');
-ez::Piston hang('C');
-ez::Piston Clamp('A');
-inline pros::Motor intake(16, pros::v5::MotorGears::blue);
 
 bool isClamp = false;
 bool clampLatch = false;
@@ -54,8 +48,9 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      Auton("Aggressive Auton\n\nBlue - Side", blue_negative_auton),
+      Auton("Aggressive Auton\n\nRed - Side", red_negative_auton),
       Auton("Example Drive\n\nDrive forward and come back.", drive_example),
-      Auton("Aggressive Auton\n\nBlue + Side", aggressive_auton),
       Auton("Example Turn\n\nTurn 3 times.", turn_example),
       Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
       Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
@@ -132,9 +127,8 @@ void opcontrol() {
 
   chassis.drive_brake_set(driver_preference_brake);
   
-  hang.set(false);
   doinker.set(false);
-  Clamp.set(false);
+  mogoclamp.set(false);
 
   while (true) {
 
@@ -165,16 +159,19 @@ void opcontrol() {
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
     
     if (master.get_digital(DIGITAL_R1)) {
-      intake.move(127);
+      intakeLow.move(127);
+      intakeHigh.move(100);
     } 
     else if (master.get_digital(DIGITAL_R2)) {
-      intake.move(-127);
+      intakeLow.move(-127);
+      intakeHigh.move(-100);
     } 
     else {
-      intake.move(0);
+      intakeLow.move(0);
+      intakeHigh.move(0);
     }
 
-    Clamp.button_toggle(master.get_digital(DIGITAL_L2));    hang.button_toggle(master.get_digital(DIGITAL_Y));
+    mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
     doinker.button_toggle(master.get_digital(DIGITAL_L1));
 
 

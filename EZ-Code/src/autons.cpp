@@ -59,13 +59,6 @@ void turn_example() {
 
 }
 
-// intake test
-void intake_test() {
-  intake.move(127);
-  chassis.pid_wait();
-  intake.move(0);
-}
-
 ///
 // Combining Turn + Drive
 ///
@@ -222,41 +215,176 @@ void interfered_example() {
 // Make your own autonomous functions here!
 // . . .
 
-void aggressive_auton() {
+void blue_negative_auton() {
+    doinker.set(false);
+    mogoclamp.set(false);
     
-    //BLOCK 1
-    chassis.pid_drive_set(-33_in, DRIVE_SPEED, true); //Should end up in the middle between the ring stack and the mogo
+    //BLOCK 1 - ally stake
+    chassis.pid_drive_set(5_in, DRIVE_SPEED, true);
+    chassis.pid_wait_quick();
+    chassis.pid_turn_set(90_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
     chassis.pid_wait();
-    //Clamp.set(true); //Shouldve picked up Mogo
-    chassis.pid_turn_set(-114_deg, DRIVE_SPEED); //the Clamp should be facing the Mogo
+    chassis.pid_turn_relative_set(-90_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-5_in, DRIVE_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(15_in, DRIVE_SPEED);
-    chassis.pid_wait();
-    //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //preload and ring 
-    pros::delay(2000); // instead of pid_wait
+    intakeHigh.move(127); //dont need low intake for ally stake
+    pros::delay(300);
+    intakeHigh.move(0);
     
-    //BLOCK2
-    // chassis.pid_turn_set(90_deg, TURN_SPEED); // this just how it is max turn is 120 just being safe
-    // chassis.pid_wait();
-    // //DOINKER NEEDED
-    // chassis.pid_turn_set(-90_deg, TURN_SPEED); //We need the Intake to be facing the next ring stack (blue line)
-    // chassis.pid_wait();
-    // chassis.pid_drive_set(34_in, DRIVE_SPEED);
-    // chassis.pid_wait();
-    // //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //Need the Bottom Ring here and need to drop into the Mogo we are still carrying 
-    //BLOCK3
-    // chassis.pid_turn_set(81_deg, TURN_SPEED); //Need intake to be facing the negative corner for blue or positive for red 
-    // chassis.pid_wait();
-    // chassis.pid_drive_set(35_in, DRIVE_SPEED); //Should be at the corner
-    // chassis.pid_wait();
-    // //Intake.spinFor(fwd, 2, vex::timeUnits::sec); //Need the bottom of the four rings here, or if you can maybe try getting the second blue one too, but not needed 
-    //BLOCK4
-    // chassis.pid_turn_set(90_deg, TURN_SPEED); //Should face one of the ladder's bases
-    // chassis.pid_wait();
-    // chassis.pid_turn_set(57_deg, TURN_SPEED);
-    // chassis.pid_wait();
-    // chassis.pid_drive_set(30_in, DRIVE_SPEED); //Go to ladder after collecting the four rings (or 5 if ur built diff)
-    // chassis.pid_wait();
-    // chassis.pid_drive_set(30_in, DRIVE_SPEED); //Split into 2 because the limit is 40 in at a time in this command. 
-    // chassis.pid_wait();
+    //BLOCK 2 - get mogo
+    chassis.pid_drive_set(5_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_turn_set(0_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_turn_relative_set(-145_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-30_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-7_in, DRIVE_SPEED*0.7);
+    chassis.pid_wait_quick();
+    mogoclamp.set(true);
+    pros::delay(300);
+    chassis.pid_drive_set(-7_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    
+    //BLOCK 3 - get 2 rings 
+    chassis.pid_turn_relative_set(-123_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    intakeLow.move(127);
+    intakeHigh.move(100);
+    chassis.pid_drive_set(24_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    pros::delay(300);
+    chassis.pid_turn_relative_set(-85_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(14_in, DRIVE_SPEED*0.7);
+    chassis.pid_wait_quick();
+    pros::delay(1000);
+    intakeLow.move(0);
+    intakeHigh.move(0);
+
+    //BLOCK 4 - doinker on the negative corner 
+    chassis.pid_drive_set(-14_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_turn_relative_set(165_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(60_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    doinker.set(true);
+    chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    doinker.set(false);
+    
+    //BLOCK 5 - intake last ring on negative blue corner 
+    chassis.pid_turn_relative_set(-90_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    intakeLow.move(127);
+    intakeHigh.move(100);
+    chassis.pid_drive_set(12_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    pros::delay(300);
+    chassis.pid_turn_relative_set(-180_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+
+    //BLOCK 6 - Rush to Ladder
+    chassis.pid_drive_set(60_in, DRIVE_SPEED);
+    chassis.pid_wait_until(20_in);
+    mogoclamp.set(false);
+    chassis.pid_wait();
+
+
+
+}
+
+
+void red_negative_auton() {
+    //degrees are flipped i think
+    doinker.set(false);
+    mogoclamp.set(false);
+    
+    //BLOCK 1 - ally stake
+    chassis.pid_drive_set(5_in, DRIVE_SPEED, true);
+    chassis.pid_wait_quick();
+    chassis.pid_turn_set(-90_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-17.5_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-5_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    intakeHigh.move(127); //dont need low intake for ally stake
+    pros::delay(300);
+    intakeHigh.move(0);
+    
+    //BLOCK 2 - get mogo
+    chassis.pid_drive_set(5_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_turn_set(0_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_turn_relative_set(145_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-30_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-7_in, DRIVE_SPEED*0.7);
+    chassis.pid_wait_quick();
+    mogoclamp.set(true);
+    pros::delay(300);
+    chassis.pid_drive_set(-7_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    
+    //BLOCK 3 - get 2 rings 
+    chassis.pid_turn_relative_set(123_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    intakeLow.move(127);
+    intakeHigh.move(100);
+    chassis.pid_drive_set(24_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    pros::delay(300);
+    chassis.pid_turn_relative_set(85_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(14_in, DRIVE_SPEED*0.7);
+    chassis.pid_wait_quick();
+    pros::delay(1000);
+    intakeLow.move(0);
+    intakeHigh.move(0);
+
+    //BLOCK 4 - doinker on the negative corner 
+    chassis.pid_drive_set(-14_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_turn_relative_set(-165_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(60_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    doinker.set(true);
+    chassis.pid_turn_relative_set(-90_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    doinker.set(false);
+    
+    //BLOCK 5 - intake last ring on negative red corner 
+    chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    intakeLow.move(127);
+    intakeHigh.move(100);
+    chassis.pid_drive_set(12_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    pros::delay(300);
+    chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
+    chassis.pid_wait_quick();
+
+    //BLOCK 6 - Rush to Ladder
+    chassis.pid_drive_set(60_in, DRIVE_SPEED);
+    chassis.pid_wait_until(20_in);
+    mogoclamp.set(false);
+    chassis.pid_wait();
+
+
+
 }
