@@ -179,6 +179,7 @@ void opcontrol() {
   // This is preference to what you like to drive on
   pros::motor_brake_mode_e_t driver_preference_brake = MOTOR_BRAKE_COAST;
   ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  ladybrown.tare_position();
   chassis.drive_brake_set(driver_preference_brake);
   
   doinker.set(false);

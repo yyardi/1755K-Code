@@ -422,7 +422,7 @@
     },
     "upload_options": {
       "description": "making code ez",
-      "slot": 2
+      "slot": 1
     },
     "use_early_access": false
   }
