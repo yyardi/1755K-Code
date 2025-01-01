@@ -20,6 +20,55 @@ ez::Drive chassis(
 bool isClamp = false;
 bool clampLatch = false;
 
+const float Kp = 0.5;
+const float Ki = 0.01;
+const float Kd = 0.1;
+
+const int tolerance = 50;
+const int max_output = 50;
+
+const int lbDown = 0;
+const int lbMid = 45;
+const int lbUp = 90;
+
+int currentPositionIndex = 0;
+bool lastCycleButtonState = false;
+
+
+void ladyBrownAngle(int target) {
+    int error = 0; 
+    int last_error = 0;
+    int integral = 0;
+    int derivative = 0;
+
+    while(true) {
+        // Break if scoring button is pressed
+        if (master.get_digital(DIGITAL_DOWN)) {
+            break;
+        }
+
+        int currentPosition = ladybrown.get_position();
+        error = target - currentPosition;
+
+        if (std::abs(error) <= tolerance) {
+            ladybrown.move_velocity(0);
+            break;
+        }
+
+        integral += error;
+        derivative = error - last_error;
+        last_error = error;
+
+        int output = (Kp * error) + (Ki * integral) + (Kd * derivative);
+        output = std::clamp(output, -max_output, max_output);
+
+        ladybrown.move_velocity(output);
+        pros::delay(20);
+    }
+}
+
+
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -50,6 +99,7 @@ void initialize() {
   ez::as::auton_selector.autons_add({
       Auton("Aggressive Auton\n\nBlue - Side", blue_negative_auton),
       Auton("Aggressive Auton\n\nRed - Side", red_negative_auton),
+      Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
       Auton("Example Drive\n\nDrive forward and come back.", drive_example),
       Auton("Example Turn\n\nTurn 3 times.", turn_example),
       Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
@@ -121,10 +171,14 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
+
+
+
 void opcontrol() {
   // This is preference to what you like to drive on
   pros::motor_brake_mode_e_t driver_preference_brake = MOTOR_BRAKE_COAST;
-
+  ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   chassis.drive_brake_set(driver_preference_brake);
   
   doinker.set(false);
@@ -165,6 +219,11 @@ void opcontrol() {
     else if (master.get_digital(DIGITAL_R2)) {
       intakeLow.move(-127);
       intakeHigh.move(-100);
+    }
+    else if (currentPositionIndex == 1 || currentPositionIndex == 2) {
+      // Reverse intake to help ring enter LadyBrown
+      intakeLow.move(-127);
+      intakeHigh.move(-100);
     } 
     else {
       intakeLow.move(0);
@@ -173,6 +232,26 @@ void opcontrol() {
 
     mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
     doinker.button_toggle(master.get_digital(DIGITAL_L1));
+
+    bool currentCycleButtonState = master.get_digital(DIGITAL_UP);
+    if (currentCycleButtonState && !lastCycleButtonState) {
+      const int positions[] = {lbDown, lbMid, lbUp};
+      currentPositionIndex = (currentPositionIndex + 1) % 3;
+      ladyBrownAngle(positions[currentPositionIndex]);
+    }
+    lastCycleButtonState = currentCycleButtonState;
+
+    // Scoring with DOWN button
+    if (master.get_digital(DIGITAL_DOWN)) {
+      ladybrown.move_velocity(600); //need to check how to do this
+    }
+    else if (!master.get_digital(DIGITAL_DOWN) && !master.get_digital(DIGITAL_UP)) {
+      ladybrown.move_velocity(0);
+    }
+    else if (master.get_digital(DIGITAL_DOWN) && master.get_digital(DIGITAL_UP)) {
+      ladybrown.move_velocity(0);
+    }
+
 
 
 
