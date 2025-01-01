@@ -9,6 +9,7 @@ void turn_example();
 void blue_negative_auton();
 void red_negative_auton();
 void red_positive_auton();
+void blue_positive_auton();
 void drive_and_turn();
 void wait_until_change_speed();
 void swing_example();

@@ -100,6 +100,7 @@ void initialize() {
       Auton("Aggressive Auton\n\nBlue - Side", blue_negative_auton),
       Auton("Aggressive Auton\n\nRed - Side", red_negative_auton),
       Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
+      Auton("Aggressive Auton\n\nBlue + Side", blue_positive_auton),
       Auton("Example Drive\n\nDrive forward and come back.", drive_example),
       Auton("Example Turn\n\nTurn 3 times.", turn_example),
       Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
