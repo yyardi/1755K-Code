@@ -20,19 +20,22 @@ ez::Drive chassis(
 bool isClamp = false;
 bool clampLatch = false;
 
-const float Kp = 0.5;
+
+int currentPositionIndex = 0;
+bool lastCycleButtonState = false;
+
+const float Kp = 0.75;
 const float Ki = 0.01;
-const float Kd = 0.1;
+const float Kd = 0.2;
 
 const int tolerance = 50;
 const int max_output = 50;
 
 const int lbDown = 0;
-const int lbMid = 45;
-const int lbUp = 90;
+const int lbMid = 420;
+const int lbScore = 2000;
+const int positions[] = {lbDown, lbMid, lbScore};
 
-int currentPositionIndex = 0;
-bool lastCycleButtonState = false;
 
 
 void ladyBrownAngle(int target) {
@@ -42,11 +45,6 @@ void ladyBrownAngle(int target) {
     int derivative = 0;
 
     while(true) {
-        // Break if scoring button is pressed
-        if (master.get_digital(DIGITAL_DOWN)) {
-            break;
-        }
-
         int currentPosition = ladybrown.get_position();
         error = target - currentPosition;
 
@@ -66,6 +64,7 @@ void ladyBrownAngle(int target) {
         pros::delay(20);
     }
 }
+
 
 
 
@@ -218,16 +217,11 @@ void opcontrol() {
     
     if (master.get_digital(DIGITAL_R1)) {
       intakeLow.move(127);
-      intakeHigh.move(100);
+      intakeHigh.move(127);
     } 
     else if (master.get_digital(DIGITAL_R2)) {
       intakeLow.move(-127);
-      intakeHigh.move(-100);
-    }
-    else if (currentPositionIndex == 1 || currentPositionIndex == 2) {
-      // Reverse intake to help ring enter LadyBrown
-      intakeLow.move(-127);
-      intakeHigh.move(-100);
+      intakeHigh.move(-127);
     } 
     else {
       intakeLow.move(0);
@@ -237,24 +231,24 @@ void opcontrol() {
     mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
     doinker.button_toggle(master.get_digital(DIGITAL_L1));
 
-    bool currentCycleButtonState = master.get_digital(DIGITAL_UP);
-    if (currentCycleButtonState && !lastCycleButtonState) {
-      const int positions[] = {lbDown, lbMid, lbUp};
-      currentPositionIndex = (currentPositionIndex + 1) % 3;
-      ladyBrownAngle(positions[currentPositionIndex]);
-    }
-    lastCycleButtonState = currentCycleButtonState;
 
-    // Scoring with DOWN button
     if (master.get_digital(DIGITAL_DOWN)) {
-      ladybrown.move_velocity(600); //need to check how to do this
+        currentPositionIndex = (currentPositionIndex + 1) % 3;
+        ladyBrownAngle(positions[currentPositionIndex]);
     }
-    else if (!master.get_digital(DIGITAL_DOWN) && !master.get_digital(DIGITAL_UP)) {
-      ladybrown.move_velocity(0);
+
+    if (master.get_digital(DIGITAL_UP)) {
+        currentPositionIndex = 0;
+        ladyBrownAngle(positions[0]);
     }
-    else if (master.get_digital(DIGITAL_DOWN) && master.get_digital(DIGITAL_UP)) {
-      ladybrown.move_velocity(0);
-    }
+
+    // bool currentCycleButtonState = master.get_digital(DIGITAL_DOWN);
+    // if (currentCycleButtonState && !lastCycleButtonState) {
+    //   const int positions[] = {lbDown, lbMid, lbScore};
+    //   currentPositionIndex = (currentPositionIndex + 1) % 3;
+    //   ladyBrownAngle(positions[currentPositionIndex]);
+    // }
+    // lastCycleButtonState = currentCycleButtonState;
 
 
 
