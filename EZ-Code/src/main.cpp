@@ -101,6 +101,7 @@ void initialize() {
       Auton("Aggressive Auton\n\nRed - Side", red_negative_auton),
       Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
       Auton("Aggressive Auton\n\nBlue + Side", blue_positive_auton),
+      Auton("Skills Auton\n\nRed Ally Stake Start Pos", skills_auton),
       Auton("Example Drive\n\nDrive forward and come back.", drive_example),
       Auton("Example Turn\n\nTurn 3 times.", turn_example),
       Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
@@ -109,6 +110,7 @@ void initialize() {
       Auton("Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining),
       Auton("Combine all 3 movements", combining_movements),
       Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
+      
   });
 
   // Initialize chassis and auton selector

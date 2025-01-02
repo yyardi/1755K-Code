@@ -254,7 +254,7 @@ void blue_negative_auton() {
     chassis.pid_turn_relative_set(-165_deg, TURN_SPEED);
     chassis.pid_wait_quick();
     intakeLow.move(127);
-    intakeHigh.move(100);
+    intakeHigh.move(100); // maybe change later
     chassis.pid_drive_set(19_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
     pros::delay(500);
@@ -603,5 +603,14 @@ void blue_positive_auton() {
     ladybrown.move(127);
     pros::delay(200);
     ladybrown.move(0);
+
+}
+
+void skills_auton() {
+  ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  doinker.set(false);
+  mogoclamp.set(false);
+  
+  
 
 }
