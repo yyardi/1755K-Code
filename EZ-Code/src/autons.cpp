@@ -285,10 +285,10 @@ void blue_negative_auton() {
     chassis.pid_wait_quick();
     chassis.pid_drive_set(-30_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(-11_in, DRIVE_SPEED*0.7);
+    chassis.pid_drive_set(-12_in, DRIVE_SPEED*0.7);
     chassis.pid_wait_quick();
     mogoclamp.set(true);
-    chassis.pid_drive_set(-3_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
     
     //BLOCK 3 - get 3 rings 
@@ -314,7 +314,7 @@ void blue_negative_auton() {
 
     chassis.pid_drive_set(13_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    pros::delay(1500);
+    pros::delay(1800);
     intakeLow.move(0);
     intakeHigh.move(0);
 
@@ -388,10 +388,10 @@ void red_negative_auton() {
     chassis.pid_wait_quick();
     chassis.pid_drive_set(-30_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(-11_in, DRIVE_SPEED*0.7);
+    chassis.pid_drive_set(-12_in, DRIVE_SPEED*0.7);
     chassis.pid_wait_quick();
     mogoclamp.set(true);
-    chassis.pid_drive_set(-3_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
     
     //BLOCK 3 - get 3 rings 
@@ -479,79 +479,84 @@ void red_positive_auton() {
     chassis.pid_turn_relative_set(-45_deg, TURN_SPEED);
     chassis.pid_wait_quick();
 
+
     chassis.pid_drive_set(-20_in, DRIVE_SPEED);
     chassis.pid_wait();
 
     chassis.pid_turn_relative_set(-45_deg, TURN_SPEED);
     chassis.pid_wait_quick();
+    intakeLow.move(0);
 
     chassis.pid_drive_set(-10_in, DRIVE_SPEED);
     chassis.pid_wait();
 
-    chassis.pid_turn_relative_set(-30_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(-25_deg, TURN_SPEED);
     chassis.pid_wait_quick();
 
-    chassis.pid_drive_set(-16.5_in, DRIVE_SPEED);
-    chassis.pid_wait();
+    chassis.pid_drive_set(-16.5_in, DRIVE_SPEED*0.7);
+    chassis.pid_wait_quick();
     mogoclamp.set(true);
+    pros::delay(200);
+
     
     //BLOCK 3 - Face Stack and collect rings
-    chassis.pid_turn_relative_set(20_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(50_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-    intakeLow.move(100); //purposefully slower so the preload doesnt get dropped
-    chassis.pid_drive_set(10_in, DRIVE_SPEED);
+    chassis.pid_drive_set(20_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
     mogoclamp.set(false); // drop mogo on our side to regrab it
-    chassis.pid_drive_set(5_in, DRIVE_SPEED);
+    chassis.pid_drive_set(7_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
     intakeLow.move(0);
 
-    chassis.pid_drive_set(-7_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-12_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
+    intakeLow.move(127);
     mogoclamp.set(true); //regrab mogo
-
+    pros::delay(100);
     intakeHigh.move(127);
-    pros::delay(600); //intake both red rings here onto the mogo
+    pros::delay(1000); //intake both red rings here onto the mogo
     intakeHigh.move(0);
 
-    //BLOCK 4 - go to corner and use doinker
-    chassis.pid_turn_relative_set(-50_deg, TURN_SPEED);
-    chassis.pid_wait_quick();
-    chassis.pid_drive_set(50_in, DRIVE_SPEED);
-    chassis.pid_wait_until(37_in);
-    doinker.set(true);
-    mogoclamp.set(false); //let go of mogo on our side 
-    chassis.pid_wait_quick_chain();
-    chassis.pid_turn_relative_set(90_deg, TURN_SPEED); //hit the stack in the corner with doinker at 90 deg, then back
-    chassis.pid_wait();
-    doinker.set(false);
-    chassis.pid_turn_relative_set(-90_deg, TURN_SPEED);
-    chassis.pid_drive_set(4_in, DRIVE_SPEED);
-    chassis.pid_wait_quick();
-    intakeLow.move(127); // collect bottom ring just enough to get it on the intake stage 2
-    intakeHigh.move(127);
-    pros::delay(50);
-    intakeLow.move(0);
-    intakeHigh.move(0);
+    // //BLOCK 4 - go to corner and use doinker
+    // chassis.pid_turn_relative_set(-50_deg, TURN_SPEED);
+    // chassis.pid_wait_quick();
+    // chassis.pid_drive_set(50_in, DRIVE_SPEED);
+    // chassis.pid_wait_until(37_in);
+    // doinker.set(true);
+    // mogoclamp.set(false); //let go of mogo on our side 
+    // chassis.pid_wait_quick_chain();
+    // chassis.pid_turn_relative_set(90_deg, TURN_SPEED); //hit the stack in the corner with doinker at 90 deg, then back
+    // chassis.pid_wait();
+    // doinker.set(false);
+    // chassis.pid_turn_relative_set(-90_deg, TURN_SPEED);
+    // chassis.pid_drive_set(4_in, DRIVE_SPEED);
+    // chassis.pid_wait_quick();
+    // intakeLow.move(127); // collect bottom ring just enough to get it on the intake stage 2
+    // intakeHigh.move(127);
+    // pros::delay(50);
+    // intakeLow.move(0);
+    // intakeHigh.move(0);
 
-    chassis.pid_turn_relative_set(-4_deg, TURN_SPEED); //align with the other mogo
-    chassis.pid_wait_quick();
+    // chassis.pid_turn_relative_set(-4_deg, TURN_SPEED); //align with the other mogo
+    // chassis.pid_wait_quick();
     
-    chassis.pid_drive_set(-40_in, DRIVE_SPEED);
-    chassis.pid_wait_quick();
-    mogoclamp.set(true);
-    chassis.pid_drive_set(-5_in, DRIVE_SPEED);
-    chassis.pid_wait_quick();
-    intakeHigh.move(127);
-    pros::delay(600);
-    intakeHigh.move(0);
-    chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
-    chassis.pid_wait_quick();
-    chassis.pid_drive_set(-8_in, DRIVE_SPEED);
-    chassis.pid_wait();
+    // chassis.pid_drive_set(-40_in, DRIVE_SPEED);
+    // chassis.pid_wait_quick();
+    // mogoclamp.set(true);
+    // chassis.pid_drive_set(-5_in, DRIVE_SPEED);
+    // chassis.pid_wait_quick();
+    // intakeHigh.move(127);
+    // pros::delay(600);
+    // intakeHigh.move(0);
+    // chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
+    // chassis.pid_wait_quick();
+    // chassis.pid_drive_set(-8_in, DRIVE_SPEED);
+    // chassis.pid_wait();
 
-    ladybrown.move(127);
-    pros::delay(200);
-    ladybrown.move(0);
+    // ladybrown.move(127);
+    // pros::delay(200);
+    // ladybrown.move(0);
 
 }
 
