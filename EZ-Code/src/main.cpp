@@ -217,11 +217,11 @@ void opcontrol() {
     
     if (master.get_digital(DIGITAL_R1)) {
       intakeLow.move(127);
-      intakeHigh.move(127);
+      intakeHigh.move(114);
     } 
     else if (master.get_digital(DIGITAL_R2)) {
       intakeLow.move(-127);
-      intakeHigh.move(-127);
+      intakeHigh.move(-114);
     } 
     else {
       intakeLow.move(0);
