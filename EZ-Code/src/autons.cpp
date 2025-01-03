@@ -325,7 +325,7 @@ void blue_negative_auton() {
     chassis.pid_wait();
 
     ladybrown.move(127);
-    pros::delay(200);
+    pros::delay(1000);
     ladybrown.move(0);
 
 
@@ -428,7 +428,7 @@ void red_negative_auton() {
     chassis.pid_wait();
 
     ladybrown.move(127);
-    pros::delay(200);
+    pros::delay(1000);
     ladybrown.move(0);
 
 
@@ -555,9 +555,8 @@ void red_positive_auton() {
     // chassis.pid_wait();
 
     // ladybrown.move(127);
-    // pros::delay(200);
+    // pros::delay(1000);
     // ladybrown.move(0);
-
 }
 
 void blue_positive_auton() {
@@ -647,9 +646,9 @@ void blue_positive_auton() {
     chassis.pid_drive_set(-8_in, DRIVE_SPEED);
     chassis.pid_wait();
 
-    ladybrown.move(127);
-    pros::delay(200);
-    ladybrown.move(0);
+    // ladybrown.move(127);
+    // pros::delay(1000);
+    // ladybrown.move(0);
 
 }
 
