@@ -238,13 +238,13 @@ void opcontrol() {
 
     if (master.get_digital(DIGITAL_DOWN)) {
         // currentPositionIndex = (currentPositionIndex + 1) % 3;
-        ladybrown.move_absolute(440, 127);
+        ladybrown.move_absolute(0, 127);
         // ladyBrownAngle(positions[currentPositionIndex]);
     }
 
     if (master.get_digital(DIGITAL_UP)) {
         // currentPositionIndex = 0;
-        ladybrown.move_absolute(0, 127);
+        ladybrown.move_absolute(2000, 127);
 
         // ladyBrownAngle(positions[0]);
         // ladybrown.tare_position();
@@ -252,7 +252,7 @@ void opcontrol() {
 
     if (master.get_digital(DIGITAL_LEFT)) {
         // currentPositionIndex = 0;
-        ladybrown.move_absolute(2000, 127);
+        ladybrown.move_absolute(440, 127);
     }
 
     // bool currentCycleButtonState = master.get_digital(DIGITAL_DOWN);
