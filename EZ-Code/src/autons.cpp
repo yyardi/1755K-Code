@@ -20,7 +20,7 @@ const int tolerance = 50;
 const int max_output = 50;
 
 const int lbDown = 0;
-const int lbMid = 420;
+const int lbMid = 480;
 const int lbScore = 2000;
 const int positions[] = {lbDown, lbMid, lbScore};
 
@@ -325,7 +325,7 @@ void blue_negative_auton() {
     chassis.pid_wait();
 
     ladybrown.move(127);
-    pros::delay(1000);
+    pros::delay(200);
     ladybrown.move(0);
 
 
@@ -428,7 +428,7 @@ void red_negative_auton() {
     chassis.pid_wait();
 
     ladybrown.move(127);
-    pros::delay(1000);
+    pros::delay(200);
     ladybrown.move(0);
 
 
@@ -555,8 +555,9 @@ void red_positive_auton() {
     // chassis.pid_wait();
 
     // ladybrown.move(127);
-    // pros::delay(1000);
+    // pros::delay(200);
     // ladybrown.move(0);
+
 }
 
 void blue_positive_auton() {
@@ -646,9 +647,9 @@ void blue_positive_auton() {
     chassis.pid_drive_set(-8_in, DRIVE_SPEED);
     chassis.pid_wait();
 
-    // ladybrown.move(127);
-    // pros::delay(1000);
-    // ladybrown.move(0);
+    ladybrown.move(127);
+    pros::delay(200);
+    ladybrown.move(0);
 
 }
 

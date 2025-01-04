@@ -32,7 +32,7 @@ const int tolerance = 50;
 const int max_output = 50;
 
 const int lbDown = 0;
-const int lbMid = 420;
+const int lbMid = 480;
 const int lbScore = 2000;
 const int positions[] = {lbDown, lbMid, lbScore};
 
@@ -44,14 +44,16 @@ void ladyBrownAngle(int target) {
     int integral = 0;
     int derivative = 0;
 
-    while(true) {
-        int currentPosition = ladybrown.get_position();
-        error = target - currentPosition;
+    // while(true) {
+    //     int currentPosition = ladybrown.get_position();
+    //     error = target - currentPosition;
 
-        if (std::abs(error) <= tolerance) {
-            ladybrown.move_velocity(0);
-            break;
-        }
+    //     if (std::abs(error) <= tolerance) {
+    //         ladybrown.move_velocity(0);
+    //         break;
+    //     }
+
+
 
         integral += error;
         derivative = error - last_error;
@@ -61,9 +63,12 @@ void ladyBrownAngle(int target) {
         output = std::clamp(output, -max_output, max_output);
 
         ladybrown.move_velocity(output);
+
+        //Break, if any other button is pressed
+
         pros::delay(20);
     }
-}
+
 
 
 
@@ -181,7 +186,6 @@ void opcontrol() {
   // This is preference to what you like to drive on
   pros::motor_brake_mode_e_t driver_preference_brake = MOTOR_BRAKE_COAST;
   ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-  ladybrown.tare_position();
   chassis.drive_brake_set(driver_preference_brake);
   
   doinker.set(false);
@@ -217,11 +221,11 @@ void opcontrol() {
     
     if (master.get_digital(DIGITAL_R1)) {
       intakeLow.move(127);
-      intakeHigh.move(114);
+      intakeHigh.move(113);
     } 
     else if (master.get_digital(DIGITAL_R2)) {
       intakeLow.move(-127);
-      intakeHigh.move(-114);
+      intakeHigh.move(-113);
     } 
     else {
       intakeLow.move(0);
@@ -233,13 +237,22 @@ void opcontrol() {
 
 
     if (master.get_digital(DIGITAL_DOWN)) {
-        currentPositionIndex = (currentPositionIndex + 1) % 3;
-        ladyBrownAngle(positions[currentPositionIndex]);
+        // currentPositionIndex = (currentPositionIndex + 1) % 3;
+        ladybrown.move_absolute(440, 127);
+        // ladyBrownAngle(positions[currentPositionIndex]);
     }
 
     if (master.get_digital(DIGITAL_UP)) {
-        currentPositionIndex = 0;
-        ladyBrownAngle(positions[0]);
+        // currentPositionIndex = 0;
+        ladybrown.move_absolute(0, 127);
+
+        // ladyBrownAngle(positions[0]);
+        // ladybrown.tare_position();
+    }
+
+    if (master.get_digital(DIGITAL_LEFT)) {
+        // currentPositionIndex = 0;
+        ladybrown.move_absolute(2000, 127);
     }
 
     // bool currentCycleButtonState = master.get_digital(DIGITAL_DOWN);
