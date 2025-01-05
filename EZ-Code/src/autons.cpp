@@ -262,22 +262,22 @@ void blue_negative_auton() {
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
     //BLOCK 1 - ally stake
-    chassis.pid_drive_set(5_in, DRIVE_SPEED, true);
+    chassis.pid_drive_set(5_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
     chassis.pid_turn_set(90_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(-18.5_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-18.7_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_turn_relative_set(-90_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(-6_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-5.5_in, DRIVE_SPEED);
     chassis.pid_wait();
     intakeHigh.move(127); //dont need low intake for ally stake
-    pros::delay(300);
+    pros::delay(400);
     intakeHigh.move(0);
     
     //BLOCK 2 - get mogo
-    chassis.pid_drive_set(5_in, DRIVE_SPEED);
+    chassis.pid_drive_set(4_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
     chassis.pid_turn_set(0_deg, TURN_SPEED);
     chassis.pid_wait_quick();
@@ -292,45 +292,48 @@ void blue_negative_auton() {
     chassis.pid_wait_quick();
     
     //BLOCK 3 - get 3 rings 
-    chassis.pid_turn_relative_set(-165_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(-173_deg, TURN_SPEED);
     chassis.pid_wait_quick();
     intakeLow.move(127);
     intakeHigh.move(100);
     chassis.pid_drive_set(19_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    pros::delay(500);
-    chassis.pid_turn_relative_set(25_deg, TURN_SPEED);
+    chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(6_in, DRIVE_SPEED);
+    
+    pros::delay(200);
+    chassis.pid_turn_relative_set(28_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-    pros::delay(400);
+    chassis.pid_drive_set(9_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    pros::delay(200);
     
 
-    chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
 
-    chassis.pid_turn_relative_set(60_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
     chassis.pid_wait_quick();
 
     chassis.pid_drive_set(13_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    pros::delay(1800);
+    pros::delay(200);
     
 
     //BLOCK 4 - rush to ladder
-    chassis.pid_turn_relative_set(160_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(140_deg, TURN_SPEED);
     chassis.pid_wait_quick();
     chassis.pid_drive_set(30_in, DRIVE_SPEED);
     chassis.pid_wait();
 
 
-    intakeLow.move(0);
-    intakeHigh.move(0);
+    // intakeLow.move(0);
+    // intakeHigh.move(0);
     ladybrown.move(127);
     pros::delay(600);
     ladybrown.move(0);
 
-
+// below is already commented
     
     // //BLOCK 4 - doinker on the negative corner 
     // chassis.pid_drive_set(-14_in, DRIVE_SPEED);
@@ -366,22 +369,22 @@ void red_negative_auton() {
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     
     //BLOCK 1 - ally stake
-    chassis.pid_drive_set(5.5_in, DRIVE_SPEED, true);
+    chassis.pid_drive_set(5_in, DRIVE_SPEED, true);
     chassis.pid_wait_quick();
     chassis.pid_turn_set(-90_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(-18.5_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-18.7_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(-6_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-5.5_in, DRIVE_SPEED);
     chassis.pid_wait();
     intakeHigh.move(127); //dont need low intake for ally stake
-    pros::delay(500);
+    pros::delay(400);
     intakeHigh.move(0);
     
     //BLOCK 2 - get mogo
-    chassis.pid_drive_set(5_in, DRIVE_SPEED);
+    chassis.pid_drive_set(4_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
     chassis.pid_turn_set(0_deg, TURN_SPEED);
     chassis.pid_wait_quick();
@@ -396,45 +399,48 @@ void red_negative_auton() {
     chassis.pid_wait_quick();
     
     //BLOCK 3 - get 3 rings 
-    chassis.pid_turn_relative_set(165_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(173_deg, TURN_SPEED);
     chassis.pid_wait_quick();
     intakeLow.move(127);
     intakeHigh.move(100);
     chassis.pid_drive_set(19_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    pros::delay(500);
-    chassis.pid_turn_relative_set(-25_deg, TURN_SPEED);
+    chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(7_in, DRIVE_SPEED);
+    
+    pros::delay(200);
+    chassis.pid_turn_relative_set(-28_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-    pros::delay(400);
+    chassis.pid_drive_set(9_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+    pros::delay(200);
     
 
-    chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
 
-    chassis.pid_turn_relative_set(-60_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(-90_deg, TURN_SPEED);
     chassis.pid_wait_quick();
 
     chassis.pid_drive_set(13_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    pros::delay(1800);
+    pros::delay(200);
     
 
     //BLOCK 4 - rush to ladder
-    chassis.pid_turn_relative_set(-160_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(-140_deg, TURN_SPEED);
     chassis.pid_wait_quick();
     chassis.pid_drive_set(30_in, DRIVE_SPEED);
     chassis.pid_wait();
 
 
-    intakeLow.move(0);
-    intakeHigh.move(0);
+    // intakeLow.move(0);
+    // intakeHigh.move(0);
     ladybrown.move(127);
     pros::delay(600);
     ladybrown.move(0);
 
-
+// below is already commented
     
     // //BLOCK 4 - doinker on the negative corner 
     // chassis.pid_drive_set(-14_in, DRIVE_SPEED);
@@ -1018,20 +1024,5 @@ void skills_auton() {
   // chassis.pid_drive_set(36_in,DRIVE_SPEED);
   // chassis.pid_wait_quick();
   
-
-
-  
-
-
-  
-
-
-  
-
-
-
-
-  
-
 
 }
