@@ -32,7 +32,7 @@ const int tolerance = 50;
 const int max_output = 50;
 
 const int lbDown = 0;
-const int lbMid = 480;
+const int lbMid = 420;
 const int lbScore = 2000;
 const int positions[] = {lbDown, lbMid, lbScore};
 
