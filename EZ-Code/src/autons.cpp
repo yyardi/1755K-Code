@@ -21,7 +21,7 @@ const int max_output = 50;
 
 const int lbDown = 0;
 const int lbMid = 480;
-const int lbScore = 2000;
+const int lbScore = 1900;
 const int positions[] = {lbDown, lbMid, lbScore};
 
 
@@ -297,9 +297,9 @@ void blue_negative_auton() {
     chassis.pid_wait_quick();
     chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    
     pros::delay(200);
-    chassis.pid_turn_relative_set(25_deg, TURN_SPEED);
+
+    chassis.pid_turn_relative_set(21_deg, TURN_SPEED); //25
     chassis.pid_wait_quick();
     chassis.pid_drive_set(13_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
@@ -309,7 +309,7 @@ void blue_negative_auton() {
     chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
 
-    chassis.pid_turn_relative_set(87_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(92_deg, TURN_SPEED);
     chassis.pid_wait_quick();
 
     chassis.pid_drive_set(25_in, DRIVE_SPEED*0.7);
@@ -320,7 +320,8 @@ void blue_negative_auton() {
     //BLOCK 4 - rush to ladder
     chassis.pid_turn_relative_set(130_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-
+    intakeLow.move(0);
+    intakeHigh.move(0);
     
     chassis.pid_drive_set(40_in, DRIVE_SPEED*0.7);
     chassis.pid_wait();
@@ -331,9 +332,6 @@ void blue_negative_auton() {
     ladybrown.move(127);
     pros::delay(600);
     ladybrown.move(0);
-    
-    intakeLow.move(0);
-    intakeHigh.move(0);
 
 // below is already commented
     
@@ -406,11 +404,11 @@ void red_negative_auton() {
     chassis.pid_wait_quick();
     chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
-    
     pros::delay(200);
-    chassis.pid_turn_relative_set(-25_deg, TURN_SPEED);
+
+    chassis.pid_turn_relative_set(-21_deg, TURN_SPEED); //-25
     chassis.pid_wait_quick();
-    chassis.pid_drive_set(13_in, DRIVE_SPEED);
+    chassis.pid_drive_set(14_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
     pros::delay(200);
     
@@ -418,7 +416,7 @@ void red_negative_auton() {
     chassis.pid_drive_set(-2_in, DRIVE_SPEED);
     chassis.pid_wait_quick();
 
-    chassis.pid_turn_relative_set(-87_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(-92_deg, TURN_SPEED);
     chassis.pid_wait_quick();
 
     chassis.pid_drive_set(25_in, DRIVE_SPEED*0.7);
@@ -429,7 +427,8 @@ void red_negative_auton() {
     //BLOCK 4 - rush to ladder
     chassis.pid_turn_relative_set(-130_deg, TURN_SPEED);
     chassis.pid_wait_quick();
-
+    intakeLow.move(0);
+    intakeHigh.move(0);
     
     chassis.pid_drive_set(40_in, DRIVE_SPEED*0.7);
     chassis.pid_wait();
@@ -440,9 +439,6 @@ void red_negative_auton() {
     ladybrown.move(127);
     pros::delay(600);
     ladybrown.move(0);
-    
-    intakeLow.move(0);
-    intakeHigh.move(0);
 
 // below is already commented
     
