@@ -5,6 +5,9 @@
 
 Welcome to the official repository for Team 1755K's robotics projects! Here, you’ll find all the code, documentation, and resources for our team's journey, including past competition archives and the latest innovations. Special Thanks to our sponsor, **Polymaker**!
 
+<a href="https://polymaker.com/" target="_blank">Polymaker Inc</a>
+<a href="https://docs.google.com/presentation/d/1bIl7I55HEaiwGx8CQbsbxuVOjW_J9ZmIvWEf3nrDaSE/edit#slide=id.g24d0769397b_0_208" target="_blank">1755K Engineering Notebook</a>
+
 ![Sponsor Logo](images/polymaker.png)
 
 ---
