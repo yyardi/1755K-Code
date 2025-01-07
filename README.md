@@ -1,6 +1,6 @@
 # Robotics Code for Team 1755K
 ![Team Photo](images/team_photo.jpg)
-![Our Tournament Winning Robot](images/TC.jpeg)
+![Our Tournament Winning Robot](images/TC.jpg)
 ![Over Under States Robot](images/OUStates.jpg)
 
 Welcome to the official repository for Team 1755K's robotics projects! Here, you’ll find all the code, documentation, and resources for our team's journey, including past competition archives and the latest innovations. Special Thanks to our sponsor, **Polymaker**!
