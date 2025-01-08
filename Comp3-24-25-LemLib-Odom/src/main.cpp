@@ -51,7 +51,7 @@ lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
                               &rightMotors, // right motor group
                               13.5, // track width
                               lemlib::Omniwheel::NEW_275, // using new 2.75" omnis
-                              450, // drivetrain rpm is 360
+                              450, // drivetrain rpm is 450
                               2 // horizontal drift is 2. If we had traction wheels, it would have been 8
 );
 
@@ -170,15 +170,15 @@ void initialize() {
     // thread to for brain screen and position logging
     colorSortTask = new pros::Task(sorting);
     
-    // AutonSelector::getInstance().init();
+    AutonSelector::getInstance().init();
     
     // task for updating display
-    // pros::Task displayTask([&]() {
-    //     while (true) {
-    //         AutonSelector::getInstance().update();
-    //         pros::delay(50);
-    //     }
-    // });
+    pros::Task displayTask([&]() {
+        while (true) {
+            AutonSelector::getInstance().update();
+            pros::delay(50);
+        }
+    });
 
     // pros::Task screenTask([&]() {
     //     while (true) {
