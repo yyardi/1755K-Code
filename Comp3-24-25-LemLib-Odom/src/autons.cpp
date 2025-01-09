@@ -1,5 +1,11 @@
-#include "autons.hpp"
-#include "main.cpp"
+#include "liblvgl/llemu.h"
+#include "main.h"
+
+
+// get a path used for pure pursuit
+// in the static folder 
+ASSET(example_txt); // '.' replaced with "_" to make c++ happy 
+
 
 void blue_negative_auton() {
     selectBlueTeam(); // Set team color for sorting
@@ -55,89 +61,72 @@ void auton_example() {
     pros::lcd::print(4, "pure pursuit finished!");
 }
 
-
-//methods for the auton selector class
+// Initialize autonomous selection
 void AutonSelector::init() {
     currentAuton = AutonRoutine::NONE;
+    pros::lcd::clear();
     showingCoords = false;
+    displayAutonSelection();
 }
 
+// Update display or selection logic
+void AutonSelector::update() {
+    if (showingCoords) {
+        displayCoordinates();
+    } else {
+        displayAutonSelection();
+    }
+
+    // Handle screen input for changing routines
+    if (LCD_BTN_RIGHT) {
+        currentAuton = static_cast<AutonRoutine>((static_cast<int>(currentAuton) + 1) % 6);
+    }
+    if (LCD_BTN_LEFT) {
+        currentAuton = static_cast<AutonRoutine>((static_cast<int>(currentAuton) - 1 + 6) % 6);
+    }
+    
+}
+
+// Run the selected autonomous routine
+void AutonSelector::runSelectedAuton() {
+    switch (currentAuton) {
+        case AutonRoutine::BLUE_NEGATIVE: blue_negative_auton(); break;
+        case AutonRoutine::RED_NEGATIVE: red_negative_auton(); break;
+        case AutonRoutine::RED_POSITIVE: red_positive_auton(); break;
+        case AutonRoutine::BLUE_POSITIVE: blue_positive_auton(); break;
+        case AutonRoutine::SKILLS: skills_auton(); break;
+        case AutonRoutine::NONE: default: break;
+    }
+}
+
+// Toggle display mode
+void AutonSelector::toggleDisplay() {
+    showingCoords = !showingCoords;
+    pros::lcd::clear();
+}
+
+// Display available routines
+void AutonSelector::displayAutonSelection() {
+    pros::lcd::print(0, "Auton: %s", getAutonName());
+}
+
+// Display robot coordinates
+void AutonSelector::displayCoordinates() {
+    auto pose = chassis.getPose();
+    pros::lcd::print(0, "Auton: %s", getAutonName());
+    pros::lcd::print(0, "X: %.2f", pose.x);
+    pros::lcd::print(1, "Y: %.2f", pose.y);
+    pros::lcd::print(2, "Theta: %.2f", pose.theta);
+}
+
+// Get auton routine name
 const char* AutonSelector::getAutonName() {
-    switch(currentAuton) {
+    switch (currentAuton) {
         case AutonRoutine::BLUE_NEGATIVE: return "Blue Negative";
         case AutonRoutine::RED_NEGATIVE: return "Red Negative";
         case AutonRoutine::RED_POSITIVE: return "Red Positive";
         case AutonRoutine::BLUE_POSITIVE: return "Blue Positive";
         case AutonRoutine::SKILLS: return "Skills";
-        default: return "None";
-    }
-}
-
-void AutonSelector::displayAutonSelection() {
-    pros::lcd::clear();
-    pros::lcd::print(0, "Current Auton: %s", getAutonName());
-    pros::lcd::print(1, "LEFT/RIGHT: Cycle");
-    pros::lcd::print(2, "CENTER: Toggle Display");
-}
-
-void AutonSelector::displayCoordinates() {
-    pros::lcd::clear();
-    pros::lcd::print(0, "X: %f", chassis.getPose().x);
-    pros::lcd::print(1, "Y: %f", chassis.getPose().y);
-    pros::lcd::print(2, "Theta: %f", chassis.getPose().theta);
-}
-
-void AutonSelector::toggleDisplay() {
-    showingCoords = !showingCoords;
-}
-
-void AutonSelector::update() {
-    if (showingCoords) {
-        displayCoordinates();
-    } 
-    else {
-        displayAutonSelection();
-        
-        // Handle button presses for auton selection
-        if (pros::lcd::read_buttons() & LCD_BTN_LEFT) {
-            currentAuton = static_cast<AutonRoutine>(
-                (static_cast<int>(currentAuton) - 1 + 5) % 5
-            );
-            pros::delay(100);
-        }
-        else if (pros::lcd::read_buttons() & LCD_BTN_RIGHT) {
-            currentAuton = static_cast<AutonRoutine>(
-                (static_cast<int>(currentAuton) + 1) % 5
-            );
-            pros::delay(100); // Debounce
-        }
-    }
-    
-    // Toggle display mode with center button
-    if (pros::lcd::read_buttons() & LCD_BTN_CENTER) {
-        toggleDisplay();
-        pros::delay(100); // Debounce
-    }
-}
-
-void AutonSelector::runSelectedAuton() {
-    switch(currentAuton) {
-        case AutonRoutine::BLUE_NEGATIVE:
-            blue_negative_auton();
-            break;
-        case AutonRoutine::RED_NEGATIVE:
-            red_negative_auton();
-            break;
-        case AutonRoutine::RED_POSITIVE:
-            red_positive_auton();
-            break;
-        case AutonRoutine::BLUE_POSITIVE:
-            blue_positive_auton();
-            break;
-        case AutonRoutine::SKILLS:
-            skills_auton();
-            break;
-        default:
-            break;
+        case AutonRoutine::NONE: default: return "None";
     }
 }

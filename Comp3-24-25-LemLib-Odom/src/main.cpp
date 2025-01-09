@@ -16,7 +16,6 @@ bool isDoinker = false;
 bool doinkerLatch = false;
 
 int currentPositionIndex = 0;
-bool lastCycleButtonState = false;
 
 const int lbDown = 0;
 const int lbMid = 420;
@@ -39,7 +38,7 @@ pros::Imu imu(17);
 // horizontal tracking wheel encoder. Rotation sensor, not reversed
 pros::Rotation horizontalEnc(20);
 // vertical tracking wheel encoder. Rotation sensor, reversed
-pros::Rotation verticalEnc(-11);
+pros::Rotation verticalEnc(-6);
 
 // horizontal tracking wheel. 2" diameter, 5.75" offset, back of the robot (negative)
 lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -5.75);
@@ -87,20 +86,9 @@ lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
                             &imu // inertial sensor
 );
 
-// input curve for throttle input during driver control
-lemlib::ExpoDriveCurve throttleCurve(3, // joystick deadband out of 127
-                                     6, // minimum output where drivetrain will move out of 127
-                                     1.019 // expo curve gain
-);
-
-// input curve for steer input during driver control
-lemlib::ExpoDriveCurve steerCurve(3, // joystick deadband out of 127
-                                  6, // minimum output where drivetrain will move out of 127
-                                  1.019 // expo curve gain
-);
 
 // create the chassis
-lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors, &throttleCurve, &steerCurve);
+lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors);
 
 pros::Motor intakeLow(-11);
 pros::Motor intakeHigh(-7);
@@ -111,6 +99,15 @@ pros::Optical colorsort(2); //change port
 pros::Motor ladybrown(5);
 pros::ADIDigitalOut doinker('A');
 pros::ADIDigitalOut mogoclamp('C');
+
+//use these with the autons selector
+void selectRedTeam() {
+    isRedTeam.store(true);
+}
+
+void selectBlueTeam() {
+    isRedTeam.store(false);
+}
 
 void sorting() {
     while (true) {
@@ -147,14 +144,7 @@ void sorting() {
     }
 }
 
-//use these with the autons selector
-void selectRedTeam() {
-    isRedTeam.store(true);
-}
 
-void selectBlueTeam() {
-    isRedTeam.store(false);
-}
 
 
 
@@ -204,12 +194,6 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-// get a path used for pure pursuit
-// in the static folder 
-ASSET(example_txt); // '.' replaced with "_" to make c++ happy 
-
-
-
 
 /**
  * Runs during auto
@@ -223,7 +207,7 @@ void autonomous() {
   	mogoclamp.set_value(LOW);
 	isColorSortEnabled = true; //enable color sort for all of auto -- we could cook on the corners??
 
-    // AutonSelector::getInstance().runSelectedAuton();
+    AutonSelector::getInstance().runSelectedAuton();
 
     
 }
@@ -242,6 +226,11 @@ void opcontrol() {
                 controller.get_digital(DIGITAL_DOWN)) {
                 autonomous(); //runs auton
                 chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST); //when done go back to coast for driver
+            }
+            //switches from auton selector to the coords and vise versa
+            if (controller.get_digital(DIGITAL_A) && 
+                controller.get_digital(DIGITAL_RIGHT)) {
+                AutonSelector::getInstance().toggleDisplay();
             }
         }
 
