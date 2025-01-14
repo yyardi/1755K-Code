@@ -12,7 +12,7 @@
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
     {-9, -3, -8},     // Left Chassis Ports (negative port will reverse it!)
-    {-19, 12, 18},  // Right Chassis Ports (negative port will reverse it!)
+    {19, 12, 18},  // Right Chassis Ports (negative port will reverse it!)
 
     15,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
