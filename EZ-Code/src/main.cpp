@@ -1,6 +1,7 @@
 #include "main.h"
 #include "okapi/api.hpp"
 #include "api.h"
+#include "subsystems.hpp"
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -10,15 +11,13 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-18, -19, -20},     // Left Chassis Ports (negative port will reverse it!)
-    {8, 9, 10},  // Right Chassis Ports (negative port will reverse it!)
+    {-9, -3, -8},     // Left Chassis Ports (negative port will reverse it!)
+    {-19, 12, 18},  // Right Chassis Ports (negative port will reverse it!)
 
-    17,      // IMU Port
+    15,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM
 
-bool isClamp = false;
-bool clampLatch = false;
 
 
 int currentPositionIndex = 0;
@@ -188,8 +187,8 @@ void opcontrol() {
   ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   chassis.drive_brake_set(driver_preference_brake);
   
-  doinker.set(false);
-  mogoclamp.set(false);
+  // doinker.set(false);
+  intakePiston.set(false);
 
   while (true) {
 
@@ -221,11 +220,11 @@ void opcontrol() {
     
     if (master.get_digital(DIGITAL_R1)) {
       intakeLow.move(127);
-      intakeHigh.move(113);
+      intakeHigh.move(127);
     } 
     else if (master.get_digital(DIGITAL_R2)) {
       intakeLow.move(-127);
-      intakeHigh.move(-113);
+      intakeHigh.move(-127);
     } 
     else {
       intakeLow.move(0);
@@ -233,7 +232,8 @@ void opcontrol() {
     }
 
     mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
-    doinker.button_toggle(master.get_digital(DIGITAL_L1));
+    // doinker.button_toggle(master.get_digital(DIGITAL_L1));
+    intakePiston.button_toggle(master.get_digital(DIGITAL_L1));
 
 
     if (master.get_digital(DIGITAL_DOWN)) {

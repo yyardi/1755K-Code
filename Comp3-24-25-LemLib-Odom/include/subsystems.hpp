@@ -20,8 +20,9 @@ extern pros::Motor intakeLow;
 extern pros::Motor intakeHigh;
 extern pros::Optical colorsort;
 extern pros::Motor ladybrown;
-extern pros::ADIDigitalOut doinker;
+// extern pros::ADIDigitalOut doinker;
 extern pros::ADIDigitalOut mogoclamp;
+extern pros::ADIDigitalOut intakePiston;
 
 void initializeSubsystems();
 

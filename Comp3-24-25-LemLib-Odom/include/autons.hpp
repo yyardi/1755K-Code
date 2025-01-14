@@ -6,6 +6,7 @@ enum class AutonRoutine {
     RED_POSITIVE,
     BLUE_POSITIVE,
     SKILLS,
+    AUTON_EXAMPLE,
     NONE
 };
 

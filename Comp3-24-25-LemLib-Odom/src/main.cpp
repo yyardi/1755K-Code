@@ -7,6 +7,7 @@
 #include "pros/motors.h"
 #include <atomic>
 #include "autons.hpp"
+#include "subsystems.hpp"
 
 //electronics variables
 bool isClamp = false;
@@ -14,6 +15,9 @@ bool clampLatch = false;
 
 bool isDoinker = false;
 bool doinkerLatch = false;
+
+bool isIntakePiston = false;
+bool intakePistonLatch = false;
 
 int currentPositionIndex = 0;
 
@@ -29,14 +33,14 @@ pros::Task* colorSortTask = nullptr;
 // electronics declarations
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-pros::MotorGroup leftMotors({-18, -19, -20}, pros::MotorGearset::blue); // left motor group - reversed
-pros::MotorGroup rightMotors({8, 9, 10}, pros::MotorGearset::blue); // right motor group -
+pros::MotorGroup leftMotors({-9, -3, -8}, pros::MotorGearset::blue); // left motor group - reversed
+pros::MotorGroup rightMotors({19, 12, 18}, pros::MotorGearset::blue); // right motor group -
 
-pros::Imu imu(17);
+pros::Imu imu(15);
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, not reversed
-pros::Rotation horizontalEnc(20);
+pros::Rotation horizontalEnc(2);
 // vertical tracking wheel encoder. Rotation sensor, reversed
 pros::Rotation verticalEnc(-6);
 
@@ -90,14 +94,15 @@ lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel
 // create the chassis
 lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors);
 
-pros::Motor intakeLow(-11);
-pros::Motor intakeHigh(-7);
+pros::Motor intakeLow(-4);
+pros::Motor intakeHigh(-5);
 
 pros::Optical colorsort(2); //change port
 
 
-pros::Motor ladybrown(5);
-pros::ADIDigitalOut doinker('A');
+pros::Motor ladybrown(16);
+// pros::ADIDigitalOut doinker('A');
+pros::ADIDigitalOut intakePiston('B');
 pros::ADIDigitalOut mogoclamp('C');
 
 //use these with the autons selector
@@ -203,7 +208,7 @@ void competition_initialize() {}
 void autonomous() {
 	chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);  	
-  	doinker.set_value(LOW);
+  	// doinker.set_value(LOW);
   	mogoclamp.set_value(LOW);
 	isColorSortEnabled = true; //enable color sort for all of auto -- we could cook on the corners??
 
@@ -237,11 +242,11 @@ void opcontrol() {
         //intake 
         if (controller.get_digital(DIGITAL_R1)) {
             intakeLow.move(127);
-            intakeHigh.move(113);
+            intakeHigh.move(127);
         } 
         else if (controller.get_digital(DIGITAL_R2)) {
             intakeLow.move(-127);
-            intakeHigh.move(-113);
+            intakeHigh.move(-127);
         } 
         else {
             intakeLow.move(0);
@@ -265,22 +270,39 @@ void opcontrol() {
             clampLatch = false;
         }
 
-        //doinker
-        if (isDoinker){
-            doinker.set_value(HIGH);
+        //intake piston
+        if (isIntakePiston){
+            intakePiston.set_value(HIGH);
         } 
         else {
-            doinker.set_value(LOW);
+            intakePiston.set_value(LOW);
         }
         if (controller.get_digital(DIGITAL_L1)) {
-            if (!doinkerLatch) {
-                isDoinker = !isDoinker;
-                doinkerLatch = true;
+            if (!intakePistonLatch) {
+                isIntakePiston = !isIntakePiston;
+                intakePistonLatch = true;
             } 
         }    
         else {
-            doinkerLatch = false;
+            intakePistonLatch = false;
         }
+
+        // //doinker
+        // if (isDoinker){
+        //     doinker.set_value(HIGH);
+        // } 
+        // else {
+        //     doinker.set_value(LOW);
+        // }
+        // if (controller.get_digital(DIGITAL_L1)) {
+        //     if (!doinkerLatch) {
+        //         isDoinker = !isDoinker;
+        //         doinkerLatch = true;
+        //     } 
+        // }    
+        // else {
+        //     doinkerLatch = false;
+        // }
 
         // ladybrown
         if (controller.get_digital(DIGITAL_DOWN)) {
@@ -306,10 +328,10 @@ void opcontrol() {
 
 
         //color sort
-        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)) {
+        if (controller.get_digital(DIGITAL_Y)) {
             isColorSortEnabled = true;
         }
-        else if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)) {
+        else if (controller.get_digital(DIGITAL_X)) {
             isColorSortEnabled = false;
         }
         else {

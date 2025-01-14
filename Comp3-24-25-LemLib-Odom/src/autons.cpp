@@ -1,11 +1,17 @@
+#include "autons.hpp"
 #include "liblvgl/llemu.h"
 #include "main.h"
+#include "subsystems.hpp"
 
 
 // get a path used for pure pursuit
 // in the static folder 
 ASSET(example_txt); // '.' replaced with "_" to make c++ happy 
-
+void example_drive(){
+    selectBlueTeam();
+    chassis.moveToPoint(0, 10, 4000);
+    
+}
 
 void blue_negative_auton() {
     selectBlueTeam(); // Set team color for sorting
@@ -95,6 +101,7 @@ void AutonSelector::runSelectedAuton() {
         case AutonRoutine::RED_POSITIVE: red_positive_auton(); break;
         case AutonRoutine::BLUE_POSITIVE: blue_positive_auton(); break;
         case AutonRoutine::SKILLS: skills_auton(); break;
+        case AutonRoutine::AUTON_EXAMPLE: auton_example(); break;
         case AutonRoutine::NONE: default: break;
     }
 }
@@ -127,6 +134,7 @@ const char* AutonSelector::getAutonName() {
         case AutonRoutine::RED_POSITIVE: return "Red Positive";
         case AutonRoutine::BLUE_POSITIVE: return "Blue Positive";
         case AutonRoutine::SKILLS: return "Skills";
+        case AutonRoutine::AUTON_EXAMPLE: return "Autons Example";
         case AutonRoutine::NONE: default: return "None";
     }
 }
