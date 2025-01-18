@@ -3,7 +3,7 @@
 enum class AutonRoutine {
     BLUE_NEGATIVE,
     RED_NEGATIVE,
-    RED_POSITIVE,
+    RED_POSITIVE,   
     BLUE_POSITIVE,
     SKILLS,
     AUTON_EXAMPLE,

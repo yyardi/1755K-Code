@@ -7,11 +7,11 @@
 // get a path used for pure pursuit
 // in the static folder 
 ASSET(example_txt); // '.' replaced with "_" to make c++ happy 
-void example_drive(){
-    selectBlueTeam();
-    chassis.moveToPoint(0, 10, 4000);
+// void example_drive(){
+//     selectBlueTeam();
+//     chassis.moveToPoint(0, 10, 4000);
     
-}
+// }
 
 void blue_negative_auton() {
     selectBlueTeam(); // Set team color for sorting
@@ -69,10 +69,10 @@ void auton_example() {
 
 // Initialize autonomous selection
 void AutonSelector::init() {
-    currentAuton = AutonRoutine::NONE;
-    pros::lcd::clear();
-    showingCoords = false;
-    displayAutonSelection();
+    // currentAuton = AutonRoutine::NONE;
+    // pros::lcd::clear();
+    // showingCoords = false;
+    // displayAutonSelection();
 }
 
 // Update display or selection logic

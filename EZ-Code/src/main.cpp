@@ -19,7 +19,6 @@ ez::Drive chassis(
     450);   // Wheel RPM
 
 
-
 int currentPositionIndex = 0;
 bool lastCycleButtonState = false;
 
@@ -83,7 +82,7 @@ void initialize() {
   ez::ez_template_print();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
-
+  
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(true);  // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(1.4);    // Sets the active brake kP. We recommend ~2.  0 will disable.
@@ -213,11 +212,12 @@ void opcontrol() {
     }
 
     //chassis.opcontrol_tank();  // Tank control
-    // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
+    chassis.opcontrol_arcade_standard(ez::SPLIT);  // Standard single arcade
     //chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
     // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
-    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
     
+
+
     if (master.get_digital(DIGITAL_R1)) {
       intakeLow.move(127);
       intakeHigh.move(127);

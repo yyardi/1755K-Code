@@ -40,14 +40,14 @@ pros::Imu imu(15);
 
 // tracking wheels
 // horizontal tracking wheel encoder. Rotation sensor, not reversed
-pros::Rotation horizontalEnc(2);
+pros::Rotation horizontalEnc(1);
 // vertical tracking wheel encoder. Rotation sensor, reversed
-pros::Rotation verticalEnc(-6);
+pros::Rotation verticalEnc(-13);
 
 // horizontal tracking wheel. 2" diameter, 5.75" offset, back of the robot (negative)
-lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -5.75);
+lemlib::TrackingWheel horizontal(&horizontalEnc, lemlib::Omniwheel::NEW_2, -6);
 // vertical tracking wheel. 2" diameter, 2.5" offset, left of the robot (negative)
-lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2, -2.5);
+lemlib::TrackingWheel vertical(&verticalEnc, lemlib::Omniwheel::NEW_2,-1);
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&leftMotors, // left motor group
@@ -73,9 +73,9 @@ lemlib::ControllerSettings linearController(10, // proportional gain (kP)
 // angular motion controller
 lemlib::ControllerSettings angularController(2, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             10, // derivative gain (kD)
-                                             3, // anti windup
-                                             1, // small error range, in degrees
+                                             12, // derivative gain (kD)
+                                             0, // anti windup
+                                             0.5, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
                                              3, // large error range, in degrees
                                              500, // large error range timeout, in milliseconds
@@ -108,6 +108,7 @@ pros::ADIDigitalOut mogoclamp('C');
 //use these with the autons selector
 void selectRedTeam() {
     isRedTeam.store(true);
+    
 }
 
 void selectBlueTeam() {
@@ -159,34 +160,37 @@ void sorting() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
+
 void initialize() {
     pros::lcd::initialize(); // initialize brain screen
     chassis.calibrate(); // calibrate sensors
     // thread to for brain screen and position logging
     colorSortTask = new pros::Task(sorting);
     
-    AutonSelector::getInstance().init();
+    // AutonSelector::getInstance().init();    
     
     // task for updating display
-    pros::Task displayTask([&]() {
-        while (true) {
-            AutonSelector::getInstance().update();
-            pros::delay(50);
-        }
-    });
-
-    // pros::Task screenTask([&]() {
+    // pros::Task displayTask([&]() {
     //     while (true) {
-    //         // print robot location to the brain screen
-    //         pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
-    //         pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
-    //         pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
-    //         // log position telemetry
-    //         lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
-    //         // delay to save resources
+    //         AutonSelector::getInstance().update();
     //         pros::delay(50);
     //     }
     // });
+
+    pros::Task screenTask([&]() {
+        while (true) {
+            // print robot location to the brain screen
+            pros::lcd::print(0, "X: %f", chassis.getPose().x); // x
+            pros::lcd::print(1, "Y: %f", chassis.getPose().y); // y
+            pros::lcd::print(2, "Theta: %f", chassis.getPose().theta); // heading
+            pros::lcd::print(3, "Rotation Sensor: %i", verticalEnc.get_position());
+            // log position telemetry
+            lemlib::telemetrySink()->info("Chassis pose: {}", chassis.getPose());
+            // delay to save resources
+            pros::delay(50);
+        }
+    });
 }
 
 /**
@@ -205,15 +209,24 @@ void competition_initialize() {}
  *
  * This is an example autonomous routine which demonstrates a lot of the features LemLib has to offer
  */
+
+void example_drive(){
+    selectBlueTeam();
+    
+    chassis.setPose(0,0,0);
+    chassis.moveToPose(0, 10, 0, 1000);
+    // chassis.turnToHeading(90, 1000);
+}
+
+
 void autonomous() {
-	chassis.setBrakeMode(pros::E_MOTOR_BRAKE_HOLD);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);  	
   	// doinker.set_value(LOW);
   	mogoclamp.set_value(LOW);
 	isColorSortEnabled = true; //enable color sort for all of auto -- we could cook on the corners??
 
-    AutonSelector::getInstance().runSelectedAuton();
-
+    example_drive();
+    
     
 }
 
@@ -232,11 +245,11 @@ void opcontrol() {
                 autonomous(); //runs auton
                 chassis.setBrakeMode(pros::E_MOTOR_BRAKE_COAST); //when done go back to coast for driver
             }
-            //switches from auton selector to the coords and vise versa
-            if (controller.get_digital(DIGITAL_A) && 
-                controller.get_digital(DIGITAL_RIGHT)) {
-                AutonSelector::getInstance().toggleDisplay();
-            }
+        //     //switches from auton selector to the coords and vise versa
+        //     if (controller.get_digital(DIGITAL_A) && 
+        //         controller.get_digital(DIGITAL_RIGHT)) {
+        //         AutonSelector::getInstance().toggleDisplay();
+        //     }
         }
 
         //intake 
@@ -345,7 +358,7 @@ void opcontrol() {
         int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
         int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
         // move the chassis with curvature drive
-        chassis.arcade(leftY, rightX);
+        chassis.arcade(-1* leftY, rightX);
         // delay to save resources
         pros::delay(10);
 
