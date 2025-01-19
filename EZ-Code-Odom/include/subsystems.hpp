@@ -14,7 +14,7 @@ inline pros::Motor ladybrown(4);
 // inline ez::Piston doinker('A');
 inline pros::Optical colorsort(16);
 
-inline ez::Piston intakePiston('B');
+// inline ez::Piston intakePiston('B');
 inline ez::Piston mogoclamp('C');
 
 
@@ -28,6 +28,20 @@ inline void lb_wait() {
   while (lbPID.exit_condition({ladybrown}, true) == ez::RUNNING) {
     pros::delay(ez::util::DELAY_TIME);
   }
+}
+
+//vars
+
+inline bool isColorSortEnabled = false;  // Start enabled by default
+inline std::atomic<bool> isRedTeam(true); // Atomic for thread safety
+
+inline void selectRedTeam() {
+    isRedTeam.store(true);
+    
+}
+
+inline void selectBlueTeam() {
+    isRedTeam.store(false);
 }
 
 

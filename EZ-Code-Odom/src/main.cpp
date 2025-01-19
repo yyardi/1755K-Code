@@ -24,20 +24,6 @@ ez::Drive chassis(
 ez::tracking_wheel horiz_tracker(-5, 2, 3.0);  // This tracking wheel is perpendicular to the drive wheels
 ez::tracking_wheel vert_tracker(12, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
 
-//vars
-
-bool isColorSortEnabled = true;  // Start enabled by default
-std::atomic<bool> isRedTeam(true); // Atomic for thread safety
-
-void selectRedTeam() {
-    isRedTeam.store(true);
-    
-}
-
-void selectBlueTeam() {
-    isRedTeam.store(false);
-}
-
 void sorting_task() {
     pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
     while (true) {
@@ -48,23 +34,26 @@ void sorting_task() {
             if (isRedTeam.load()) {  // check team color multithread
                 bad_ring_detected = values.blue > 220 && values.red < 220; //red team
                 if (bad_ring_detected) {
-                    if (intakeHigh.get_actual_velocity() > 100) {
+                    if (intakeHigh.get_actual_velocity() < 100) {
                         intakeHigh.move(0);
                     }
                     else {
-                      intakeHigh.move_relative(200, 127);
+                        intakeHigh.move(-127);
+                        pros::delay(100);
+                        intakeHigh.move(0);
                     }
                 }
             } 
             else {
                 bad_ring_detected = values.blue < 220 && values.red > 220; //blue team
                 if (bad_ring_detected) {
-                    if (intakeHigh.get_actual_velocity() > 100) {
+                    if (intakeHigh.get_actual_velocity() < 100) {
                         intakeHigh.move(0);
                     }
                     else {
-                      intakeHigh.move_relative(200, 127);
-                    }
+                        intakeHigh.move(-127);
+                        pros::delay(100);
+                        intakeHigh.move(0);                    }
                 }
             }
             
@@ -93,7 +82,6 @@ void lb_task() {
 }
 
 pros::Task LB_TASK(lb_task);
-
 
 
 
@@ -128,8 +116,8 @@ void initialize() {
   
   ladybrown.tare_position();
   lbPID.exit_condition_set(80, 50, 300, 150, 500, 500);
-
-
+  intakeHigh.tare_position();
+  
 
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
   // chassis.opcontrol_curve_buttons_left_set(pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT);  // If using tank, only the left side is used.
@@ -137,6 +125,12 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      Auton("Negative Auton\n\nBlue Side", blue_negative_auton),
+      /*
+      Auton("Aggressive Auton\n\nRed - Side", red_negative_auton),
+      Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
+      Auton("Aggressive Auton\n\nBlue + Side", blue_positive_auton),
+      */
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -151,6 +145,7 @@ void initialize() {
       {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
       {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
       {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+
   });
 
   // Initialize chassis and auton selector
@@ -200,9 +195,10 @@ void autonomous() {
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
 
   mogoclamp.set(false);
-  intakePiston.set(false);
+  // intakePiston.set(false);
 	isColorSortEnabled = false; //enable color sort for all of auto -- we could cook on the corners??
 
+  ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   /*
   Odometry and Pure Pursuit are not magic
 
@@ -344,17 +340,17 @@ void opcontrol() {
 
     
       // doinker.set(false);
-      intakePiston.set(false);
+      // intakePiston.set(false);
       isColorSortEnabled = false;
 
 
       if (master.get_digital(DIGITAL_R1)) {
           intakeLow.move(127);
-          intakeHigh.move(127);
+          intakeHigh.move(106);
       } 
       else if (master.get_digital(DIGITAL_R2)) {
           intakeLow.move(-127);
-          intakeHigh.move(-127);
+          intakeHigh.move(-106);
       } 
       else {
           intakeLow.move(0);
@@ -363,28 +359,23 @@ void opcontrol() {
 
       mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
       // doinker.button_toggle(master.get_digital(DIGITAL_L1));
-      intakePiston.button_toggle(master.get_digital(DIGITAL_L1));
+      // intakePiston.button_toggle(master.get_digital(DIGITAL_L1));
 
 
-      // if (master.get_digital(DIGITAL_DOWN)) {
-      //     // currentPositionIndex = (currentPositionIndex + 1) % 3;
-      //     lbPID.target_set(0);
-      //     // ladyBrownAngle(positions[currentPositionIndex]);
-      // }
+      if (master.get_digital(DIGITAL_DOWN)) {
+          
+          lbPID.target_set(0);
+          
+      }
 
-      // if (master.get_digital(DIGITAL_UP)) {
-      //     // currentPositionIndex = 0;
-      //     lbPID.target_set(1850);
+      if (master.get_digital(DIGITAL_UP)) {
+          lbPID.target_set(1850);
+      }
 
-      //     // ladyBrownAngle(positions[0]);
-      //     // ladybrown.tare_position();
-      // }
-
-      // if (master.get_digital(DIGITAL_LEFT)) {
-      //     // currentPositionIndex = 0;
-      //     lbPID.target_set(380);
-      //     intakeHigh.move_relative(200, -127); //short out take
-      // }
+      if (master.get_digital(DIGITAL_LEFT)) {
+          lbPID.target_set(380);
+          intakeHigh.move_relative(200, -127); //short out take
+      }
 
       //color sort
       // if (master.get_digital(DIGITAL_Y)) {
@@ -392,6 +383,7 @@ void opcontrol() {
       // }
       // else if (master.get_digital(DIGITAL_X)) {
       //     isColorSortEnabled = false;
+          
       // }
       // else {
       //     isColorSortEnabled = false;
