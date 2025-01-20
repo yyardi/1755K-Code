@@ -50,6 +50,7 @@ We’re always striving to improve. Team members can:
 ## Achievements in 2024-25 High Stakes Season
 🏆 **Tournament Champions at Great Lakes 2 Competition (IL States Qualifying)** <br />
 🧑‍💻 **Think Award at Great Lakes 2 Competition** <br />
+1️⃣ **Ranked First in Division at Mundelein 2** <br />
 ...More to come from GL 3, Skills, and States! 
 
 ## Achievements in 2023-24 Over Under Season
