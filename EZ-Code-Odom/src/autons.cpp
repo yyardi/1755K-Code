@@ -411,26 +411,30 @@ void blue_negative_auton() {
     chassis.pid_drive_set(13_in, DRIVE_SPEED);
     chassis.pid_wait();
     pros::delay(600);
-    chassis.pid_turn_relative_set(-180_deg, TURN_SPEED);
-    chassis.pid_wait();
-    chassis.pid_drive_set(-24_in, DRIVE_SPEED);
-    chassis.pid_wait();
-    mogoclamp.set(false);
+    // chassis.pid_turn_relative_set(-180_deg, TURN_SPEED);
+    // chassis.pid_wait();
+    // chassis.pid_drive_set(-24_in, DRIVE_SPEED);
+    // chassis.pid_wait();
+    // mogoclamp.set(false);
 
-    chassis.pid_odom_set({{21.98_in, -5.26_in, 76_deg}, fwd, DRIVE_SPEED}, 
+
+    chassis.pid_odom_set({{-1.0_in, -49.26_in, -90_deg}, fwd, DRIVE_SPEED}, 
     true);
     chassis.pid_wait();
+    lbPID.target_set(2200);
 
-    chassis.pid_turn_relative_set(118_deg, TURN_SPEED);
-    chassis.pid_wait();
-    chassis.pid_drive_set(5_in, DRIVE_SPEED);
-    chassis.pid_wait();
-    chassis.pid_turn_relative_set(-15_deg, TURN_SPEED);
-    chassis.pid_wait();
-    intakeHigh.move(0);
-    intakeLow.move(0);
-    chassis.pid_drive_set(20_in, DRIVE_SPEED*0.6);
-    chassis.pid_wait();
+
+    // chassis.pid_turn_relative_set(118_deg, TURN_SPEED);
+    // chassis.pid_wait();
+    // chassis.pid_drive_set(5_in, DRIVE_SPEED);
+    // chassis.pid_wait();
+    // chassis.pid_turn_relative_set(-15_deg, TURN_SPEED);
+    // chassis.pid_wait();
+    // intakeHigh.move(0);
+    // intakeLow.move(0);
+    // chassis.pid_drive_set(20_in, DRIVE_SPEED*0.6);
+    
+    // chassis.pid_wait();
     // chassis.pid_wait();
     // //here we add Ladybrown
     // chassis.pid_odom_set({{{-15.4_in, -48.6_in, -60.6_deg}, rev, DRIVE_SPEED},
@@ -455,4 +459,66 @@ void blue_negative_auton() {
     // chassis.pid_wait();
 
     // lbPID.target_set(1600);
+}
+
+
+void red_negative_auton() {
+    selectRedTeam();
+    // doinker.set(false);
+    // intakePiston.set(false);
+    //BLOCK 1 - Get Mogo + Preload
+    chassis.pid_drive_set(-24.5_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_turn_set(-27_deg, TURN_SPEED);
+    chassis.pid_wait();
+    
+    chassis.pid_drive_set(-21_in, DRIVE_SPEED*0.7);
+    chassis.pid_wait_until(-20_in);
+    mogoclamp.set(true);
+    chassis.pid_wait_quick();
+    chassis.pid_drive_set(-4_in, DRIVE_SPEED);
+    chassis.pid_wait_quick();
+
+    chassis.pid_turn_relative_set(-205_deg, TURN_SPEED);
+    chassis.pid_wait();
+    // BLOCK 2 - get 3 rings 
+    intakeHigh.move(106);
+    intakeLow.move(127);
+    chassis.pid_drive_set(12_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(-32.5_deg, TURN_SPEED);
+    chassis.pid_wait();
+    chassis.pid_drive_set(8_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    pros::delay(800);
+    chassis.pid_turn_relative_set(-84_deg, TURN_SPEED);
+    chassis.pid_wait();
+    chassis.pid_drive_set(13_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    pros::delay(600);
+    // chassis.pid_turn_relative_set(180_deg, TURN_SPEED);
+    // chassis.pid_wait();
+    // chassis.pid_drive_set(-24_in, DRIVE_SPEED);
+    // chassis.pid_wait();
+    // mogoclamp.set(false);
+
+    chassis.pid_odom_set({{-1.0_in, -49.26_in, -90_deg}, fwd, DRIVE_SPEED}, 
+    true);
+    chassis.pid_wait();
+    lbPID.target_set(2200);
+    // chassis.pid_turn_relative_set(-118_deg, TURN_SPEED);
+    // chassis.pid_wait();
+    // chassis.pid_drive_set(5_in, DRIVE_SPEED);
+    // chassis.pid_wait();
+    // chassis.pid_turn_relative_set(15_deg, TURN_SPEED);
+    // chassis.pid_wait();
+    // intakeHigh.move(0);
+    // intakeLow.move(0);
+    // chassis.pid_drive_set(20_in, DRIVE_SPEED*0.6);
+    // chassis.pid_wait();
+}
+
+void skills_auton() {
+    selectRedTeam();
+
 }

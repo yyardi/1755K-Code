@@ -1,4 +1,5 @@
 #include "main.h"
+#include "autons.hpp"
 #include "subsystems.hpp"
 
 /////
@@ -126,11 +127,12 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       Auton("Negative Auton\n\nBlue Side", blue_negative_auton),
+      Auton("Negative Auton\n\nRed Side", red_negative_auton),
       /*
-      Auton("Aggressive Auton\n\nRed - Side", red_negative_auton),
       Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
       Auton("Aggressive Auton\n\nBlue + Side", blue_positive_auton),
       */
+      {"Skills\n\nRed", skills_auton},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -322,7 +324,7 @@ void opcontrol() {
     // This is preference to what you like to drive on
     chassis.drive_brake_set(MOTOR_BRAKE_COAST);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-
+    lbPID.target_set(0);
     while (true) {
       // Gives you some extras to make EZ-Template ezier
       ez_template_extras();
@@ -369,12 +371,11 @@ void opcontrol() {
       }
 
       if (master.get_digital(DIGITAL_UP)) {
-          lbPID.target_set(1850);
+          lbPID.target_set(1600);
       }
 
       if (master.get_digital(DIGITAL_LEFT)) {
-          lbPID.target_set(380);
-          intakeHigh.move_relative(200, -127); //short out take
+          lbPID.target_set(190);
       }
 
       //color sort

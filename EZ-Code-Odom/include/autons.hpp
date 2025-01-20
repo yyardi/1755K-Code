@@ -17,5 +17,6 @@ void odom_boomerang_example();
 void odom_boomerang_injected_pure_pursuit_example();
 void measure_offsets();
 void blue_negative_auton();
-
+void red_negative_auton();
+void skills_auton();
 
