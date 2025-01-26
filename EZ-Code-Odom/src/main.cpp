@@ -23,7 +23,7 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 ez::tracking_wheel horiz_tracker(-5, 2, 3.0);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(12, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel vert_tracker(15, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
 
 void sorting_task() {
     pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
