@@ -556,11 +556,11 @@ void skills_auton() {
     chassis.pid_wait();
     chassis.pid_turn_relative_set(-88_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(22_in, DRIVE_SPEED);
-    chassis.pid_wait_until(20_in);
+    chassis.pid_odom_set({{70.64_in, 53.20_in, 90_deg}, fwd, DRIVE_SPEED}, 
+    true);
+    chassis.pid_wait();
     intakeHigh.move(0);
     lbPID.target_set(1500);
-    chassis.pid_wait();
 
 
     // pros::delay(100);
