@@ -23,7 +23,7 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 ez::tracking_wheel horiz_tracker(-5, 2, 3.0);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(15, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel vert_tracker(12, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
 
 void sorting_task() {
     pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
@@ -126,13 +126,14 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"Skills\n\nRed", skills_auton},
       Auton("Negative Auton\n\nBlue Side", blue_negative_auton),
       Auton("Negative Auton\n\nRed Side", red_negative_auton),
       /*
       Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
       Auton("Aggressive Auton\n\nBlue + Side", blue_positive_auton),
       */
-      {"Skills\n\nRed", skills_auton},
+      
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -371,11 +372,11 @@ void opcontrol() {
       }
 
       if (master.get_digital(DIGITAL_UP)) {
-          lbPID.target_set(1600);
+          lbPID.target_set(1100);
       }
 
       if (master.get_digital(DIGITAL_LEFT)) {
-          lbPID.target_set(190);
+          lbPID.target_set(174);
       }
 
       //color sort

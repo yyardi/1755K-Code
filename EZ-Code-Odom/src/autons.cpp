@@ -19,7 +19,7 @@ const int SWING_SPEED = 110;
 ///
 void default_constants() {
   // P, I, D, and Start I
-  chassis.pid_drive_constants_set(22, 1.0, 200.0);         // Fwd/rev constants, used for odom and non odom motions
+  chassis.pid_drive_constants_set(22, 1.0, 210.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
   chassis.pid_turn_constants_set(4.0, 0.05, 20.0, 15.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
@@ -47,7 +47,7 @@ void default_constants() {
 
   chassis.odom_look_ahead_set(7_in);           // This is how far ahead in the path the robot looks at
   chassis.odom_boomerang_distance_set(12_in);  // This sets the maximum distance away from target that the carrot point can be
-  chassis.odom_boomerang_dlead_set(0.55);     // This handles how aggressive the end of boomerang motions are
+  chassis.odom_boomerang_dlead_set(0.1);     // This handles how aggressive the end of boomerang motions are
 
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
@@ -520,5 +520,53 @@ void red_negative_auton() {
 
 void skills_auton() {
     selectRedTeam();
+    intakeHigh.move(127);
+    pros::delay(200);
+    intakeHigh.move(0);
+    chassis.pid_odom_set(14_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_turn_set(-90_deg, TURN_SPEED);
+    chassis.pid_wait();
+    chassis.pid_odom_set(-24_in, DRIVE_SPEED);
+    chassis.pid_wait_until(-23_in);
+    mogoclamp.set(true);
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
+    chassis.pid_wait();
+    intakeHigh.move(127);
+    intakeLow.move(127);
+    chassis.pid_odom_set(24_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_odom_set({{{48.05_in, 54.82_in, -4.36_deg}, fwd, DRIVE_SPEED},
+                        {{23.22_in, 83.6_in, -47.8_deg}, fwd, DRIVE_SPEED}},
+                       true);
+    chassis.pid_wait();
+    pros::delay(300);
+    chassis.pid_turn_relative_set(160_deg, TURN_SPEED);
+    chassis.pid_wait();
+    chassis.pid_odom_set(30_in, DRIVE_SPEED);
+    chassis.pid_wait_until(13_in);
+    lbPID.target_set(174);
+    chassis.pid_wait();
+    chassis.pid_drive_set(-20_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
+    chassis.pid_wait();
+    chassis.pid_drive_set(25.5_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(-88_deg, TURN_SPEED);
+    chassis.pid_wait();
+    chassis.pid_drive_set(22_in, DRIVE_SPEED);
+    chassis.pid_wait_until(20_in);
+    intakeHigh.move(0);
+    lbPID.target_set(1500);
+    chassis.pid_wait();
+
+
+    // pros::delay(100);
+    // chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
+    // chassis.pid_wait();
+    // chassis.pid_odom_set(24_in, DRIVE_SPEED);
+    // chassis.pid_wait();
 
 }

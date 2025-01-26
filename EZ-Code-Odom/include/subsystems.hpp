@@ -15,14 +15,14 @@ inline pros::Motor ladybrown(4);
 inline pros::Optical colorsort(16);
 
 // inline ez::Piston intakePiston('B');
-inline ez::Piston mogoclamp('C');
+inline ez::Piston mogoclamp('H');
 
 
 inline void set_lb(int input) {
   ladybrown.move(input);
 }
 
-inline ez::PID lbPID{0.45, 0, 0, 0, "ladybrown"};
+inline ez::PID lbPID{0.45, 0, 1.5, 0, "ladybrown"};
 
 inline void lb_wait() {
   while (lbPID.exit_condition({ladybrown}, true) == ez::RUNNING) {
