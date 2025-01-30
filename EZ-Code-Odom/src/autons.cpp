@@ -563,7 +563,6 @@ void skills_auton() {
     chassis.pid_turn_relative_set(-88_deg, TURN_SPEED);
     chassis.pid_wait();
     chassis.pid_odom_set({{70.64_in, 53.20_in, 90_deg}, fwd, 50}, 
-    chassis.pid_odom_set({{70.64_in, 53.20_in, 90_deg}, fwd, 50}, 
     true);
     chassis.pid_wait();
 
