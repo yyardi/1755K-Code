@@ -60,17 +60,18 @@ void drive_example() {
   // The second parameter is max speed the robot will drive at
   // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions
   // for slew, only enable it when the drive distance is greater than the slew distance + a few inches
-  selectRedTeam();
+  selectBlueTeam();
   chassis.pid_odom_set(-4_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-  mogoclamp.set(true);
-  intakeHigh.move(106);
-  intakeLow.move(127);
-  chassis.pid_drive_set(30_in, DRIVE_SPEED*0.2, true);
-  chassis.pid_wait();
+  // mogoclamp.set(true);
+  // intakeHigh.move(106);
+  // intakeLow.move(127);
+  // chassis.pid_drive_set(30_in, DRIVE_SPEED*0.2, true);
+  // chassis.pid_wait();
   
-  intakeHigh.move(0);
-  intakeLow.move(0);
+  // intakeHigh.move(0);
+  // intakeLow.move(0);
+  
   
 }
 
@@ -281,9 +282,9 @@ void odom_pure_pursuit_wait_until_example() {
                         {{0_in, 0_in}, rev, DRIVE_SPEED}},
                        true);
   chassis.pid_wait_until_index(1);  // Waits until the robot passes 12, 24
-  intakeHigh.move(127);  // Set your intake to start moving once it passes through the second point in the index
+  intake_speed_high = 127;  // Set your intake to start moving once it passes through the second point in the index
   chassis.pid_wait();
-  intakeHigh.move(0);  // Turn the intake off
+  intake_speed_high = 0; // Turn the intake off
 }
 
 ///
@@ -397,8 +398,8 @@ void blue_negative_auton() {
     chassis.pid_turn_relative_set(205_deg, TURN_SPEED);
     chassis.pid_wait();
     // BLOCK 2 - get 3 rings 
-    intakeHigh.move(106);
-    intakeLow.move(127);
+    intake_speed_high = 106;
+    intake_speed_low = 127;
     chassis.pid_drive_set(12_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_turn_relative_set(32.5_deg, TURN_SPEED);
@@ -422,6 +423,8 @@ void blue_negative_auton() {
     true);
     chassis.pid_wait();
     lbPID.target_set(2200);
+    intake_speed_high = 0;
+    intake_speed_low = 0;
 
 
     // chassis.pid_turn_relative_set(118_deg, TURN_SPEED);
@@ -482,8 +485,8 @@ void red_negative_auton() {
     chassis.pid_turn_relative_set(-205_deg, TURN_SPEED);
     chassis.pid_wait();
     // BLOCK 2 - get 3 rings 
-    intakeHigh.move(106);
-    intakeLow.move(127);
+    intake_speed_high = 106;
+    intake_speed_low = 127;
     chassis.pid_drive_set(12_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_turn_relative_set(-32.5_deg, TURN_SPEED);
@@ -506,6 +509,8 @@ void red_negative_auton() {
     true);
     chassis.pid_wait();
     lbPID.target_set(2200);
+    intake_speed_high = 0;
+    intake_speed_low = 0;
     // chassis.pid_turn_relative_set(-118_deg, TURN_SPEED);
     // chassis.pid_wait();
     // chassis.pid_drive_set(5_in, DRIVE_SPEED);
@@ -520,9 +525,9 @@ void red_negative_auton() {
 
 void skills_auton() {
     selectRedTeam();
-    intakeHigh.move(127);
+    intake_speed_high = 127;
     pros::delay(200);
-    intakeHigh.move(0);
+    intake_speed_high = 0;
     chassis.pid_odom_set(14_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_turn_set(-90_deg, TURN_SPEED);
@@ -533,20 +538,20 @@ void skills_auton() {
     chassis.pid_wait();
     chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
     chassis.pid_wait();
-    intakeHigh.move(127);
-    intakeLow.move(127);
+    intake_speed_high = 106;
+    intake_speed_low = 127;
     chassis.pid_odom_set(24_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_odom_set({{{48.05_in, 54.82_in, -4.36_deg}, fwd, DRIVE_SPEED},
                         {{23.22_in, 83.6_in, -47.8_deg}, fwd, DRIVE_SPEED}},
                        true);
     chassis.pid_wait();
-    pros::delay(300);
+    pros::delay(200);
     chassis.pid_turn_relative_set(160_deg, TURN_SPEED);
     chassis.pid_wait();
     chassis.pid_odom_set(30_in, DRIVE_SPEED);
     chassis.pid_wait_until(13_in);
-    lbPID.target_set(174);
+    lbPID.target_set(178);
     chassis.pid_wait();
     chassis.pid_drive_set(-20_in, DRIVE_SPEED);
     chassis.pid_wait();
@@ -556,17 +561,42 @@ void skills_auton() {
     chassis.pid_wait();
     chassis.pid_turn_relative_set(-88_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_odom_set({{70.64_in, 53.20_in, 90_deg}, fwd, DRIVE_SPEED}, 
+    chassis.pid_odom_set({{70.64_in, 53.20_in, 90_deg}, fwd, 50}, 
     true);
     chassis.pid_wait();
-    intakeHigh.move(0);
+
+    intake_speed_high = -10;
+    pros::delay(10);
+    intake_speed_high = 0;
+    chassis.pid_drive_set(-0.3_in, DRIVE_SPEED);
+    chassis.pid_wait();
     lbPID.target_set(1500);
+    pros::delay(200);
+    chassis.pid_drive_set(-19_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    lbPID.target_set(0);
+    //done with ladybrown go get remaining rings
+    chassis.pid_turn_relative_set(90_deg, TURN_SPEED); 
+    chassis.pid_wait();
+    intake_speed_high = 106;
+    intake_speed_low = 127;
+    chassis.pid_odom_set({{50_in, -7_in, 182_deg}, fwd, DRIVE_SPEED});
+    chassis.pid_wait();
+    //last few rings on right corner
+    chassis.pid_drive_set(-5_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(-90_deg, TURN_SPEED); 
+    chassis.pid_wait();
+    chassis.pid_drive_set(-12_in, DRIVE_SPEED); //check 
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(-95_deg, TURN_SPEED); 
+    chassis.pid_wait();
+    chassis.pid_drive_set(-5_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    mogoclamp.set(false);
 
+    chassis.pid_odom_set({{0_in, 0_in, 0_deg}, fwd, 50});
+    chassis.pid_wait();
 
-    // pros::delay(100);
-    // chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
-    // chassis.pid_wait();
-    // chassis.pid_odom_set(24_in, DRIVE_SPEED);
-    // chassis.pid_wait();
 
 }

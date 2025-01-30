@@ -27,46 +27,31 @@ ez::tracking_wheel vert_tracker(12, 2, 0.0);   // This tracking wheel is paralle
 
 void sorting_task() {
     pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
+    colorsort.set_led_pwm(100);
     while (true) {
-        if (isColorSortEnabled) {
-            auto values = colorsort.get_rgb();
-            bool bad_ring_detected;
-            
-            if (isRedTeam.load()) {  // check team color multithread
-                bad_ring_detected = values.blue > 220 && values.red < 220; //red team
-                if (bad_ring_detected) {
-                    if (intakeHigh.get_actual_velocity() < 100) {
-                        intakeHigh.move(0);
-                    }
-                    else {
-                        intakeHigh.move(-127);
-                        pros::delay(100);
-                        intakeHigh.move(0);
-                    }
-                }
-            } 
-            else {
-                bad_ring_detected = values.blue < 220 && values.red > 220; //blue team
-                if (bad_ring_detected) {
-                    if (intakeHigh.get_actual_velocity() < 100) {
-                        intakeHigh.move(0);
-                    }
-                    else {
-                        intakeHigh.move(-127);
-                        pros::delay(100);
-                        intakeHigh.move(0);                    }
-                }
-            }
-            
-            // Update LED based on sorting status
-            colorsort.set_led_pwm(100); //if color sort on then led on
-        } 
-        else {
-            // Turn off LED when sorting is disabled
-            colorsort.set_led_pwm(0);
-        }
+      int hue = colorsort.get_hue();
+      if (hue > 210 && isRedTeam) { //blue is 240, red is 0
+        pros::delay(180);
+        intakeHigh.move(0);
+        pros::delay(400);
+        intakeHigh.move(0);
+        printf("Hue: %d\n", hue);
+        
+      }
+      else if (hue < 40 && !isRedTeam) { //blue is 240, red is 0
 
-        pros::delay(ez::util::DELAY_TIME);
+        pros::delay(50);
+        intakeHigh.move(-127);
+        pros::delay(200);
+        intakeHigh.move(0);
+        printf("Hue: %d\n", hue);
+        
+      }
+      
+      intakeHigh.move(intake_speed_high);
+      intakeLow.move(intake_speed_low);
+      
+      pros::delay(ez::util::DELAY_TIME);
     }
 }
 pros::Task SORTING_TASK(sorting_task);
@@ -126,6 +111,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"Drive\n\nDrive forward and come back", drive_example},
       {"Skills\n\nRed", skills_auton},
       Auton("Negative Auton\n\nBlue Side", blue_negative_auton),
       Auton("Negative Auton\n\nRed Side", red_negative_auton),
@@ -134,7 +120,7 @@ void initialize() {
       Auton("Aggressive Auton\n\nBlue + Side", blue_positive_auton),
       */
       
-      {"Drive\n\nDrive forward and come back", drive_example},
+      
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
       {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
@@ -199,7 +185,7 @@ void autonomous() {
 
   mogoclamp.set(false);
   // intakePiston.set(false);
-	isColorSortEnabled = false; //enable color sort for all of auto -- we could cook on the corners??
+	isColorSortEnabled = true; //enable color sort for all of auto -- we could cook on the corners??
 
   ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   /*
@@ -326,6 +312,7 @@ void opcontrol() {
     chassis.drive_brake_set(MOTOR_BRAKE_COAST);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     lbPID.target_set(0);
+    isColorSortEnabled = true;
     while (true) {
       // Gives you some extras to make EZ-Template ezier
       ez_template_extras();
@@ -341,23 +328,21 @@ void opcontrol() {
       // Put more user control code here!
       // . . .
 
-    
       // doinker.set(false);
       // intakePiston.set(false);
-      isColorSortEnabled = false;
 
 
       if (master.get_digital(DIGITAL_R1)) {
-          intakeLow.move(127);
-          intakeHigh.move(106);
+          intake_speed_high = 127;
+          intake_speed_low = 106;
       } 
       else if (master.get_digital(DIGITAL_R2)) {
-          intakeLow.move(-127);
-          intakeHigh.move(-106);
+          intake_speed_high = -127;
+          intake_speed_low = -106;
       } 
       else {
-          intakeLow.move(0);
-          intakeHigh.move(0);
+          intake_speed_high = 0;
+          intake_speed_low = 0;
       }
 
       mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
@@ -366,30 +351,16 @@ void opcontrol() {
 
 
       if (master.get_digital(DIGITAL_DOWN)) {
-          
           lbPID.target_set(0);
-          
       }
 
       if (master.get_digital(DIGITAL_UP)) {
-          lbPID.target_set(1100);
+          lbPID.target_set(2000);
       }
 
       if (master.get_digital(DIGITAL_LEFT)) {
-          lbPID.target_set(174);
+          lbPID.target_set(200);
       }
-
-      //color sort
-      // if (master.get_digital(DIGITAL_Y)) {
-      //     isColorSortEnabled = true;
-      // }
-      // else if (master.get_digital(DIGITAL_X)) {
-      //     isColorSortEnabled = false;
-          
-      // }
-      // else {
-      //     isColorSortEnabled = false;
-      // }
 
       pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     }

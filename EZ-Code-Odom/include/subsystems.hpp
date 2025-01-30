@@ -32,18 +32,19 @@ inline void lb_wait() {
 
 //vars
 
-inline bool isColorSortEnabled = false;  // Start enabled by default
-inline std::atomic<bool> isRedTeam(true); // Atomic for thread safety
+inline bool isColorSortEnabled = false; // CHANGE AT EVERY MATCH SCHEDULE
+inline bool isRedTeam = false; 
 
 inline void selectRedTeam() {
-    isRedTeam.store(true);
+    isRedTeam = true;
     
 }
 
 inline void selectBlueTeam() {
-    isRedTeam.store(false);
+    isRedTeam = false; 
 }
 
-
+inline int intake_speed_high = 0;
+inline int intake_speed_low = 0;
 // inline pros::Motor intake(1);
 // inline pros::adi::DigitalIn limit_switch('A');
