@@ -40,9 +40,9 @@ void sorting_task() {
       }
       else if (hue < 40 && !isRedTeam) { //blue is 240, red is 0
 
-        pros::delay(50);
-        intakeHigh.move(-127);
-        pros::delay(200);
+        pros::delay(180);
+        intakeHigh.move(0);
+        pros::delay(400);
         intakeHigh.move(0);
         printf("Hue: %d\n", hue);
         
@@ -102,7 +102,6 @@ void initialize() {
   
   ladybrown.tare_position();
   lbPID.exit_condition_set(80, 50, 300, 150, 500, 500);
-  intakeHigh.tare_position();
   
 
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
@@ -185,8 +184,7 @@ void autonomous() {
 
   mogoclamp.set(false);
   // intakePiston.set(false);
-	isColorSortEnabled = true; //enable color sort for all of auto -- we could cook on the corners??
-
+	
   ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   /*
   Odometry and Pure Pursuit are not magic
@@ -312,7 +310,7 @@ void opcontrol() {
     chassis.drive_brake_set(MOTOR_BRAKE_COAST);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     lbPID.target_set(0);
-    isColorSortEnabled = true;
+    
     while (true) {
       // Gives you some extras to make EZ-Template ezier
       ez_template_extras();

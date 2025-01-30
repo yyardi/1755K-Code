@@ -32,8 +32,7 @@ inline void lb_wait() {
 
 //vars
 
-inline bool isColorSortEnabled = false; // CHANGE AT EVERY MATCH SCHEDULE
-inline bool isRedTeam = false; 
+inline bool isRedTeam = false; //CHANGE AT EVERY MATCH
 
 inline void selectRedTeam() {
     isRedTeam = true;
