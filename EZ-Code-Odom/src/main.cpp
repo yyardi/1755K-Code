@@ -30,24 +30,24 @@ void sorting_task() {
     colorsort.set_led_pwm(100);
     while (true) {
       int hue = colorsort.get_hue();
-      if (hue > 210 && isRedTeam) { //blue is 240, red is 0
-        pros::delay(180);
-        intakeHigh.move(0);
-        pros::delay(400);
-        intakeHigh.move(0);
-        printf("Hue: %d\n", hue);
-        
-      }
-      else if (hue < 40 && !isRedTeam) { //blue is 240, red is 0
+      if (isRedTeam != 2) {
+        if (hue > 180 && (isRedTeam == 1)) { //blue is 240, red is 0
+          pros::delay(175);
+          intakeHigh.move(0);
+          pros::delay(400);
+          intakeHigh.move(0);
+          printf("Hue: %d\n", hue);
+          
+        }
+        else if (hue < 80 && (isRedTeam == 0)) { //blue is 240, red is 0
 
-        pros::delay(180);
-        intakeHigh.move(0);
-        pros::delay(400);
-        intakeHigh.move(0);
-        printf("Hue: %d\n", hue);
-        
+          pros::delay(170);
+          intakeHigh.move(0);
+          pros::delay(400);
+          intakeHigh.move(0);
+          printf("Hue: %d\n", hue);
+        }
       }
-      
       intakeHigh.move(intake_speed_high);
       intakeLow.move(intake_speed_low);
       
@@ -110,10 +110,12 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Drive\n\nDrive forward and come back", drive_example},
       {"Skills\n\nRed", skills_auton},
-      Auton("Negative Auton\n\nBlue Side", blue_negative_auton),
-      Auton("Negative Auton\n\nRed Side", red_negative_auton),
+      {"Negative Auton\n\nRed Side", red_negative_auton},
+      {"Negative Auton\n\nBlue Side", blue_negative_auton},
+      {"Drive\n\nDrive forward and come back", drive_example},
+      
+
       /*
       Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
       Auton("Aggressive Auton\n\nBlue + Side", blue_positive_auton),
@@ -353,12 +355,18 @@ void opcontrol() {
       }
 
       if (master.get_digital(DIGITAL_UP)) {
-          lbPID.target_set(2000);
+          lbPID.target_set(1900);
       }
 
       if (master.get_digital(DIGITAL_LEFT)) {
           lbPID.target_set(200);
       }
+
+      if (master.get_digital(DIGITAL_RIGHT)) {
+          lbPID.target_set(2500);
+      }
+
+
 
       pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     }

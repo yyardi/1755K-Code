@@ -32,15 +32,19 @@ inline void lb_wait() {
 
 //vars
 
-inline bool isRedTeam = false; //CHANGE AT EVERY MATCH
+inline int isRedTeam = 1; //CHANGE AT EVERY MATCH
 
 inline void selectRedTeam() {
-    isRedTeam = true;
+    isRedTeam = 1;
     
 }
 
 inline void selectBlueTeam() {
-    isRedTeam = false; 
+    isRedTeam = 0; 
+}
+
+inline void selectSkills() {
+    isRedTeam = 2;
 }
 
 inline int intake_speed_high = 0;
