@@ -30,23 +30,28 @@ void sorting_task() {
     colorsort.set_led_pwm(100);
     while (true) {
       int hue = colorsort.get_hue();
+      int threshold = 10; //check with proximity values printed
       if (isRedTeam != 2) {
-        if (hue > 180 && (isRedTeam == 1)) { //blue is 240, red is 0
-          pros::delay(175);
-          intakeHigh.move(0);
-          pros::delay(400);
-          intakeHigh.move(0);
-          printf("Hue: %d\n", hue);
-          
-        }
-        else if (hue < 80 && (isRedTeam == 0)) { //blue is 240, red is 0
+        // if (colorsort.get_proximity() < threshold) {
+          if (hue > 180 && (isRedTeam == 1)) { //blue is 240, red is 0
+            pros::delay(175);
+            intakeHigh.move(0);
+            pros::delay(400);
+            intakeHigh.move(0);
+            printf("Hue: %d\n", hue);
+            printf("Proximity: %d\n", colorsort.get_proximity());
+            
+          }
+          else if (hue < 80 && (isRedTeam == 0)) { //blue is 240, red is 0
 
-          pros::delay(170);
-          intakeHigh.move(0);
-          pros::delay(400);
-          intakeHigh.move(0);
-          printf("Hue: %d\n", hue);
-        }
+            pros::delay(170);
+            intakeHigh.move(0);
+            pros::delay(400);
+            intakeHigh.move(0);
+            printf("Hue: %d\n", hue);
+            printf("Proximity: %d\n", colorsort.get_proximity());
+          }
+        // }
       }
       intakeHigh.move(intake_speed_high);
       intakeLow.move(intake_speed_low);
@@ -312,7 +317,7 @@ void opcontrol() {
     chassis.drive_brake_set(MOTOR_BRAKE_COAST);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     lbPID.target_set(0);
-    
+    // isRedTeam = 2; //TURN OFF COLOR SORT FOR DRIVER 
     while (true) {
       // Gives you some extras to make EZ-Template ezier
       ez_template_extras();
