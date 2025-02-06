@@ -318,6 +318,8 @@ void opcontrol() {
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     lbPID.target_set(0);
     // isRedTeam = 2; //TURN OFF COLOR SORT FOR DRIVER 
+    doinker.set(false);
+    // intakePiston.set(false);
     while (true) {
       // Gives you some extras to make EZ-Template ezier
       ez_template_extras();
@@ -333,8 +335,7 @@ void opcontrol() {
       // Put more user control code here!
       // . . .
 
-      // doinker.set(false);
-      // intakePiston.set(false);
+      
 
 
       if (master.get_digital(DIGITAL_R1)) {
@@ -351,7 +352,7 @@ void opcontrol() {
       }
 
       mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
-      // doinker.button_toggle(master.get_digital(DIGITAL_L1));
+      doinker.button_toggle(master.get_digital(DIGITAL_L1));
       // intakePiston.button_toggle(master.get_digital(DIGITAL_L1));
 
 
