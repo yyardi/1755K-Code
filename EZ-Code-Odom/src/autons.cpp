@@ -499,7 +499,7 @@ void red_negative_auton() {
 void skills_auton() {
     selectSkills();
     intake_speed_high = 127;
-    pros::delay(200);
+    pros::delay(500);
     intake_speed_high = 0;
     chassis.pid_odom_set(14_in, DRIVE_SPEED);
     chassis.pid_wait();
@@ -508,6 +508,7 @@ void skills_auton() {
     chassis.pid_odom_set(-24_in, DRIVE_SPEED);
     chassis.pid_wait_until(-23_in);
     mogoclamp.set(true);
+    //grabs mogo
     chassis.pid_wait();
     chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
     chassis.pid_wait();
@@ -516,39 +517,37 @@ void skills_auton() {
     chassis.pid_odom_set(24_in, DRIVE_SPEED);
     chassis.pid_wait();
     pros::delay(200);
-    chassis.pid_odom_set({{{48.05_in, 54.82_in, -4.36_deg}, fwd, DRIVE_SPEED},
-                        {{23.22_in, 83.6_in, -47.8_deg}, fwd, DRIVE_SPEED}},
-                       true);
-
-    //at positive red corner
+    //curve part start
+  chassis.pid_odom_set({{{48.05_in, 54.82_in, -4.36_deg}, fwd, DRIVE_SPEED},
+                      {{23.22_in, 83.6_in, -47.8_deg}, fwd, DRIVE_SPEED}},
+                     true);
     chassis.pid_wait();
     pros::delay(200);
     chassis.pid_turn_relative_set(155_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(30_in, DRIVE_SPEED);
+    chassis.pid_drive_set(36_in, DRIVE_SPEED);
     chassis.pid_wait();
     pros::delay(500);
-    chassis.pid_drive_set(-7_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-13_in, DRIVE_SPEED);
     chassis.pid_wait();
-    chassis.pid_turn_relative_set(87_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(88_deg, TURN_SPEED);
     chassis.pid_wait();
     chassis.pid_drive_set(60_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_drive_set(20_in, DRIVE_SPEED*0.7);
     chassis.pid_wait();
     pros::delay(500);
-    chassis.pid_turn_relative_set(150_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(130_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(-4_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-10_in, DRIVE_SPEED);
     chassis.pid_wait();
     mogoclamp.set(false);
-    chassis.pid_drive_set(-6_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-8_in, DRIVE_SPEED);
     chassis.pid_wait();
 
     chassis.pid_odom_set({{-8.69_in, 4.54_in, 90_deg}, rev, DRIVE_SPEED}, true);
     chassis.pid_wait();
     mogoclamp.set(true);
-
     
     //not ready for LB in Auto yet
     // // lbPID.target_set(200);
