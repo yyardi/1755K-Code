@@ -501,10 +501,12 @@ void skills_auton() {
     intake_speed_high = 127;
     pros::delay(500);
     intake_speed_high = 0;
+    
     chassis.pid_odom_set(14_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_turn_set(-90_deg, TURN_SPEED);
     chassis.pid_wait();
+    
     chassis.pid_odom_set(-24_in, DRIVE_SPEED);
     chassis.pid_wait_until(-23_in);
     mogoclamp.set(true);
@@ -525,30 +527,82 @@ void skills_auton() {
     pros::delay(200);
     chassis.pid_turn_relative_set(155_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(36_in, DRIVE_SPEED);
+    chassis.pid_drive_set(34_in, DRIVE_SPEED*0.65);
     chassis.pid_wait();
     pros::delay(500);
-    chassis.pid_drive_set(-13_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-11_in, DRIVE_SPEED);
     chassis.pid_wait();
-    chassis.pid_turn_relative_set(88_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(83_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(60_in, DRIVE_SPEED);
+    chassis.pid_drive_set(62_in, DRIVE_SPEED);
     chassis.pid_wait();
     chassis.pid_drive_set(20_in, DRIVE_SPEED*0.7);
     chassis.pid_wait();
     pros::delay(500);
     chassis.pid_turn_relative_set(130_deg, TURN_SPEED);
     chassis.pid_wait();
+    intake_speed_high = -100;
+    pros::delay(100);
+    intake_speed_high = 0;
     chassis.pid_drive_set(-10_in, DRIVE_SPEED);
     chassis.pid_wait();
     mogoclamp.set(false);
     chassis.pid_drive_set(-8_in, DRIVE_SPEED);
     chassis.pid_wait();
-
-    chassis.pid_odom_set({{-8.69_in, 4.54_in, 90_deg}, rev, DRIVE_SPEED}, true);
-    chassis.pid_wait();
-    mogoclamp.set(true);
     
+
+    chassis.pid_odom_set({{-13.5_in, 7_in, 92_deg}, rev, 60}, true); // go to mogo 2
+    chassis.pid_wait();
+    //chassis.pid_drive_set(-4_in, DRIVE_SPEED*0.65);
+    //chassis.pid_wait();
+    pros::delay(300);
+    chassis.pid_odom_set(-2_in, DRIVE_SPEED*0.4); //drives back a bit
+    chassis.pid_wait();
+    mogoclamp.set(true);  // clamped 2nd mogo
+    chassis.pid_odom_set(2_in, DRIVE_SPEED); //drives fwd a bit
+    chassis.pid_wait();
+    chassis.pid_turn_set(0, TURN_SPEED);
+    chassis.pid_wait();
+    intake_speed_high = 106;
+    intake_speed_low = 127;
+    chassis.pid_odom_set(24_in, DRIVE_SPEED); //drives fwd 1 tile
+    chassis.pid_wait();
+    pros::delay(200);
+    chassis.pid_turn_relative_set(-45_deg, TURN_SPEED);//turns to avoid ladders
+    chassis.pid_wait();
+    chassis.pid_odom_set(30_in, DRIVE_SPEED); //drives fwd 1 tile
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(90_deg, TURN_SPEED);//turns twards 2nd ring 
+    chassis.pid_wait();
+    chassis.pid_odom_set(37_in, DRIVE_SPEED); //drives fwd 1 tile
+    chassis.pid_wait();
+    pros::delay(100);
+    chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);//turns twards 3nd ring 
+    chassis.pid_wait();
+    chassis.pid_odom_set(28_in, DRIVE_SPEED); //drives fwd 1 tile
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(-88_deg, TURN_SPEED);//turns twards 4nd ring 
+    chassis.pid_wait();
+    chassis.pid_odom_set(79_in, DRIVE_SPEED); //drives fwd 4 tile
+    chassis.pid_wait();
+    chassis.pid_odom_set(-10_in, DRIVE_SPEED); //drives back a little 
+    chassis.pid_wait();
+    chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);//turns twards corner 
+    chassis.pid_wait();
+    intake_speed_high = -50;
+    pros::delay(100);
+    intake_speed_high = 0;
+    chassis.pid_drive_set(-10_in, DRIVE_SPEED); // puts in corner
+    chassis.pid_wait();
+    mogoclamp.set(false);
+    chassis.pid_drive_set(-12_in, DRIVE_SPEED); // second push  
+    chassis.pid_wait();
+    chassis.pid_drive_set(8_in, DRIVE_SPEED); // second push  
+    chassis.pid_wait();
+
+
+
+
     //not ready for LB in Auto yet
     // // lbPID.target_set(200);
     // // chassis.pid_wait();
