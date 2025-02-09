@@ -11,9 +11,9 @@
 /////
 
 // These are out of 127
-const int DRIVE_SPEED = 90; // 110
-const int TURN_SPEED = 80; //90
-const int SWING_SPEED = 90; // 110
+const int DRIVE_SPEED = 110; // 110
+const int TURN_SPEED = 90; //90
+const int SWING_SPEED = 110; // 110
 
 ///
 // Constants
@@ -461,12 +461,12 @@ void red_negative_auton() {
     pros::delay(100);
     chassis.pid_drive_set(12_in, DRIVE_SPEED);
     chassis.pid_wait();
-    chassis.pid_turn_relative_set(-32.5_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(-27.5_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(10_in, DRIVE_SPEED);
+    chassis.pid_drive_set(16_in, DRIVE_SPEED);
     chassis.pid_wait();
     pros::delay(800);
-    chassis.pid_turn_relative_set(-86_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(-102_deg, TURN_SPEED);
     chassis.pid_wait();
     lbPID.target_set(200);
     chassis.pid_drive_set(13_in, DRIVE_SPEED);
@@ -482,7 +482,7 @@ void red_negative_auton() {
     // chassis.pid_wait();
     // mogoclamp.set(false);
 
-    chassis.pid_odom_set({{-11.11_in, -4.15_in, -42.36_deg}, fwd, DRIVE_SPEED}, true);
+    chassis.pid_odom_set({{-13_in, -4.68_in, 1_deg}, fwd, DRIVE_SPEED}, true);
     chassis.pid_wait();
     lbPID.target_set(2550);
     intake_speed_high = 0;
@@ -514,25 +514,25 @@ void skills_auton() {
     chassis.pid_wait();
     chassis.pid_turn_relative_set(90_deg, TURN_SPEED);
     chassis.pid_wait();
-    intake_speed_high = 106;
-    intake_speed_low = 127;
+    intake_speed_high = 127;
+    intake_speed_low = 106;
     chassis.pid_odom_set(24_in, DRIVE_SPEED);
     chassis.pid_wait();
     pros::delay(200);
     //curve part start
-  chassis.pid_odom_set({{{48.05_in, 54.82_in, -4.36_deg}, fwd, DRIVE_SPEED},
+    chassis.pid_odom_set({{{48.05_in, 54.82_in, -4.36_deg}, fwd, DRIVE_SPEED},
                       {{23.22_in, 83.6_in, -47.8_deg}, fwd, DRIVE_SPEED}},
                      true);
     chassis.pid_wait();
     pros::delay(200);
     chassis.pid_turn_relative_set(155_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(34_in, DRIVE_SPEED*0.65);
+    chassis.pid_drive_set(30_in, DRIVE_SPEED*0.65);
     chassis.pid_wait();
     pros::delay(500);
-    chassis.pid_drive_set(-11_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-5_in, DRIVE_SPEED);
     chassis.pid_wait();
-    chassis.pid_turn_relative_set(83_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(92_deg, TURN_SPEED);
     chassis.pid_wait();
     chassis.pid_drive_set(62_in, DRIVE_SPEED);
     chassis.pid_wait();
@@ -600,6 +600,32 @@ void skills_auton() {
     chassis.pid_drive_set(8_in, DRIVE_SPEED); // second push  
     chassis.pid_wait();
 
+    //push third mogo in corner
+    chassis.pid_odom_set({{-10.84_in, 114.5_in, 15.89_deg}, fwd, DRIVE_SPEED}, true);
+    chassis.pid_wait();
+
+    chassis.pid_odom_set({{-24.16_in, 113.5_in, -77.17_deg}, fwd, DRIVE_SPEED}, true);
+    chassis.pid_wait();
+
+    chassis.pid_odom_set({{-58.42_in, 120.52_in, -74.95_deg}, fwd, DRIVE_SPEED}, true);
+    chassis.pid_wait();
+
+    chassis.pid_odom_set({{-34.3_in, 112.3_in, -71.63_deg}, rev, 60}, true);
+    chassis.pid_wait();
+
+
+    chassis.pid_odom_set({{-20.51_in, 105.65_in, -236.66_deg}, fwd, 60}, true);
+    chassis.pid_wait();
+
+    chassis.pid_odom_set({{4.02_in, 115.15_in, -285.93_deg}, fwd, DRIVE_SPEED}, true);
+    chassis.pid_wait();
+
+    chassis.pid_odom_set({{21.46_in, 115.35_in, -267.38_deg}, fwd, DRIVE_SPEED}, true);
+    chassis.pid_wait();
+
+
+    chassis.pid_odom_set({{56.95_in, 118.97_in, -302.26_deg}, fwd, DRIVE_SPEED}, true); 
+    chassis.pid_wait();
 
 
 

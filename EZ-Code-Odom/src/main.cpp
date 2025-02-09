@@ -30,29 +30,29 @@ void sorting_task() {
     colorsort.set_led_pwm(100);
     while (true) {
       int hue = colorsort.get_hue();
-      int threshold = 10; //check with proximity values printed
-      if (isRedTeam != 2) {
-        // if (colorsort.get_proximity() < threshold) {
-          if (hue > 180 && (isRedTeam == 1)) { //blue is 240, red is 0
-            pros::delay(175);
-            intakeHigh.move(0);
-            pros::delay(400);
-            intakeHigh.move(0);
-            printf("Hue: %d\n", hue);
-            printf("Proximity: %d\n", colorsort.get_proximity());
+      // int threshold = 10; //check with proximity values printed
+      // if (isRedTeam != 2) {
+      //   // if (colorsort.get_proximity() < threshold) {
+      //     if (hue > 180 && (isRedTeam == 1)) { //blue is 240, red is 0
+      //       pros::delay(175);
+      //       intakeHigh.move(0);
+      //       pros::delay(400);
+      //       intakeHigh.move(0);
+      //       printf("Hue: %d\n", hue);
+      //       printf("Proximity: %d\n", colorsort.get_proximity());
             
-          }
-          else if (hue < 80 && (isRedTeam == 0)) { //blue is 240, red is 0
+      //     }
+      //     else if (hue < 80 && (isRedTeam == 0)) { //blue is 240, red is 0
 
-            pros::delay(170);
-            intakeHigh.move(0);
-            pros::delay(400);
-            intakeHigh.move(0);
-            printf("Hue: %d\n", hue);
-            printf("Proximity: %d\n", colorsort.get_proximity());
-          }
+      //       pros::delay(170); 
+      //       intakeHigh.move(0);
+      //       pros::delay(400);
+      //       intakeHigh.move(0);
+      //       printf("Hue: %d\n", hue);
+      //       printf("Proximity: %d\n", colorsort.get_proximity());
+      //     }
         // }
-      }
+      // }
       intakeHigh.move(intake_speed_high);
       intakeLow.move(intake_speed_low);
       
@@ -115,11 +115,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Skills\n\nRed", skills_auton},
       {"Negative Auton\n\nRed Side", red_negative_auton},
       {"Negative Auton\n\nBlue Side", blue_negative_auton},
       {"Drive\n\nDrive forward and come back", drive_example},
-      
+      {"Skills\n\nRed", skills_auton},
 
       /*
       Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
@@ -339,12 +338,12 @@ void opcontrol() {
 
 
       if (master.get_digital(DIGITAL_R1)) {
-          intake_speed_high = 127;
-          intake_speed_low = 106;
+          intake_speed_high = 106;
+          intake_speed_low = 127;
       } 
       else if (master.get_digital(DIGITAL_R2)) {
-          intake_speed_high = -127;
-          intake_speed_low = -106;
+          intake_speed_high = -106;
+          intake_speed_low = -127;
       } 
       else {
           intake_speed_high = 0;
