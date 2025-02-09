@@ -521,65 +521,80 @@ void skills_auton() {
     pros::delay(200);
     //curve part start
     chassis.pid_odom_set({{{48.05_in, 54.82_in, -4.36_deg}, fwd, DRIVE_SPEED},
-                      {{23.22_in, 83.6_in, -47.8_deg}, fwd, DRIVE_SPEED}},
+                      {{22.22_in, 84.6_in, -47.8_deg}, fwd, DRIVE_SPEED}},
                      true);
     chassis.pid_wait();
     pros::delay(200);
-    chassis.pid_turn_relative_set(155_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(160_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(30_in, DRIVE_SPEED*0.65);
+    chassis.pid_drive_set(25_in, DRIVE_SPEED);
     chassis.pid_wait();
-    pros::delay(500);
-    chassis.pid_drive_set(-5_in, DRIVE_SPEED);
+    pros::delay(200);
+    chassis.pid_drive_set(-7_in, DRIVE_SPEED);
     chassis.pid_wait();
-    chassis.pid_turn_relative_set(92_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(85_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_drive_set(62_in, DRIVE_SPEED);
-    chassis.pid_wait();
-    chassis.pid_drive_set(20_in, DRIVE_SPEED*0.7);
+    chassis.pid_odom_set({{50.93_in, -14.06_in, 180_deg}, fwd, 90}, true);
     chassis.pid_wait();
     pros::delay(500);
-    chassis.pid_turn_relative_set(130_deg, TURN_SPEED);
+    chassis.pid_turn_relative_set(125_deg, TURN_SPEED);
     chassis.pid_wait();
     intake_speed_high = -100;
     pros::delay(100);
     intake_speed_high = 0;
-    chassis.pid_drive_set(-10_in, DRIVE_SPEED);
+    chassis.pid_drive_set(-17_in, DRIVE_SPEED);
     chassis.pid_wait();
     mogoclamp.set(false);
-    chassis.pid_drive_set(-8_in, DRIVE_SPEED);
+    pros::delay(100);
+    chassis.pid_drive_set(20_in, DRIVE_SPEED);
     chassis.pid_wait();
-    
-
-    chassis.pid_odom_set({{-13.5_in, 7_in, 92_deg}, rev, 60}, true); // go to mogo 2
+    chassis.pid_turn_relative_set(145_deg,TURN_SPEED);
     chassis.pid_wait();
-    //chassis.pid_drive_set(-4_in, DRIVE_SPEED*0.65);
-    //chassis.pid_wait();
-    pros::delay(300);
-    chassis.pid_odom_set(-2_in, DRIVE_SPEED*0.4); //drives back a bit
+    chassis.pid_odom_set({{-13.5_in, 1.83_in, 446.69_deg}, rev, 60}, true); // go to mogo 
     chassis.pid_wait();
     mogoclamp.set(true);  // clamped 2nd mogo
-    chassis.pid_odom_set(2_in, DRIVE_SPEED); //drives fwd a bit
     chassis.pid_wait();
-    chassis.pid_turn_set(0, TURN_SPEED);
+    chassis.pid_turn_set(360, TURN_SPEED);
     chassis.pid_wait();
-    intake_speed_high = 106;
-    intake_speed_low = 127;
-    chassis.pid_odom_set(24_in, DRIVE_SPEED); //drives fwd 1 tile
+    intake_speed_high = 127;
+    intake_speed_low = 106;
+    chassis.pid_drive_set(24_in, DRIVE_SPEED); //drives fwd 1 tile , first ring on mogo 2
     chassis.pid_wait();
     pros::delay(200);
-    chassis.pid_turn_relative_set(-45_deg, TURN_SPEED);//turns to avoid ladders
-    chassis.pid_wait();
-    chassis.pid_odom_set(30_in, DRIVE_SPEED); //drives fwd 1 tile
-    chassis.pid_wait();
-    chassis.pid_turn_relative_set(90_deg, TURN_SPEED);//turns twards 2nd ring 
-    chassis.pid_wait();
-    chassis.pid_odom_set(37_in, DRIVE_SPEED); //drives fwd 1 tile
+   chassis.pid_odom_set({{{-48.05_in, 54.82_in, 324.73_deg}, fwd, DRIVE_SPEED},
+                      {{-22.22_in, 84.6_in, 412.24_deg}, fwd, DRIVE_SPEED}},
+                     true); //ring 2
     chassis.pid_wait();
     pros::delay(100);
-    chassis.pid_turn_relative_set(-135_deg, TURN_SPEED);//turns twards 3nd ring 
+    chassis.pid_turn_relative_set(-137_deg, TURN_SPEED);
     chassis.pid_wait();
-    chassis.pid_odom_set(28_in, DRIVE_SPEED); //drives fwd 1 tile
+    chassis.pid_drive_set(25_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    pros::delay(100);
+    chassis.pid_turn_relative_set(84_deg, TURN_SPEED);
+    chassis.pid_odom_set({{-44.4_in, -21.5_in, 180_deg}, fwd, 90}, true);  //last 3 rings on mogo 2
+    chassis.pid_wait();
+    pros::delay(500);
+    chassis.pid_turn_relative_set(-125_deg, TURN_SPEED);
+    chassis.pid_wait();
+    intake_speed_high = -100;
+    pros::delay(100);
+    intake_speed_high = 0;
+    chassis.pid_drive_set(-17_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    mogoclamp.set(false);
+    pros::delay(100);
+    chassis.pid_drive_set(20_in, DRIVE_SPEED);
+    chassis.pid_wait();
+    chassis.pid_odom_set({{-52.3_in, 70.58_in, -6.88_deg}, fwd, DRIVE_SPEED}, true);  // third mogo pursuit ig idk
+    chassis.pid_wait();
+    pros::delay(100);
+    chassis.pid_odom_set({{-13.22_in, 88.3_in, -129.69_deg}, rev, 80}, true);  // third mogo pursuit ig idk
+    chassis.pid_wait();
+    pros::delay(100);
+    mogoclamp.set(true);
+
+    /*chassis.pid_odom_set(28_in, DRIVE_SPEED); //drives fwd 1 tile
     chassis.pid_wait();
     chassis.pid_turn_relative_set(-88_deg, TURN_SPEED);//turns twards 4nd ring 
     chassis.pid_wait();
@@ -624,9 +639,9 @@ void skills_auton() {
     chassis.pid_wait();
 
 
-    chassis.pid_odom_set({{56.95_in, 118.97_in, -302.26_deg}, fwd, DRIVE_SPEED}, true); 
-    chassis.pid_wait();
-
+      chassis.pid_odom_set({{56.95_in, 118.97_in, -302.26_deg}, fwd, DRIVE_SPEED}, true); 
+      chassis.pid_wait();
+*/
 
 
     //not ready for LB in Auto yet
