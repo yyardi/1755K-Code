@@ -1,3 +1,4 @@
+#include "autons.hpp"
 #include <sys/select.h>
 #include "EZ-Template/drive/drive.hpp"
 #include "main.h"
@@ -374,7 +375,8 @@ void measure_offsets() {
 // . . .
 // Make your own autonomous functions here!
 // . . .
-void blue_negative_auton() {
+
+void old_blue_negative_auton() {
     selectBlueTeam();
     // doinker.set(false);
     // intakePiston.set(false);
@@ -436,7 +438,7 @@ void blue_negative_auton() {
 }
 
 
-void red_negative_auton() {
+void old_red_negative_auton() {
     selectRedTeam();
     // doinker.set(false);
     // intakePiston.set(false);
@@ -496,7 +498,7 @@ void red_negative_auton() {
     lbPID.target_set(400);
 }
 
-void skills_auton() {
+void old_skills_auton() {
     selectSkills();
     intake_speed_high = 127;
     pros::delay(500);
@@ -669,3 +671,63 @@ void skills_auton() {
 
 
 }
+
+
+
+//States Negatives
+void new_negative_blue() {
+  //Starting Pose: Angled to Mogo (backwards)
+  selectBlueTeam();
+}
+
+void new_negative_red() {
+  //Starting Pose: Angled to Mogo (backwards)
+  selectRedTeam();
+}
+
+void full_goal_negative_blue() {
+  //Starting Pose: Angled to Mogo (backwards)
+  selectBlueTeam();
+}
+
+void full_goal_negative_red() {
+  //Starting Pose: Angled to Mogo (backwards)
+  selectRedTeam();
+}
+
+
+//States Positives
+void goal_rush_positive_blue() {
+  //Starting Pose: Angled to Mogo (forwards)
+  selectBlueTeam();
+}
+
+void goal_rush_positive_red() {
+  //Starting Pose: Angled to Mogo (forwards)
+  selectBlueTeam();
+}
+
+void carry_positive_blue() {
+  //Starting Pose: Angled to Mogo (forwards)
+  selectBlueTeam();
+}
+
+void carry_positive_red() {
+  //Starting Pose: Angled to Mogo (forwards)
+  selectRedTeam();
+}
+
+//Skills
+void fiftyone_skills() {
+  selectSkills();
+}
+
+
+
+
+
+
+
+
+
+

@@ -115,17 +115,31 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Negative Auton\n\nRed Side", red_negative_auton},
-      {"Negative Auton\n\nBlue Side", blue_negative_auton},
-      {"Drive\n\nDrive forward and come back", drive_example},
-      {"Skills\n\nRed", skills_auton},
+      {"Negative Auton\n\nRed Side", new_negative_red},
+      {"Negative Auton\n\nBlue Side", new_negative_blue},
 
-      /*
-      Auton("Aggressive Auton\n\nRed + Side", red_positive_auton),
-      Auton("Aggressive Auton\n\nBlue + Side", blue_positive_auton),
-      */
+      {"Negative Auton\n\nRed Side\n\nFull Goal", full_goal_negative_red},
+      {"Negative Auton\n\nBlue Side\n\nFull Goal", full_goal_negative_blue},
+
+      {"Positive Auton\n\nRed Side\n\nGoal Rush", goal_rush_positive_red},
+      {"Positive Auton\n\nBlue Side\n\nGoal Rush", goal_rush_positive_blue},
+
+      {"Positive Auton\n\nRed Side\n\nCarry", carry_positive_red},
+      {"Positive Auton\n\nBlue Side\n\nCarry", carry_positive_blue},
+
+      {"Skills\n\nRed Side", fiftyone_skills},
+
+
+
+      //dont use unless emergency
+      {"OLD Negative Auton\n\nRed Side", old_red_negative_auton},
+      {"OLD Negative Auton\n\nBlue Side", old_blue_negative_auton},
+      {"Drive\n\nDrive forward and come back", drive_example},
+      // {"OLD Skills\n\nRed", old_skills_auton},
       
       
+
+
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
       {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
