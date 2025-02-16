@@ -1,4 +1,5 @@
 #include "main.h"
+#include "EZ-Template/sdcard.hpp"
 #include "autons.hpp"
 #include "subsystems.hpp"
 // after comp testing
@@ -76,7 +77,7 @@ pros::Task LB_TASK(lb_task);
 
 void lv_image(void) {
     lv_obj_t * img1 = lv_img_create(lv_scr_act());
-    lv_img_set_src(img1, "v5brain kinetic.bin"); //put actual path to image here
+    lv_img_set_src(img1, "v5brain.bin"); //put actual path to image here
     lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_size(img1, 240, 240);
 }
@@ -331,9 +332,11 @@ void ez_template_extras() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-    // This is preference to what you like to drive on
-    lv_image();
+    
+    // lv_image();
+    // ez::as::shutdown(); //ez template green turns off and team image comes on
 
+    // This is preference to what you like to drive on
     chassis.drive_brake_set(MOTOR_BRAKE_COAST);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     lbPID.target_set(0);
