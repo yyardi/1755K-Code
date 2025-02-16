@@ -678,21 +678,39 @@ void old_skills_auton() {
 void new_negative_blue() {
   //Starting Pose: Angled to Mogo (backwards)
   selectBlueTeam();
+
+  //Grab Mogo, then usual ring rush with 4 in the mogo
+
+  //Go to corner, and then intake 2 more rings and LB
+
+  //Go to ally stake 
+  
+  // then touch ladder
 }
 
 void new_negative_red() {
   //Starting Pose: Angled to Mogo (backwards)
   selectRedTeam();
+
+
 }
 
 void full_goal_negative_blue() {
   //Starting Pose: Angled to Mogo (backwards)
   selectBlueTeam();
+  //Grab mogo, then usual ring rush with 4 in the mogo
+
+  //Go to corner, and then intake 2 more rings, 
+
+
+  // rush to positive corner
 }
 
 void full_goal_negative_red() {
   //Starting Pose: Angled to Mogo (backwards)
   selectRedTeam();
+
+
 }
 
 
@@ -700,16 +718,42 @@ void full_goal_negative_red() {
 void goal_rush_positive_blue() {
   //Starting Pose: Angled to Mogo (forwards)
   selectBlueTeam();
+  //Rush with doinker to goal 
+  //(Back up and clamp properly, then drop preload)
+
+  //get second mogo and then drop the second ring 
+
+  //get corner and drop another 2 rings
+
+  //get ally stake with intake piston
+
+  //rush ladder
+
 }
 
 void goal_rush_positive_red() {
   //Starting Pose: Angled to Mogo (forwards)
   selectBlueTeam();
+
+
+
 }
 
 void carry_positive_blue() {
   //Starting Pose: Angled to Mogo (forwards)
   selectBlueTeam();
+  //Rush with doinker to goal
+  //(Back up and clamp properly, then drop preload)
+
+  //get second mogo and then drop the second ring
+
+  //get ally stake with intake piston
+
+  //get third mogo (negative side) and go forward, then drop a ring from the stack
+
+  //rush ladder
+
+
 }
 
 void carry_positive_red() {
