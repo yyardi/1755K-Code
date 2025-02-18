@@ -23,10 +23,10 @@ void default_constants() {
   // P, I, D, and Start I
   chassis.pid_drive_constants_set(22, 1.0, 210.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(4.0, 0.05, 20.0, 15.0);     // Turn in place constants
+  chassis.pid_turn_constants_set(4.0, 0.05, 15.0, 10.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
-  chassis.pid_odom_angular_constants_set(3.0, 0.0, 13.0);    // Angular control for odom motions
-  chassis.pid_odom_boomerang_constants_set(1.0, 0.0, 10.0);  // Angular control for boomerang motions
+  chassis.pid_odom_angular_constants_set(1.5, 0.0, 15.0);    // Angular control for odom motions
+  chassis.pid_odom_boomerang_constants_set(5.0, 0.0, 10.0);  // Angular control for boomerang motions
 
   // Exit conditions
   chassis.pid_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
@@ -408,7 +408,7 @@ void old_blue_negative_auton() {
     pros::delay(800);
     chassis.pid_turn_relative_set(86_deg, TURN_SPEED);
     chassis.pid_wait();
-    lbPID.target_set(200);
+    lbPID.target_set(570);
     chassis.pid_drive_set(13_in, DRIVE_SPEED);
     chassis.pid_wait();
     pros::delay(700);
@@ -431,7 +431,7 @@ void old_blue_negative_auton() {
     chassis.pid_wait();
     lbPID.target_set(0);
 
-    chassis.pid_odom_set({{11.47_in, -52.18_in, 133.9_deg}, fwd, DRIVE_SPEED}, true);
+    chassis.pid_odom_set({{1.21_in, -22.67_in, 133.9_deg}, fwd, DRIVE_SPEED}, true);
     chassis.pid_wait();
     lbPID.target_set(400);
     
@@ -691,7 +691,31 @@ void new_negative_blue() {
 void new_negative_red() {
   //Starting Pose: Angled to Mogo (backwards)
   selectRedTeam();
+  //Grab Mogo, then usual ring rush with 4 in the mogo
+  chassis.pid_drive_set(-22_in, DRIVE_SPEED);
+  chassis.pid_wait_until(-21.5_in);
+  mogoclamp.set(true);
+  chassis.pid_wait();
+  intake_speed_high = 127;
+  pros::delay(200);
 
+  chassis.pid_odom_set(
+    {{5.21_in, -23.11_in, 87_deg}, fwd, DRIVE_SPEED},
+   true);
+  chassis.pid_wait();
+
+  
+  chassis.pid_turn_relative_set(30_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  //Go to corner, and then intake 2 more rings and LB
+
+  //Go to ally stake 
+  
+  // then touch ladder
+  intake_speed_high = 0;
 
 }
 
@@ -751,7 +775,7 @@ void carry_positive_blue() {
 
   //get third mogo (negative side) and go forward, then drop a ring from the stack
 
-  //rush ladder
+  //rush ladderx
 
 
 }

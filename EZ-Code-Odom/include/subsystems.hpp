@@ -10,12 +10,12 @@ extern Drive chassis;
 
 inline pros::Motor intakeLow(-11);
 inline pros::Motor intakeHigh(-7);
-inline pros::Motor ladybrown(4);
-inline ez::Piston doinker('A');
-inline pros::Optical colorsort(16);
+inline pros::Motor ladybrown(3);
+inline ez::Piston doinker('H');
+inline pros::Optical colorsort(1);
 
-// inline ez::Piston intakePiston('B');
-inline ez::Piston mogoclamp('H');
+inline ez::Piston intakePiston('B');
+inline ez::Piston mogoclamp('A');
 
 
 inline void set_lb(int input) {

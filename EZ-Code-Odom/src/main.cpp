@@ -1,7 +1,9 @@
 #include "main.h"
 #include "EZ-Template/sdcard.hpp"
 #include "autons.hpp"
+#include "liblvgl/misc/lv_area.h"
 #include "subsystems.hpp"
+#include "filesystem.h"
 // after comp testing
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -11,10 +13,10 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-18, -19, -20},     // Left Chassis Ports (negative port will reverse it!)
-    {8, 9, 10},  // Right Chassis Ports (negative port will reverse it!)
+    {18, -19, -20},     // Left Chassis Ports (negative port will reverse it!)
+    {-8, 9, 10},  // Right Chassis Ports (negative port will reverse it!)
 
-    17,      // IMU Port
+    6,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
@@ -23,37 +25,38 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(-5, 2, 3.0);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(12, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel horiz_tracker(-5, 2, 0.0);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel vert_tracker(4, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
 
 void sorting_task() {
     pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
     colorsort.set_led_pwm(100);
     while (true) {
-      int hue = colorsort.get_hue();
-      // int threshold = 10; //check with proximity values printed
-      // if (isRedTeam != 2) {
-      //   // if (colorsort.get_proximity() < threshold) {
-      //     if (hue > 180 && (isRedTeam == 1)) { //blue is 240, red is 0
-      //       pros::delay(175);
-      //       intakeHigh.move(0);
-      //       pros::delay(400);
-      //       intakeHigh.move(0);
-      //       printf("Hue: %d\n", hue);
-      //       printf("Proximity: %d\n", colorsort.get_proximity());
+      
+      int threshold = 10; //check with proximity values printed
+      if (isRedTeam != 2) {
+        int hue = colorsort.get_hue();
+        if (colorsort.get_proximity() < threshold) {
+          if (hue > 180 && (isRedTeam == 1)) { //blue is 240, red is 0
+            pros::delay(175);
+            intakeHigh.move(0);
+            pros::delay(400);
+            intakeHigh.move(0);
+            printf("Hue: %d\n", hue);
+            printf("Proximity: %d\n", colorsort.get_proximity());
             
-      //     }
-      //     else if (hue < 80 && (isRedTeam == 0)) { //blue is 240, red is 0
+          }
+          else if (hue < 80 && (isRedTeam == 0)) { //blue is 240, red is 0
 
-      //       pros::delay(170); 
-      //       intakeHigh.move(0);
-      //       pros::delay(400);
-      //       intakeHigh.move(0);
-      //       printf("Hue: %d\n", hue);
-      //       printf("Proximity: %d\n", colorsort.get_proximity());
-      //     }
-        // }
-      // }
+            pros::delay(170); 
+            intakeHigh.move(0);
+            pros::delay(400);
+            intakeHigh.move(0);
+            printf("Hue: %d\n", hue);
+            printf("Proximity: %d\n", colorsort.get_proximity());
+          }
+        }
+      }
       intakeHigh.move(intake_speed_high);
       intakeLow.move(intake_speed_low);
       
@@ -77,9 +80,9 @@ pros::Task LB_TASK(lb_task);
 
 void lv_image(void) {
     lv_obj_t * img1 = lv_img_create(lv_scr_act());
-    lv_img_set_src(img1, "v5brain.bin"); //put actual path to image here
-    lv_obj_align(img1, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_set_size(img1, 240, 240);
+    lv_img_set_src(img1, "S:/v5brain.bin"); //put actual path to image here
+    lv_obj_align(img1, LV_ALIGN_DEFAULT, 0, 0);
+    lv_obj_set_size(img1, 480, 240);
 }
 
 /**
@@ -91,7 +94,7 @@ void lv_image(void) {
 void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
-
+  
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
@@ -106,13 +109,15 @@ void initialize() {
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
-  chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
+  // chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
   // Set the drive to your own constants from autons.cpp!
   default_constants();
   
   ladybrown.tare_position();
   lbPID.exit_condition_set(80, 50, 300, 150, 500, 500);
+  
+  _init_fs();
   
 
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
@@ -209,7 +214,7 @@ void autonomous() {
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
 
   mogoclamp.set(false);
-  // intakePiston.set(false);
+  intakePiston.set(false);
 	
   ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   /*
@@ -332,10 +337,9 @@ void ez_template_extras() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-    
     // lv_image();
-    // ez::as::shutdown(); //ez template green turns off and team image comes on
-
+    //ez::as::shutdown(); //ez template green turns off and team image comes on
+    
     // This is preference to what you like to drive on
     chassis.drive_brake_set(MOTOR_BRAKE_COAST);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -384,15 +388,15 @@ void opcontrol() {
       }
 
       if (master.get_digital(DIGITAL_UP)) {
-          lbPID.target_set(1900);
-      }
-
-      if (master.get_digital(DIGITAL_LEFT)) {
-          lbPID.target_set(200);
+          lbPID.target_set(2000);
       }
 
       if (master.get_digital(DIGITAL_RIGHT)) {
-          lbPID.target_set(2500);
+          lbPID.target_set(570);
+      }
+
+      if (master.get_digital(DIGITAL_LEFT)) {
+          lbPID.target_set(2600);
       }
 
 
