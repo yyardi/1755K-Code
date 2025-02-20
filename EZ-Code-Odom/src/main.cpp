@@ -25,7 +25,7 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-ez::tracking_wheel horiz_tracker(-5, 2, 0.0);  // This tracking wheel is perpendicular to the drive wheels
+ez::tracking_wheel horiz_tracker(5, 2, 6.0);  // This tracking wheel is perpendicular to the drive wheels
 ez::tracking_wheel vert_tracker(4, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
 
 void sorting_task() {
@@ -362,7 +362,6 @@ void opcontrol() {
       // Put more user control code here!
       // . . .
 
-      
 
 
       if (master.get_digital(DIGITAL_R1)) {
@@ -380,7 +379,7 @@ void opcontrol() {
 
       mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
       doinker.button_toggle(master.get_digital(DIGITAL_L1));
-      // intakePiston.button_toggle(master.get_digital(DIGITAL_L1));
+      // intakePiston.button_toggle(master.get_digital(DIGITAL_B));
 
 
       if (master.get_digital(DIGITAL_DOWN)) {
@@ -392,7 +391,7 @@ void opcontrol() {
       }
 
       if (master.get_digital(DIGITAL_RIGHT)) {
-          lbPID.target_set(570);
+          lbPID.target_set(450);
       }
 
       if (master.get_digital(DIGITAL_LEFT)) {

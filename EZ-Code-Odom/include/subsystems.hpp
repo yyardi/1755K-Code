@@ -11,10 +11,10 @@ extern Drive chassis;
 inline pros::Motor intakeLow(-11);
 inline pros::Motor intakeHigh(-7);
 inline pros::Motor ladybrown(3);
-inline ez::Piston doinker('H');
+inline ez::Piston doinker('B');
 inline pros::Optical colorsort(1);
 
-inline ez::Piston intakePiston('B');
+inline ez::Piston intakePiston('H');
 inline ez::Piston mogoclamp('A');
 
 
