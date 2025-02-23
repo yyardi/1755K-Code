@@ -32,7 +32,7 @@ inline void lb_wait() {
 
 //vars
 
-inline int isRedTeam = 2; //CHANGE AT EVERY MATCH
+inline int isRedTeam = 1; //CHANGE AT EVERY MATCH
 
 inline void selectRedTeam() {
     isRedTeam = 1;

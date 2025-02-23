@@ -33,22 +33,20 @@ void sorting_task() {
     colorsort.set_led_pwm(100);
     while (true) {
       
-      int threshold = 10; //check with proximity values printed
+      int threshold = 200; //check with proximity values printed
       if (isRedTeam != 2) {
         int hue = colorsort.get_hue();
-        if (colorsort.get_proximity() < threshold) {
-          if (hue > 180 && (isRedTeam == 1)) { //blue is 240, red is 0
-            pros::delay(175);
+        if (colorsort.get_proximity() > threshold) {
+          if (hue > 180 && hue < 240 && (isRedTeam == 1)) { //blue is 240, red is 0, but our hooks are purple which is ~300
+            pros::delay(180);
             intakeHigh.move(0);
             pros::delay(400);
             intakeHigh.move(0);
             printf("Hue: %d\n", hue);
             printf("Proximity: %d\n", colorsort.get_proximity());
-            
           }
-          else if (hue < 80 && (isRedTeam == 0)) { //blue is 240, red is 0
-
-            pros::delay(170); 
+          else if (hue < 50 && (isRedTeam == 0)) { //blue is 240, red is 0
+            pros::delay(180); 
             intakeHigh.move(0);
             pros::delay(400);
             intakeHigh.move(0);
@@ -64,6 +62,8 @@ void sorting_task() {
     }
 }
 pros::Task SORTING_TASK(sorting_task);
+
+
 
 
 
@@ -231,6 +231,9 @@ void autonomous() {
   */
 
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
+
+  // lv_image();
+  // ez::as::shutdown(); //ez template green turns off and team image comes on
 }
 
 /**
@@ -344,7 +347,7 @@ void opcontrol() {
     chassis.drive_brake_set(MOTOR_BRAKE_COAST);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     lbPID.target_set(0);
-    // isRedTeam = 2; //TURN OFF COLOR SORT FOR DRIVER 
+    isRedTeam = 2; //TURN OFF COLOR SORT FOR DRIVER 
     doinker.set(false);
     // intakePiston.set(false);
     while (true) {
@@ -365,11 +368,11 @@ void opcontrol() {
 
 
       if (master.get_digital(DIGITAL_R1)) {
-          intake_speed_high = 106;
+          intake_speed_high = 127;
           intake_speed_low = 127;
       } 
       else if (master.get_digital(DIGITAL_R2)) {
-          intake_speed_high = -106;
+          intake_speed_high = -127;
           intake_speed_low = -127;
       } 
       else {

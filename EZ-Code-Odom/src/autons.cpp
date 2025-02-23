@@ -1,6 +1,7 @@
 #include "autons.hpp"
 #include <sys/select.h>
 #include "EZ-Template/drive/drive.hpp"
+#include "EZ-Template/util.hpp"
 #include "main.h"
 #include "pros/motors.h"
 #include "pros/rtos.hpp"
@@ -24,7 +25,7 @@ void default_constants() {
   // chassis.pid_drive_constants_set(23, 1.0, 220.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_drive_constants_forward_set(24.0, 0.05, 220.0);
   chassis.pid_drive_constants_backward_set(16.0, 0.05, 220.0);
-  chassis.pid_heading_constants_set(18.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
+  chassis.pid_heading_constants_set(14.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
   chassis.pid_turn_constants_set(4.0, 0.05, 15.0, 10.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(1.5, 0.0, 18.0);    // Angular control for odom motions
@@ -50,8 +51,8 @@ void default_constants() {
   chassis.odom_turn_bias_set(0.7);
 
   chassis.odom_look_ahead_set(7_in);           // This is how far ahead in the path the robot looks at
-  chassis.odom_boomerang_distance_set(12_in);  // This sets the maximum distance away from target that the carrot point can be
-  chassis.odom_boomerang_dlead_set(0.2);     // This handles how aggressive the end of boomerang motions are
+  chassis.odom_boomerang_distance_set(30_in);  // This sets the maximum distance away from target that the carrot point can be
+  chassis.odom_boomerang_dlead_set(0.6);     // This handles how aggressive the end of boomerang motions are
 
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
@@ -64,18 +65,18 @@ void drive_example() {
   // The second parameter is max speed the robot will drive at
   // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions
   // for slew, only enable it when the drive distance is greater than the slew distance + a few inches
-  // selectBlueTeam();
-  // chassis.pid_odom_set(-4_in, DRIVE_SPEED, true);
-  // chassis.pid_wait();
-  // mogoclamp.set(true);
-  // intake_speed_high = 127;
-  // intake_speed_low = 127;
-  // pros::delay(100000);
+  selectRedTeam();
+  chassis.pid_odom_set(-4_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  mogoclamp.set(true);
+  intake_speed_high = 127;
+  intake_speed_low = 127;
+  pros::delay(100000);
 
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  // chassis.pid_wait();
+  // chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
+  // chassis.pid_wait();
   
 }
 
@@ -697,20 +698,20 @@ void new_negative_blue() {
 
 void new_negative_red() {
   //Starting Pose: Angled to Mogo (backwards)
-  // selectRedTeam();
+  selectRedTeam();
   //Grab Mogo, then usual ring rush with 4 in the mogo
   chassis.pid_drive_set(-23_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  chassis.pid_wait_quick_chain();
   mogoclamp.set(true);
   
   pros::delay(50);
   intake_speed_high = 127;
   pros::delay(300);
   
-  chassis.pid_turn_set(120_deg, TURN_SPEED);
+  chassis.pid_turn_set(110_deg, TURN_SPEED);
   chassis.pid_wait();
   intake_speed_low = 127;
-  chassis.pid_odom_set(23_in, DRIVE_SPEED);
+  chassis.pid_odom_set(21_in, DRIVE_SPEED);
   chassis.pid_wait();
   pros::delay(400);
 
@@ -718,10 +719,10 @@ void new_negative_red() {
   chassis.pid_wait();
 
 
-  chassis.pid_turn_set(92_deg, TURN_SPEED);
+  chassis.pid_turn_set(87_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(10_in, DRIVE_SPEED);
+  chassis.pid_drive_set(15_in, DRIVE_SPEED);
   chassis.pid_wait();
   
   pros::delay(450);
@@ -729,38 +730,59 @@ void new_negative_red() {
   chassis.pid_turn_set(-27_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  intake_speed_low = -127;
+  intake_speed_low = -127; 
 
   chassis.pid_drive_set(16_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   intake_speed_low = 127;
-  
+
   chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  intake_speed_low = 0;
+  pros::delay(500);
 
-
-
-  //Go to corner, and then intake 2 more rings and LB
-
-  
-
-  chassis.pid_odom_set({{11.85_in, 14.85_in, 13_deg}, fwd, DRIVE_SPEED}, true);
+  chassis.pid_turn_set(-103_deg, TURN_SPEED);
   chassis.pid_wait();
 
+  chassis.pid_drive_set(50_in, DRIVE_SPEED);
+  chassis.pid_wait_until(40_in);
+  chassis.pid_speed_max_set(30);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(15_in, 70);
+  chassis.pid_wait();
+
+  pros::delay(400);
+
+  lbPID.target_set(450);
+
+  chassis.pid_turn_set(-6_deg, DRIVE_SPEED);
+  chassis.pid_wait();
+  
   chassis.pid_drive_set(2_in, DRIVE_SPEED);
   chassis.pid_wait();
-  
-  doinker.set(true);
-  
-  // chassis.pid_turn_relative_set(-80_deg, 127);
+
+  lbPID.target_set(2600);
+  // chassis.pid_drive_set(30_in, DRIVE_SPEED);
   // chassis.pid_wait();
 
 
+  // //Go to corner, and then intake 2 more rings and LB
+
+  // chassis.pid_odom_set({{11.85_in, 12.85_in, 10_deg}, fwd, DRIVE_SPEED}, true);
+  // chassis.pid_wait();
+
+  // doinker.set(true);
+  // pros::delay(300);
+  // chassis.pid_turn_relative_set(-100_deg, DRIVE_SPEED);
+  // chassis.pid_wait();
+
 
   //Go to ally stake 
+
+
+
   
   // then touch ladder
   intake_speed_high = 0;
@@ -806,8 +828,61 @@ void goal_rush_positive_blue() {
 
 void goal_rush_positive_red() {
   //Starting Pose: Angled to Mogo (forwards)
-  selectBlueTeam();
+  selectRedTeam();
+  //Rush with doinker to goal 
+  chassis.pid_drive_set(43_in, 127);
+  chassis.pid_wait_quick_chain();
+  doinker.set(true);
+  
 
+  chassis.pid_drive_set(-15_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  doinker.set(false);
+  pros::delay(500);
+
+  chassis.pid_drive_set(-18_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(135_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  mogoclamp.set(true);
+  pros::delay(300);
+  intake_speed_high = 127;
+  intake_speed_low = 127;
+
+  chassis.pid_turn_relative_set(-64_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  intake_speed_high = 0;
+
+
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  mogoclamp.set(false);
+
+  chassis.pid_drive_set(8_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_relative_set(58_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-15_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-10_in, 80);
+  chassis.pid_wait();
+
+  mogoclamp.set(true);
+  intake_speed_high = 127;
+  pros::delay(600);
+
+  chassis.pid_odom_set({{39.87_in, -24.58_in, 145.38_deg}, fwd, DRIVE_SPEED}, true);
+  chassis.pid_wait();
 
 
 }
@@ -824,7 +899,7 @@ void carry_positive_blue() {
 
   //get third mogo (negative side) and go forward, then drop a ring from the stack
 
-  //rush ladderx
+  //rush ladder
 
 
 }
