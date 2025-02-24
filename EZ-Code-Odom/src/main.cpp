@@ -96,7 +96,7 @@ void initialize() {
   ez::ez_template_print();
   
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
-
+  // sylib::initialize();
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
@@ -232,8 +232,8 @@ void autonomous() {
 
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 
-  // lv_image();
-  // ez::as::shutdown(); //ez template green turns off and team image comes on
+  lv_image();
+  ez::as::shutdown(); //ez template green turns off and team image comes on
 }
 
 /**

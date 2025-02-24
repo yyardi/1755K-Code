@@ -687,13 +687,94 @@ void new_negative_blue() {
   //Starting Pose: Angled to Mogo (backwards)
   selectBlueTeam();
 
-  //Grab Mogo, then usual ring rush with 4 in the mogo
+  chassis.pid_drive_set(-23_in, DRIVE_SPEED);
+  chassis.pid_wait_quick_chain();
+  mogoclamp.set(true);
+  
+  pros::delay(50);
+  intake_speed_high = 127;
+  pros::delay(300);
+  
+  chassis.pid_turn_set(-110_deg, TURN_SPEED);
+  chassis.pid_wait();
+  intake_speed_low = 127;
+  chassis.pid_odom_set(21_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  pros::delay(400);
 
-  //Go to corner, and then intake 2 more rings and LB
+  chassis.pid_odom_set(-6_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+
+  chassis.pid_turn_set(-87_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(15_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  
+  pros::delay(450);
+
+  chassis.pid_turn_set(27_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  intake_speed_low = -127; 
+
+  chassis.pid_drive_set(16_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  intake_speed_low = 127;
+
+  chassis.pid_drive_set(10_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  pros::delay(500);
+
+  chassis.pid_turn_set(103_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(50_in, DRIVE_SPEED);
+  chassis.pid_wait_until(20_in);
+  chassis.pid_speed_max_set(30);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(15_in, 70);
+  chassis.pid_wait();
+
+  pros::delay(400);
+
+  lbPID.target_set(450);
+
+  chassis.pid_turn_set(6_deg, DRIVE_SPEED);
+  chassis.pid_wait();
+  
+  chassis.pid_drive_set(4_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  lbPID.target_set(2600);
+  // chassis.pid_drive_set(30_in, DRIVE_SPEED);
+  // chassis.pid_wait();
+
+
+  // //Go to corner, and then intake 2 more rings and LB
+
+  // chassis.pid_odom_set({{11.85_in, 12.85_in, 10_deg}, fwd, DRIVE_SPEED}, true);
+  // chassis.pid_wait();
+
+  // doinker.set(true);
+  // pros::delay(300);
+  // chassis.pid_turn_relative_set(-100_deg, DRIVE_SPEED);
+  // chassis.pid_wait();
+
 
   //Go to ally stake 
+
+
+
   
   // then touch ladder
+  intake_speed_high = 0;
+  intake_speed_low = 0;
+
 }
 
 void new_negative_red() {
@@ -760,7 +841,7 @@ void new_negative_red() {
   chassis.pid_turn_set(-6_deg, DRIVE_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_drive_set(2_in, DRIVE_SPEED);
+  chassis.pid_drive_set(4_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   lbPID.target_set(2600);
@@ -814,26 +895,10 @@ void goal_rush_positive_blue() {
   //Starting Pose: Angled to Mogo (forwards)
   selectBlueTeam();
   //Rush with doinker to goal 
-  //(Back up and clamp properly, then drop preload)
-
-  //get second mogo and then drop the second ring 
-
-  //get corner and drop another 2 rings
-
-  //get ally stake with intake piston
-
-  //rush ladder
-
-}
-
-void goal_rush_positive_red() {
-  //Starting Pose: Angled to Mogo (forwards)
-  selectRedTeam();
-  //Rush with doinker to goal 
-  chassis.pid_drive_set(43_in, 127);
+  chassis.pid_drive_set(45_in, 127);
   chassis.pid_wait_quick_chain();
   doinker.set(true);
-  
+  pros::delay(100);
 
   chassis.pid_drive_set(-15_in, DRIVE_SPEED);
   chassis.pid_wait();
@@ -841,7 +906,68 @@ void goal_rush_positive_red() {
   doinker.set(false);
   pros::delay(500);
 
-  chassis.pid_drive_set(-18_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-21_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-135_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  mogoclamp.set(true);
+  pros::delay(300);
+  intake_speed_high = 127;
+  intake_speed_low = 127;
+
+  chassis.pid_turn_relative_set(64_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  intake_speed_high = 0;
+
+
+  chassis.pid_drive_set(27_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  mogoclamp.set(false);
+
+  chassis.pid_drive_set(8_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_turn_relative_set(-58_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-15_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-10_in, 80);
+  chassis.pid_wait();
+
+  mogoclamp.set(true);
+  intake_speed_high = 127;
+  pros::delay(600);
+
+  chassis.pid_odom_set({{39.87_in, -24.58_in, -145.38_deg}, fwd, DRIVE_SPEED}, true);
+  chassis.pid_wait();
+
+
+}
+
+void goal_rush_positive_red() {
+  //Starting Pose: Angled to Mogo (forwards)
+  selectRedTeam();
+  //Rush with doinker to goal 
+  chassis.pid_drive_set(45_in, 127);
+  chassis.pid_wait_quick_chain();
+  doinker.set(true);
+  pros::delay(100);
+
+  chassis.pid_drive_set(-15_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  doinker.set(false);
+  pros::delay(500);
+
+  chassis.pid_drive_set(-21_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   chassis.pid_turn_set(135_deg, TURN_SPEED);
@@ -861,7 +987,7 @@ void goal_rush_positive_red() {
   intake_speed_high = 0;
 
 
-  chassis.pid_drive_set(20_in, DRIVE_SPEED);
+  chassis.pid_drive_set(27_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   mogoclamp.set(false);
