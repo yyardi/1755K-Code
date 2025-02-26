@@ -3,6 +3,7 @@
 #include "EZ-Template/api.hpp"
 #include "api.h"
 #include "pros/optical.hpp"
+#include "pros/rotation.hpp"
 
 extern Drive chassis;
 
@@ -14,15 +15,16 @@ inline pros::Motor ladybrown(3);
 inline ez::Piston doinker('B');
 inline pros::Optical colorsort(1);
 
-inline ez::Piston intakePiston('H');
+// inline ez::Piston intakePiston('H');
 inline ez::Piston mogoclamp('A');
+inline pros::Rotation ladybrown_sensor(-2);
 
 
 inline void set_lb(int input) {
   ladybrown.move(input);
 }
 
-inline ez::PID lbPID{0.45, 0, 1.5, 0, "ladybrown"};
+inline ez::PID lbPID{0.045, 0, 0.11, 0, "ladybrown"};
 
 inline void lb_wait() {
   while (lbPID.exit_condition({ladybrown}, true) == ez::RUNNING) {
@@ -31,6 +33,8 @@ inline void lb_wait() {
 }
 
 //vars
+
+inline bool antijamOn = true; 
 
 inline int isRedTeam = 1; //CHANGE AT EVERY MATCH
 

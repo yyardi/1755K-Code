@@ -4,6 +4,14 @@
 #include "liblvgl/misc/lv_area.h"
 #include "subsystems.hpp"
 #include "filesystem.h"
+#include "stormlib/led.hpp" 
+
+stormlib::aRGB strand1('H', 63); //num corresponds to letter port, 63 is max per strand
+
+stormlib::aRGB_manager LEDmanager(&strand1, nullptr, nullptr, nullptr,
+  nullptr, nullptr, nullptr, nullptr);
+
+
 // after comp testing
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -29,48 +37,132 @@ ez::tracking_wheel horiz_tracker(5, 2, 6.0);  // This tracking wheel is perpendi
 ez::tracking_wheel vert_tracker(4, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
 
 void sorting_task() {
-    pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
-    colorsort.set_led_pwm(100);
-    while (true) {
-      
-      int threshold = 200; //check with proximity values printed
-      if (isRedTeam != 2) {
-        int hue = colorsort.get_hue();
-        if (colorsort.get_proximity() > threshold) {
-          if (hue > 180 && hue < 240 && (isRedTeam == 1)) { //blue is 240, red is 0, but our hooks are purple which is ~300
-            pros::delay(180);
-            intakeHigh.move(0);
-            pros::delay(400);
-            intakeHigh.move(0);
-            printf("Hue: %d\n", hue);
-            printf("Proximity: %d\n", colorsort.get_proximity());
-          }
-          else if (hue < 50 && (isRedTeam == 0)) { //blue is 240, red is 0
-            pros::delay(180); 
-            intakeHigh.move(0);
-            pros::delay(400);
-            intakeHigh.move(0);
-            printf("Hue: %d\n", hue);
-            printf("Proximity: %d\n", colorsort.get_proximity());
-          }
+  pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
+  colorsort.set_led_pwm(100);
+  bool isColorSortHappening = false;
+
+  uint32_t intakeHighStartTime = 0, intakeLowStartTime = 0;
+  uint32_t intakeHighJamStart = 0, intakeLowJamStart = 0;
+  bool intakeHighRecentlyStarted = false, intakeLowRecentlyStarted = false;
+  bool intakeHighJammed = false, intakeLowJammed = false;
+
+  const uint32_t antiJamDelay = 500; // Time before anti-jam can activate after starting
+  const uint32_t highJamThreshold = 400;  // Time before intake high is considered jammed
+  const uint32_t lowJamThreshold = 300;   // Lower threshold for intake low (more sensitive)
+
+
+  while (true) {
+    int threshold = 200; //check with proximity values printed
+    if (isRedTeam != 2) {
+      int hue = colorsort.get_hue();
+      if (colorsort.get_proximity() > threshold) {
+        if (hue > 180 && hue < 240 && (isRedTeam == 1)) { //blue is 240, red is 0, but our hooks are purple which is ~300
+          isColorSortHappening = true; //Update boolean 
+          pros::delay(180);
+          intakeHigh.move(0);
+          pros::delay(400);
+          intakeHigh.move(0);
+          printf("Hue: %d\n", hue);
+          printf("Proximity: %d\n", colorsort.get_proximity());
+        }
+        else if (hue < 50 && (isRedTeam == 0)) { //blue is 240, red is 0
+          isColorSortHappening = true; //Update boolean 
+          pros::delay(180); 
+          intakeHigh.move(0);
+          pros::delay(400);
+          intakeHigh.move(0);
+          printf("Hue: %d\n", hue);
+          printf("Proximity: %d\n", colorsort.get_proximity());
         }
       }
-      intakeHigh.move(intake_speed_high);
-      intakeLow.move(intake_speed_low);
-      
-      pros::delay(ez::util::DELAY_TIME);
+      else {
+        isColorSortHappening = false; //Update boolean 
+      }
     }
+
+    uint32_t currentTime = pros::millis();
+
+
+
+    // Detect if intakeHigh was just started
+    if (intake_speed_high > 0 && !intakeHighRecentlyStarted) {
+        intakeHighRecentlyStarted = true;
+        intakeHighStartTime = pros::millis();
+    }
+
+    // Detect if intakeLow was just started
+    if (intake_speed_low > 0 && !intakeLowRecentlyStarted) {
+        intakeLowRecentlyStarted = true;
+        intakeLowStartTime = pros::millis();
+    }
+
+    // --- Anti-Jam Logic with Duration Check ---
+    if (antijamOn) { 
+      // Get Ladybrown Position
+      int ladybrownPos = ladybrown_sensor.get_position();
+      bool isLadybrownLoaded = (abs(ladybrownPos - 2150) < 150 || abs(ladybrownPos - 3000) < 150);
+  
+      // IntakeHigh Jam Detection (Disabled When Ladybrown is Up)
+      if (!isColorSortHappening && !isLadybrownLoaded && currentTime - intakeHighStartTime > antiJamDelay) {
+          if (intake_speed_high > 0 && intakeHigh.get_actual_velocity() < intake_speed_high * 0.15) {
+              if (!intakeHighJammed) {
+                  intakeHighJamStart = currentTime;
+                  intakeHighJammed = true;
+              }
+              else if (currentTime - intakeHighJamStart > highJamThreshold) {
+                  intakeHigh.move(-127); // Reverse
+                  pros::delay(500);     
+                  intakeHigh.move(intake_speed_high); // Resume normal speed
+                  intakeHighJammed = false; 
+              }
+          }
+          else {
+              intakeHighJammed = false; 
+          }
+      }
+  
+      // IntakeLow Jam Detection (Still Works Normally)
+      if (!isColorSortHappening && currentTime - intakeLowStartTime > antiJamDelay) {
+          if (intake_speed_low > 0 && intakeLow.get_actual_velocity() < intake_speed_low * 0.15) {
+              if (!intakeLowJammed) {
+                  intakeLowJamStart = currentTime;
+                  intakeLowJammed = true;
+              }
+              else if (currentTime - intakeLowJamStart > lowJamThreshold) {
+                  intakeLow.move(-127); // Reverse
+                  pros::delay(500);    
+                  intakeLow.move(intake_speed_low); // Resume normal speed
+                  intakeLowJammed = false; 
+              }
+          }
+          else {
+              intakeLowJammed = false; 
+          }
+      }
+    }  
+    intakeHigh.move(intake_speed_high);
+    intakeLow.move(intake_speed_low);
+
+    // Reset flags when intake is turned off
+    if (intake_speed_high == 0) {
+      intakeHighRecentlyStarted = false;
+      intakeHighJammed = false;
+    }
+    if (intake_speed_low == 0) {
+        intakeLowRecentlyStarted = false;
+        intakeLowJammed = false;
+    }
+    
+    pros::delay(ez::util::DELAY_TIME);
+  }
 }
 pros::Task SORTING_TASK(sorting_task);
-
-
-
 
 
 void lb_task() {
   pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
   while (true) {
-    set_lb(lbPID.compute(ladybrown.get_position()));
+    set_lb(lbPID.compute(ladybrown_sensor.get_position()));
 
     pros::delay(ez::util::DELAY_TIME);
   }
@@ -96,7 +188,6 @@ void initialize() {
   ez::ez_template_print();
   
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
-  // sylib::initialize();
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
@@ -114,11 +205,13 @@ void initialize() {
   // Set the drive to your own constants from autons.cpp!
   default_constants();
   
-  ladybrown.tare_position();
+  ladybrown_sensor.reset_position();
   lbPID.exit_condition_set(80, 50, 300, 150, 500, 500);
   
   _init_fs();
+  LEDmanager.initialize(20);
   
+
 
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
   // chassis.opcontrol_curve_buttons_left_set(pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT);  // If using tank, only the left side is used.
@@ -214,7 +307,7 @@ void autonomous() {
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
 
   mogoclamp.set(false);
-  intakePiston.set(false);
+  // intakePiston.set(false);
 	
   ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   /*
@@ -341,13 +434,19 @@ void ez_template_extras() {
  */
 void opcontrol() {
     // lv_image();
-    //ez::as::shutdown(); //ez template green turns off and team image comes on
-    
+    // ez::as::shutdown(); //ez template green turns off and team image comes on
+    LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue ish
+    // strand3.setColor(0x00FFFF); // strand stays on one color
+    // strand4.flash(0xFF0000);    // flashes a color
+    // strand5.pulse(0xFF0000);    // sends a pulse down the strand repeatedly
+
+
     // This is preference to what you like to drive on
     chassis.drive_brake_set(MOTOR_BRAKE_COAST);
     ladybrown.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     lbPID.target_set(0);
     isRedTeam = 2; //TURN OFF COLOR SORT FOR DRIVER 
+    // antijamOn = false; //TURN OFF ANTI JAM FOR DRIVER
     doinker.set(false);
     // intakePiston.set(false);
     while (true) {
@@ -385,20 +484,28 @@ void opcontrol() {
       // intakePiston.button_toggle(master.get_digital(DIGITAL_B));
 
 
-      if (master.get_digital(DIGITAL_DOWN)) {
+      if (master.get_digital(DIGITAL_DOWN)) { //reset LB with Down
           lbPID.target_set(0);
       }
 
-      if (master.get_digital(DIGITAL_UP)) {
-          lbPID.target_set(2000);
+      if (master.get_digital(DIGITAL_UP)) { //Score LB with Up
+          lbPID.target_set(10400);
       }
 
-      if (master.get_digital(DIGITAL_RIGHT)) {
-          lbPID.target_set(450);
+      if (master.get_digital(DIGITAL_RIGHT)) { //First load stage LB With Right
+          lbPID.target_set(2150);
       }
 
-      if (master.get_digital(DIGITAL_LEFT)) {
-          lbPID.target_set(2600);
+      if (master.get_digital(DIGITAL_LEFT)) { //Second load stage LB with Left
+          lbPID.target_set(3000);
+      }
+
+      if (master.get_digital(DIGITAL_B)) { //Ally stake with LB on B
+        lbPID.target_set(16000);
+      }
+
+      if (master.get_digital(DIGITAL_Y)) { //antitip goal on Y
+          lbPID.target_set(19000);
       }
 
 
