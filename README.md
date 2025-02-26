@@ -48,10 +48,13 @@ We’re always striving to improve. Team members can:
 ---
 
 ## Achievements in 2024-25 High Stakes Season
+5️⃣ Top 5 teams in IL by TrueSkill Ranking (Top ~300 Worldwide)
 🏆 **Tournament Champions at Great Lakes 2 Competition (IL States Qualifying)** <br />
 🧑‍💻 **Think Award at Great Lakes 2 Competition** <br />
 1️⃣ **Ranked First in Division at Mundelein 2** <br />
-...More to come from GL 3, Skills, and States! 
+🏆 **Tournament Champions at Great Lakes 3 Competition** <br />
+💪 **Excellence Award at Great Lakes 3 Competition** <br />
+More to come from States...
 
 ## Achievements in 2023-24 Over Under Season
 🏗️ **Ranked First in the Great Lakes 4 Competition + Build Award** <br />
