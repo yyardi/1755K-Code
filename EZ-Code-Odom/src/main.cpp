@@ -58,7 +58,7 @@ void sorting_task() {
       if (colorsort.get_proximity() > threshold) {
         if (hue > 180 && hue < 240 && (isRedTeam == 1)) { //blue is 240, red is 0, but our hooks are purple which is ~300
           isColorSortHappening = true; //Update boolean 
-          pros::delay(180);
+          pros::delay(170);
           intakeHigh.move(0);
           pros::delay(400);
           intakeHigh.move(0);
@@ -67,7 +67,7 @@ void sorting_task() {
         }
         else if (hue < 50 && (isRedTeam == 0)) { //blue is 240, red is 0
           isColorSortHappening = true; //Update boolean 
-          pros::delay(180); 
+          pros::delay(170); 
           intakeHigh.move(0);
           pros::delay(400);
           intakeHigh.move(0);
@@ -325,8 +325,8 @@ void autonomous() {
 
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 
-  lv_image();
-  ez::as::shutdown(); //ez template green turns off and team image comes on
+  // lv_image();
+  // ez::as::shutdown(); //ez template green turns off and team image comes on
 }
 
 /**
