@@ -30,7 +30,7 @@
                 "version": "3.2.2"
             },
             "StormLib": {
-                "location": "C:\\Users\\12247\\AppData\\Roaming\\PROS\\templates\\StormLib@0.2.2",
+                "location": "C:\\Users\\12247\\AppData\\Roaming\\PROS\\templates\\StormLib@0.2.3",
                 "metadata": {
                     "origin": "local"
                 },
@@ -38,15 +38,15 @@
                 "py/object": "pros.conductor.templates.local_template.LocalTemplate",
                 "supported_kernels": "^4.1.0",
                 "system_files": [
-                    "include\\stormlib\\api.hpp",
-                    "include\\stormlib\\led.hpp",
-                    "include\\stormlib\\clock.hpp",
                     "firmware\\StormLib.a",
-                    "include\\stormlib\\selector.hpp"
+                    "include\\stormlib\\selector.hpp",
+                    "include\\stormlib\\led.hpp",
+                    "include\\stormlib\\api.hpp",
+                    "include\\stormlib\\clock.hpp"
                 ],
                 "target": "v5",
                 "user_files": [],
-                "version": "0.2.2"
+                "version": "0.2.3"
             },
             "kernel": {
                 "location": "C:\\Users\\union\\AppData\\Roaming\\PROS\\templates\\kernel@4.1.1",

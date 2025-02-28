@@ -6,9 +6,9 @@
 #include "filesystem.h"
 #include "stormlib/led.hpp" 
 
-stormlib::aRGB strand1('H', 63); //num corresponds to letter port, 63 is max per strand
-
-stormlib::aRGB_manager LEDmanager(&strand1, nullptr, nullptr, nullptr,
+stormlib::aRGB strand1(16, 'E', 24); //num corresponds to letter port, 63 is max per strand
+stormlib::aRGB strand2(16, 'C', 24); //num corresponds to letter port, 63 is max per strand
+stormlib::aRGB_manager LEDmanager(&strand1, &strand2, nullptr, nullptr,
   nullptr, nullptr, nullptr, nullptr);
 
 
@@ -100,7 +100,7 @@ void sorting_task() {
     if (antijamOn) { 
       // Get Ladybrown Position
       int ladybrownPos = ladybrown_sensor.get_position();
-      bool isLadybrownLoaded = (abs(ladybrownPos - 2150) < 150 || abs(ladybrownPos - 3000) < 150);
+      bool isLadybrownLoaded = (ladybrownPos > 200);
   
       // IntakeHigh Jam Detection (Disabled When Ladybrown is Up)
       if (!isColorSortHappening && !isLadybrownLoaded && currentTime - intakeHighStartTime > antiJamDelay) {
@@ -305,7 +305,7 @@ void autonomous() {
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
-
+  LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue 
   mogoclamp.set(false);
   // intakePiston.set(false);
 	
@@ -488,27 +488,32 @@ void opcontrol() {
           lbPID.target_set(0);
       }
 
-      if (master.get_digital(DIGITAL_UP)) { //Score LB with Up
-          lbPID.target_set(10400);
+      if (master.get_digital(DIGITAL_B)) { //Descore Angle
+          lbPID.target_set(13400);
       }
 
       if (master.get_digital(DIGITAL_RIGHT)) { //First load stage LB With Right
-          lbPID.target_set(2150);
+          lbPID.target_set(1950);
       }
 
       if (master.get_digital(DIGITAL_LEFT)) { //Second load stage LB with Left
-          lbPID.target_set(3000);
+          lbPID.target_set(3850);
       }
 
-      if (master.get_digital(DIGITAL_B)) { //Ally stake with LB on B
-        lbPID.target_set(16000);
+      if (master.get_digital(DIGITAL_UP)) { //Main scoring angle 
+        lbPID.target_set(17500);
       }
 
       if (master.get_digital(DIGITAL_Y)) { //antitip goal on Y
           lbPID.target_set(19000);
       }
 
-
+      if (abs(ladybrown_sensor.get_position() - 3850) < 500) {
+        if (master.get_digital(DIGITAL_R1)) {
+          intake_speed_high = 80;
+          intake_speed_low = 127;
+        } 
+      }
 
       pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
     }

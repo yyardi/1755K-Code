@@ -21,6 +21,8 @@ public:
    */
   aRGB(int adiPort, int length);
 
+  aRGB(int smartPort, int expanderPort, int length);
+
   /**
    * @brief Set the strand to flow from a color to another color
    *
@@ -41,7 +43,7 @@ public:
    * @param angularSettings settings for the angular controller
    * @param sensors sensors to be used for odometry
    */
-  void flash(uint32_t color, int speed = 5, uint32_t color2 = 0x000000);
+  void flash(uint32_t color, int speed = 5, uint32_t color2 = 0x00000F);
 
   /**
    * @brief Set the strand to "breathe" a color (i.e a slower, less harsh flash)
@@ -66,7 +68,7 @@ public:
   static std::vector<uint32_t> genRainbow(int length);
 
   void pulse(uint32_t color, int length = 3, int speed = 5,
-             uint32_t color2 = 0x000000);
+             uint32_t color2 = 0x00000f);
 
   /**
    * @brief Turn off the RGB
@@ -102,6 +104,7 @@ public:
 
 private:
   int adiPort, length;
+  int expanderPort = 0;
   uint32_t default_color, tempColor1, tempColor2;
   int speed, mode, shiftValue = 0;
 };
@@ -121,6 +124,7 @@ public:
   void pulse(uint32_t color, int length = 3, int speed = 5,
              uint32_t color2 = 0xffffff);
   void off();
+  void pixelRun(uint32_t color, int length = 3, int speed = 2, uint32_t color2 = 0x00000F);
 
 private:
   aRGB *strand1, *strand2, *strand3, *strand4, *strand5, *strand6, *strand7,

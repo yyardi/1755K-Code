@@ -685,8 +685,8 @@ void old_skills_auton() {
 //States Negatives
 void new_negative_blue() {
   //Starting Pose: Angled to Mogo (backwards)
-  selectBlueTeam();
-
+  selectRedTeam();
+  //Grab Mogo, then usual ring rush with 4 in the mogo
   chassis.pid_drive_set(-23_in, DRIVE_SPEED);
   chassis.pid_wait_quick_chain();
   mogoclamp.set(true);
@@ -729,11 +729,11 @@ void new_negative_blue() {
 
   pros::delay(500);
 
-  chassis.pid_turn_set(103_deg, TURN_SPEED);
+  chassis.pid_turn_set(97_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(50_in, DRIVE_SPEED);
-  chassis.pid_wait_until(20_in);
+  chassis.pid_wait_until(40_in);
   chassis.pid_speed_max_set(30);
   chassis.pid_wait();
 
@@ -747,10 +747,10 @@ void new_negative_blue() {
   chassis.pid_turn_set(6_deg, DRIVE_SPEED);
   chassis.pid_wait();
   
-  chassis.pid_drive_set(4_in, DRIVE_SPEED);
+  chassis.pid_drive_set(5_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  lbPID.target_set(16000);
+  lbPID.target_set(19000);
   // chassis.pid_drive_set(30_in, DRIVE_SPEED);
   // chassis.pid_wait();
 
@@ -774,7 +774,6 @@ void new_negative_blue() {
   // then touch ladder
   intake_speed_high = 0;
   intake_speed_low = 0;
-
 }
 
 void new_negative_red() {
