@@ -731,13 +731,13 @@ void new_negative_blue() {
 
 
 
-  chassis.pid_turn_set(-180_deg, TURN_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_turn_set(-180_deg, TURN_SPEED);
+  // chassis.pid_wait();
 
-  chassis.pid_drive_set(34_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(34_in, DRIVE_SPEED);
+  // chassis.pid_wait();
 
-  lbPID.target_set(11000);
+  // lbPID.target_set(11000);
 
 
   // chassis.pid_drive_set(25_in, 70);
@@ -829,13 +829,13 @@ void new_negative_red() {
 
   pros::delay(500);
 
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_turn_set(180_deg, TURN_SPEED);
+  // chassis.pid_wait();
 
-  chassis.pid_drive_set(34_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(34_in, DRIVE_SPEED);
+  // chassis.pid_wait();
 
-  lbPID.target_set(11000);
+  // lbPID.target_set(11000);
 
 
   // chassis.pid_drive_set(50_in, 70);
