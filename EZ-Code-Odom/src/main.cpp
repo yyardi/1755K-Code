@@ -170,12 +170,13 @@ void lb_task() {
 
 pros::Task LB_TASK(lb_task);
 
-void lv_image(void) {
+/*void lv_image(void) {
     lv_obj_t * img1 = lv_img_create(lv_scr_act());
     lv_img_set_src(img1, "S:/v5brain.bin"); //put actual path to image here
     lv_obj_align(img1, LV_ALIGN_DEFAULT, 0, 0);
     lv_obj_set_size(img1, 480, 240);
 }
+*/  
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.

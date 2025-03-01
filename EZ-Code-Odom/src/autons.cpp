@@ -1048,6 +1048,7 @@ void carry_positive_red() {
 //Skills
 void fiftyone_skills() {
   selectSkills();
+  
   intake_speed_high = 127;
   pros::delay(500);
   intake_speed_high = 0;
@@ -1063,7 +1064,7 @@ void fiftyone_skills() {
   //grabs mogo
   chassis.pid_wait();
   chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
+  chassis.pid_wait_quick_chain();
   intake_speed_high = 127;
   intake_speed_low = 106;
   chassis.pid_odom_set(24_in, DRIVE_SPEED);
@@ -1085,8 +1086,16 @@ void fiftyone_skills() {
   chassis.pid_wait();
 
 
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_turn_set(179_deg, TURN_SPEED);
   chassis.pid_wait();
+  chassis.pid_drive_set(78_in, DRIVE_SPEED*0.85);
+  chassis.pid_wait();
+  chassis.pid_drive_set(4_in, DRIVE_SPEED*0.85);
+  chassis.pid_wait();
+  
+
+
+  /*
   chassis.pid_drive_set(25_in, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(25_in, DRIVE_SPEED);
@@ -1095,7 +1104,10 @@ void fiftyone_skills() {
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
+  */
   // pros::delay(500);
+  
+  
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(-17_in, DRIVE_SPEED);
@@ -1104,6 +1116,60 @@ void fiftyone_skills() {
   pros::delay(100);
   chassis.pid_drive_set(17_in, DRIVE_SPEED);
   chassis.pid_wait();
+  //chassis.drive_angle_set(-45);
+
+
+
+// first goal done
+
+
+chassis.pid_turn_set(85_deg, TURN_SPEED);
+chassis.pid_wait();
+chassis.pid_drive_set(-74_in, DRIVE_SPEED*0.65);
+chassis.pid_wait_until(-73_in);
+mogoclamp.set(true);
+chassis.pid_turn_set(0_deg, TURN_SPEED);
+
+// copied need to flip 
+
+chassis.pid_wait_quick_chain();
+intake_speed_high = 127;
+intake_speed_low = 106;
+chassis.pid_odom_set(24_in, DRIVE_SPEED);
+chassis.pid_wait();
+pros::delay(200);
+chassis.pid_turn_set(-50_deg,TURN_SPEED);
+chassis.pid_wait();
+chassis.pid_odom_set(26_in,DRIVE_SPEED);
+chassis.pid_wait();
+chassis.pid_turn_set(50_deg,TURN_SPEED);
+chassis.pid_wait();
+chassis.pid_odom_set(27_in,DRIVE_SPEED);
+chassis.pid_wait();
+//curve part start
+pros::delay(200);
+chassis.pid_turn_set(-90_deg, TURN_SPEED);
+chassis.pid_wait();
+chassis.pid_drive_set(24_in, DRIVE_SPEED);
+chassis.pid_wait();
+
+
+chassis.pid_turn_set(-179_deg, TURN_SPEED);
+chassis.pid_wait();
+chassis.pid_drive_set(78_in, DRIVE_SPEED*0.85);
+chassis.pid_wait();
+chassis.pid_drive_set(4_in, DRIVE_SPEED*0.85);
+chassis.pid_wait();
+
+
+
+
+
+
+
+
+
+
   // //Alternate pid code
   // // chassis.pid_turn_set(90_deg, TURN_SPEED);
   // // chassis.pid_wait();
