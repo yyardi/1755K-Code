@@ -6,10 +6,10 @@
 #include "filesystem.h"
 #include "stormlib/led.hpp" 
 
-stormlib::aRGB strand1(16, 'E', 24); //num corresponds to letter port, 63 is max per strand
-stormlib::aRGB strand2(16, 'C', 24); //num corresponds to letter port, 63 is max per strand
-stormlib::aRGB_manager LEDmanager(&strand1, &strand2, nullptr, nullptr,
-  nullptr, nullptr, nullptr, nullptr);
+// stormlib::aRGB strand1(16, 'E', 24); //num corresponds to letter port, 63 is max per strand
+// stormlib::aRGB strand2(16, 'C', 24); //num corresponds to letter port, 63 is max per strand
+// stormlib::aRGB_manager LEDmanager(&strand1, &strand2, nullptr, nullptr,
+//   nullptr, nullptr, nullptr, nullptr);
 
 
 // after comp testing
@@ -209,7 +209,7 @@ void initialize() {
   lbPID.exit_condition_set(80, 50, 300, 150, 500, 500);
   
   _init_fs();
-  LEDmanager.initialize(20);
+  // LEDmanager.initialize(20);
   
 
 
@@ -305,7 +305,7 @@ void autonomous() {
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
-  LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue 
+  // LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue 
   mogoclamp.set(false);
   // intakePiston.set(false);
 	
@@ -435,7 +435,7 @@ void ez_template_extras() {
 void opcontrol() {
     // lv_image();
     // ez::as::shutdown(); //ez template green turns off and team image comes on
-    LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue ish
+    // LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue ish
     // strand3.setColor(0x00FFFF); // strand stays on one color
     // strand4.flash(0xFF0000);    // flashes a color
     // strand5.pulse(0xFF0000);    // sends a pulse down the strand repeatedly
@@ -505,7 +505,7 @@ void opcontrol() {
       }
 
       if (master.get_digital(DIGITAL_Y)) { //antitip goal on Y
-          lbPID.target_set(19000);
+          lbPID.target_set(22500);
       }
 
       if (abs(ladybrown_sensor.get_position() - 3850) < 500) {

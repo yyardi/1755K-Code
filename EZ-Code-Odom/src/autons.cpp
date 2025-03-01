@@ -724,34 +724,40 @@ void new_negative_blue() {
   chassis.pid_wait();
 
   intake_speed_low = 127;
+  intake_speed_high = 127;
   pros::delay(400);
   chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait();
 
 
 
-  chassis.pid_turn_set(103_deg, TURN_SPEED);
+  chassis.pid_turn_set(-180_deg, TURN_SPEED);
   chassis.pid_wait();
 
-
-  chassis.pid_drive_set(25_in, 70);
-  chassis.pid_wait();
-  chassis.pid_drive_set(25_in, 70);
-  chassis.pid_wait();
-  chassis.pid_drive_set(15_in, 70);
+  chassis.pid_drive_set(34_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  pros::delay(700);
+  lbPID.target_set(11000);
 
-  lbPID.target_set(2300);
 
-  chassis.pid_turn_set(-6_deg, DRIVE_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(25_in, 70);
+  // chassis.pid_wait();
+  // chassis.pid_drive_set(25_in, 70);
+  // chassis.pid_wait();
+  // chassis.pid_drive_set(15_in, 70);
+  // chassis.pid_wait();
+
+  // pros::delay(700);
+
+  // lbPID.target_set(2300);
+
+  // chassis.pid_turn_set(-6_deg, DRIVE_SPEED);
+  // chassis.pid_wait();
   
-  chassis.pid_drive_set(4_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(4_in, DRIVE_SPEED);
+  // chassis.pid_wait();
 
-  lbPID.target_set(19000);
+  // lbPID.target_set(19000);
   // chassis.pid_drive_set(30_in, DRIVE_SPEED);
   // chassis.pid_wait();
 
@@ -817,32 +823,38 @@ void new_negative_red() {
   chassis.pid_wait();
 
   intake_speed_low = 127;
-
+  intake_speed_high = 127;
   chassis.pid_drive_set(10_in, DRIVE_SPEED);
   chassis.pid_wait();
 
   pros::delay(500);
 
-  chassis.pid_turn_set(-99_deg, TURN_SPEED);
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(50_in, 70);
+  chassis.pid_drive_set(34_in, DRIVE_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(15_in, 70);
-  chassis.pid_wait();
+  lbPID.target_set(11000);
 
-  pros::delay(400);
 
-  lbPID.target_set(2300);
+  // chassis.pid_drive_set(50_in, 70);
+  // chassis.pid_wait();
 
-  chassis.pid_turn_set(6_deg, DRIVE_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(15_in, 70);
+  // chassis.pid_wait();
+
+  // pros::delay(400);
+
+  // lbPID.target_set(2300);
+
+  // chassis.pid_turn_set(6_deg, DRIVE_SPEED);
+  // chassis.pid_wait();
   
-  chassis.pid_drive_set(4_in, DRIVE_SPEED);
-  chassis.pid_wait();
+  // chassis.pid_drive_set(4_in, DRIVE_SPEED);
+  // chassis.pid_wait();
 
-  lbPID.target_set(16000);
+  // lbPID.target_set(19000);
   // chassis.pid_drive_set(30_in, DRIVE_SPEED);
   // chassis.pid_wait();
 
