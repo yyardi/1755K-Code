@@ -6,10 +6,10 @@
 #include "filesystem.h"
 #include "stormlib/led.hpp" 
 
-// stormlib::aRGB strand1(16, 'E', 24); //num corresponds to letter port, 63 is max per strand
-// stormlib::aRGB strand2(16, 'C', 24); //num corresponds to letter port, 63 is max per strand
-// stormlib::aRGB_manager LEDmanager(&strand1, &strand2, nullptr, nullptr,
-//   nullptr, nullptr, nullptr, nullptr);
+stormlib::aRGB strand1(16, 'E', 24); //num corresponds to letter port, 63 is max per strand
+stormlib::aRGB strand2(16, 'C', 24); //num corresponds to letter port, 63 is max per strand
+stormlib::aRGB_manager LEDmanager(&strand1, &strand2, nullptr, nullptr,
+  nullptr, nullptr, nullptr, nullptr);
 
 
 // after comp testing
@@ -170,13 +170,13 @@ void lb_task() {
 
 pros::Task LB_TASK(lb_task);
 
-/*void lv_image(void) {
+void lv_image(void) {
     lv_obj_t * img1 = lv_img_create(lv_scr_act());
     lv_img_set_src(img1, "S:/v5brain.bin"); //put actual path to image here
     lv_obj_align(img1, LV_ALIGN_DEFAULT, 0, 0);
     lv_obj_set_size(img1, 480, 240);
 }
-*/  
+  
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -188,7 +188,7 @@ void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
   
-  pros::delay(500);  // Stop the user from doing anything while legacy ports configure
+  pros::delay(3000);  // Stop the user from doing anything while legacy ports configure
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
@@ -210,7 +210,7 @@ void initialize() {
   lbPID.exit_condition_set(80, 50, 300, 150, 500, 500);
   
   _init_fs();
-  // LEDmanager.initialize(20);
+  LEDmanager.initialize(20);
   
 
 
@@ -434,9 +434,9 @@ void ez_template_extras() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-    // lv_image();
-    // ez::as::shutdown(); //ez template green turns off and team image comes on
-    // LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue ish
+    lv_image();
+    ez::as::shutdown(); //ez template green turns off and team image comes on
+    LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue ish
     // strand3.setColor(0x00FFFF); // strand stays on one color
     // strand4.flash(0xFF0000);    // flashes a color
     // strand5.pulse(0xFF0000);    // sends a pulse down the strand repeatedly
