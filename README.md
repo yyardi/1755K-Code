@@ -3,7 +3,7 @@
 ![Our Tournament Winning Robot](images/TC.jpg)
 ![Over Under States Robot](images/OUStates.jpg)
 
-Welcome to the official repository for Team 1755K's robotics projects! Here, you’ll find all the code, documentation, and resources for our team's journey, including past competition archives and the latest innovations. Special Thanks to our sponsor, **Polymaker**!
+Welcome to the official repository for Team 1755K's robotics projects, a top Illinois team and World Championship Competitor! Here, you’ll find all the code, documentation, and resources for our team's journey, including past competition archives and the latest innovations. Special Thanks to our sponsor, **Polymaker**!
 
 <a href="https://polymaker.com/" target="_blank">Polymaker Inc</a> <br />
 <a href="https://docs.google.com/presentation/d/1bIl7I55HEaiwGx8CQbsbxuVOjW_J9ZmIvWEf3nrDaSE/edit#slide=id.g24d0769397b_0_208" target="_blank">1755K Engineering Notebook</a>
@@ -54,7 +54,9 @@ We’re always striving to improve. Team members can:
 1️⃣ **Ranked First in Division at Mundelein 2** <br />
 🏆 **Tournament Champions at Great Lakes 3 Competition** <br />
 💪 **Excellence Award at Great Lakes 3 Competition** <br />
-More to come from States...
+🌍 **Illinois State Championship Tournament Finalists (Worlds Qualifying)** <br />
+See you in Dallas! More to come from Worlds!
+
 
 ## Achievements in 2023-24 Over Under Season
 🏗️ **Ranked First in the Great Lakes 4 Competition + Build Award** <br />
