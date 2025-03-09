@@ -1,5 +1,6 @@
 # Robotics Code for Team 1755K
-![Team Photo](images/team_photo.jpg)
+![Team Photo](images/team_photo.png)
+![High Stakes Robot](images/HSStates.png)
 ![Our Tournament Winning Robot](images/TC.jpg)
 ![Over Under States Robot](images/OUStates.jpg)
 
