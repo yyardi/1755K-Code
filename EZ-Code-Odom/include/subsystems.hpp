@@ -15,7 +15,6 @@ inline pros::Motor ladybrown(3);
 inline ez::Piston doinker('B');
 inline pros::Optical colorsort(1);
 
-// inline ez::Piston intakePiston('H');
 inline ez::Piston mogoclamp('A');
 inline pros::Rotation ladybrown_sensor(-2);
 

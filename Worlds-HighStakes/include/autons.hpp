@@ -2,6 +2,11 @@
 
 void default_constants();
 
+void redPositive();
+void bluePositive();
+void redNegative();
+void blueNegative();
+
 void drive_example();
 void turn_example();
 void drive_and_turn();

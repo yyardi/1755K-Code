@@ -8,21 +8,41 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {1, 2, 3},     // Left Chassis Ports (negative port will reverse it!)
-    {-4, -5, -6},  // Right Chassis Ports (negative port will reverse it!)
+    {-8, -9, 10},     // Left Chassis Ports (negative port will reverse it!)
+    {-15, 16, 17},  // Right Chassis Ports (negative port will reverse it!)
 
-    7,      // IMU Port
-    4.125,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    343);   // Wheel RPM = cartridge * (motor gear / wheel gear)
+    13,      // IMU Port
+    3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
+    450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
-// Uncomment the trackers you're using here!
-// - `8` and `9` are smart ports (making these negative will reverse the sensor)
-//  - you should get positive values on the encoders going FORWARD and RIGHT
-// - `2.75` is the wheel diameter
-// - `4.0` is the distance from the center of the wheel to the center of the robot
-// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
+void intake_task() {
+  pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
+  colorsort.set_led_pwm(100);
+  bool isColorSortHappening = false;
+  while(true) {
+    intake.move(intake_speed_high);
+    intake2.move(intake_speed_low);
+    pros::delay(ez::util::DELAY_TIME);
+  }
+
+  
+}
+pros::Task INTAKE_TASK(intake_task);
+
+void lb_task() {
+  pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
+  while (true) {
+    set_LB(lbPID.compute(ladybrown_sensor.get_position()));
+
+    pros::delay(ez::util::DELAY_TIME);
+  }
+}
+
+pros::Task LB_TASK(lb_task);
+
+
+    
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -34,15 +54,9 @@ void initialize() {
   ez::ez_template_print();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
-
-  // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
-  //  - change `back` to `front` if the tracking wheel is in front of the midline
-  //  - ignore this if you aren't using a horizontal tracker
-  // chassis.odom_tracker_back_set(&horiz_tracker);
-  // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
-  //  - change `left` to `right` if the tracking wheel is to the right of the centerline
-  //  - ignore this if you aren't using a vertical tracker
-  // chassis.odom_tracker_left_set(&vert_tracker);
+  mogoclamp.set(false);
+  ladybrown_sensor.reset_position();
+  lbPID.exit_condition_set(80, 50, 300, 150, 500, 500);
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
@@ -58,6 +72,11 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"Red Positive", redPositive},
+      {"Blue Positive", bluePositive},
+      {"Red Negative", redNegative},
+      {"Blue Negative", blueNegative},
+    
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -119,6 +138,9 @@ void autonomous() {
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
+  mogoclamp.set(false);
+  doinkerR.set(false);
+  doinkerL.set(false);
 
   /*
   Odometry and Pure Pursuit are not magic
@@ -241,21 +263,81 @@ void ez_template_extras() {
  */
 void opcontrol() {
   // This is preference to what you like to drive on
-  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  // lv_image();
+  // ez::as::shutdown(); //ez template green turns off and team image comes on
+  // LEDmanager.flow(0x6414e3, 0x9828fa); //gradient between purple/blue ish
+  // strand3.setColor(0x00FFFF); // strand stays on one color
+  // strand4.flash(0xFF0000);    // flashes a color
+  // strand5.pulse(0xFF0000);    // sends a pulse down the strand repeatedly
 
+
+  // This is preference to what you like to drive on
+  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  ladybrown1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  lbPID.target_set(0);
+  isRedTeam = 2; //TURN OFF COLOR SORT FOR DRIVER 
+  // antijamOn = false; //TURN OFF ANTI JAM FOR DRIVER
+  
+  doinkerR.set(false);
+  doinkerL.set(false);
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
+    
 
-    chassis.opcontrol_tank();  // Tank control
-    // chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
+    //chassis.opcontrol_tank();  // Tank control
+    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
     // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
     // chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
     // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
 
-    // . . .
-    // Put more user control code here!
-    // . . .
+
+    if (master.get_digital(DIGITAL_R1)) {
+        intake_speed_high=127;
+        intake_speed_low=127;
+    } 
+    else if (master.get_digital(DIGITAL_R2)) {
+        intake_speed_high=-127;
+        intake_speed_low=-127;
+    } 
+    else {
+        intake_speed_high=0;
+        intake_speed_low=0;
+    }
+
+    mogoclamp.button_toggle(master.get_digital(DIGITAL_L2)); 
+    doinkerR.button_toggle(master.get_digital(DIGITAL_L1));
+    doinkerL.button_toggle(master.get_digital(DIGITAL_LEFT));
+
+    if (master.get_digital(DIGITAL_DOWN)) { //reset LB with Down
+      lbPID.target_set(0);
+    }
+
+    if (master.get_digital(DIGITAL_B)) { //Descore Angle
+      lbPID.target_set(13400);
+    }
+
+    if (master.get_digital(DIGITAL_RIGHT)) { //First load stage LB With Right
+      lbPID.target_set(2150);
+    }
+
+    if (master.get_digital(DIGITAL_UP)) { //Main scoring angle 
+      lbPID.target_set(17500);
+    }
+
+    if (master.get_digital(DIGITAL_Y)) { //antitip goal on Y
+      lbPID.target_set(23500);
+    } 
+
+
+    
+    // if (abs(ladybrown_sensor.get_position() - 3850) < 500) {
+    //   if (master.get_digital(DIGITAL_R1)) {
+    //     intake_speed_high = 80;
+    //     intake_speed_low = 127;
+    //   } 
+    // }
+
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }

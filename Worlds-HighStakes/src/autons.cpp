@@ -6,18 +6,18 @@
 /////
 
 // These are out of 127
-const int DRIVE_SPEED = 110;
-const int TURN_SPEED = 90;
-const int SWING_SPEED = 110;
+const int DRIVE_SPEED = 127;
+const int TURN_SPEED = 110;
+const int SWING_SPEED = 127;
 
 ///
 // Constants
 ///
 void default_constants() {
   // P, I, D, and Start I
-  chassis.pid_drive_constants_set(20.0, 0.0, 100.0);         // Fwd/rev constants, used for odom and non odom motions
-  chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(3.0, 0.05, 20.0, 15.0);     // Turn in place constants
+  chassis.pid_drive_constants_set(10.0, 0.0, 8.0);         // Fwd/rev constants, used for odom and non odom motions
+  chassis.pid_heading_constants_set(11.0, 0.0, 40.0);        // Holds the robot straight while going forward without odom
+  chassis.pid_turn_constants_set(5.0, 0.0, 20.0, 0.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(6.5, 0.0, 52.5);    // Angular control for odom motions
   chassis.pid_odom_boomerang_constants_set(5.8, 0.0, 32.5);  // Angular control for boomerang motions
@@ -59,10 +59,8 @@ void drive_example() {
 
   chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
   chassis.pid_wait();
-
   chassis.pid_drive_set(-12_in, DRIVE_SPEED);
   chassis.pid_wait();
-
   chassis.pid_drive_set(-12_in, DRIVE_SPEED);
   chassis.pid_wait();
 }
@@ -76,10 +74,10 @@ void turn_example() {
 
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
-
+  pros::delay(1000);
   chassis.pid_turn_set(45_deg, TURN_SPEED);
   chassis.pid_wait();
-
+  pros::delay(1000);
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 }
@@ -376,3 +374,77 @@ void measure_offsets() {
 // . . .
 // Make your own autonomous functions here!
 // . . .
+
+void redPositive() {
+  selectRedTeam();
+  chassis.pid_drive_set(40_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  doinkerL.set(true);
+  pros::delay(100);
+  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  doinkerL.set(false);
+  pros::delay(500);
+  chassis.pid_turn_set(160_deg, TURN_SPEED, true);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-2_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  mogoclamp.set(true);
+  intake_speed_high=127;
+  pros::delay(1000);
+  intake_speed_high=0;
+
+  chassis.pid_turn_set(0_deg, TURN_SPEED, true);
+  chassis.pid_wait();
+
+  mogoclamp.set(false);
+
+  chassis.pid_turn_set(-110_deg, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  intake_speed_low=127;
+  intake_speed_high=127;
+
+  chassis.pid_drive_set(17_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+
+  
+
+
+
+  
+
+
+}
+
+void bluePositive() {
+  selectRedTeam();
+  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  doinkerL.set(true);
+  pros::delay(100);
+  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+}
+
+void redNegative() {
+  selectRedTeam();
+  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  doinkerL.set(true);
+  pros::delay(100);
+  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+}
+
+void blueNegative() {
+  selectRedTeam();
+  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  doinkerL.set(true);
+  pros::delay(100);
+  chassis.pid_drive_set(-24_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+}
