@@ -36,13 +36,12 @@ inline void set_LB(int input) {
 
 //vars
 
-inline bool antijamOn = true; 
+inline bool antijamOn = false; 
 
 inline int isRedTeam = 1; //CHANGE AT EVERY MATCH
 
 inline void selectRedTeam() {
-    isRedTeam = 1;
-    
+    isRedTeam = 1;   
 }
 
 inline void selectBlueTeam() {

@@ -16,17 +16,128 @@ ez::Drive chassis(
     450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 
+
+
 void intake_task() {
   pros::delay(2000);  // Set EZ-Template calibrate before this function starts running
   colorsort.set_led_pwm(100);
   bool isColorSortHappening = false;
-  while(true) {
+
+  uint32_t intakeStartTime = 0, intake2StartTime = 0;
+  uint32_t intakeJamStart = 0, intake2JamStart = 0;
+  bool intakeRecentlyStarted = false, intake2RecentlyStarted = false;
+  bool intakeJammed = false, intake2Jammed = false;
+
+  const uint32_t antiJamDelay = 500; // Time before anti-jam can activate after starting
+  const uint32_t highJamThreshold = 400;  // Time before intake high is considered jammed
+  const uint32_t lowJamThreshold = 300;   // Lower threshold for intake low (more sensitive)
+
+
+  while (true) {
+    int threshold = 200; //check with proximity values printed
+    if (isRedTeam != 2) {
+      
+      int hue = colorsort.get_hue();
+      if (colorsort.get_proximity() > threshold) {
+        if (hue > 180 && hue < 240 && (isRedTeam == 1)) { //blue is 240, red is 0, but our hooks are purple which is ~300
+          isColorSortHappening = true; //Update boolean 
+          pros::delay(130);
+          intake.move(0);
+          pros::delay(400);
+          intake.move(0);
+          printf("Hue: %d\n", hue);
+          printf("Proximity: %d\n", colorsort.get_proximity());
+        }
+        else if (hue < 50 && (isRedTeam == 0)) { //blue is 240, red is 0
+          isColorSortHappening = true; //Update boolean 
+          pros::delay(130); 
+          intake.move(0);
+          pros::delay(400);
+          intake.move(0);
+          printf("Hue: %d\n", hue);
+          printf("Proximity: %d\n", colorsort.get_proximity());
+        }
+      }
+      else {
+        isColorSortHappening = false; //Update boolean 
+      }
+    }
+
+    uint32_t currentTime = pros::millis();
+
+
+
+    // Detect if intake was just started
+    if (intake_speed_high > 0 && !intakeRecentlyStarted) {
+        intakeRecentlyStarted = true;
+        intakeStartTime = pros::millis();
+    }
+
+    // Detect if intake2 was just started
+    if (intake_speed_low > 0 && !intake2RecentlyStarted) {
+        intake2RecentlyStarted = true;
+        intake2StartTime = pros::millis();
+    }
+
+    // --- Anti-Jam Logic with Duration Check ---
+    if (antijamOn) { 
+      // Get Ladybrown Position
+      int ladybrownPos = ladybrown_sensor.get_position();
+      bool isLadybrownLoaded = (ladybrownPos > 200);
+  
+      // intake Jam Detection (Disabled When Ladybrown is Up)
+      if (!isColorSortHappening && !isLadybrownLoaded && currentTime - intakeStartTime > antiJamDelay) {
+          if (intake_speed_high > 0 && intake.get_actual_velocity() < intake_speed_high * 0.15) {
+              if (!intakeJammed) {
+                  intakeJamStart = currentTime;
+                  intakeJammed = true;
+              }
+              else if (currentTime - intakeJamStart > highJamThreshold) {
+                  intake.move(-127); // Reverse
+                  pros::delay(500);     
+                  intake.move(intake_speed_high); // Resume normal speed
+                  intakeJammed = false; 
+              }
+          }
+          else {
+              intakeJammed = false; 
+          }
+      }
+  
+      // intake2 Jam Detection (Still Works Normally)
+      if (!isColorSortHappening && currentTime - intake2StartTime > antiJamDelay) {
+          if (intake_speed_low > 0 && intake2.get_actual_velocity() < intake_speed_low * 0.15) {
+              if (!intake2Jammed) {
+                  intake2JamStart = currentTime;
+                  intake2Jammed = true;
+              }
+              else if (currentTime - intake2JamStart > lowJamThreshold) {
+                  intake2.move(-127); // Reverse
+                  pros::delay(500);    
+                  intake2.move(intake_speed_low); // Resume normal speed
+                  intake2Jammed = false; 
+              }
+          }
+          else {
+              intake2Jammed = false; 
+          }
+      }
+    }  
     intake.move(intake_speed_high);
     intake2.move(intake_speed_low);
+
+    // Reset flags when intake is turned off
+    if (intake_speed_high == 0) {
+      intakeRecentlyStarted = false;
+      intakeJammed = false;
+    }
+    if (intake_speed_low == 0) {
+        intake2RecentlyStarted = false;
+        intake2Jammed = false;
+    }
+    
     pros::delay(ez::util::DELAY_TIME);
   }
-
-  
 }
 pros::Task INTAKE_TASK(intake_task);
 
@@ -76,7 +187,7 @@ void initialize() {
       {"Blue Positive", bluePositive},
       {"Red Negative", redNegative},
       {"Blue Negative", blueNegative},
-    
+      {"Color Test", colorTest},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -275,7 +386,7 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   ladybrown1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   lbPID.target_set(0);
-  isRedTeam = 2; //TURN OFF COLOR SORT FOR DRIVER 
+  isRedTeam = 1; //TURN OFF COLOR SORT FOR DRIVER 
   // antijamOn = false; //TURN OFF ANTI JAM FOR DRIVER
   
   doinkerR.set(false);
@@ -322,7 +433,7 @@ void opcontrol() {
     }
 
     if (master.get_digital(DIGITAL_UP)) { //Main scoring angle 
-      lbPID.target_set(17500);
+      lbPID.target_set(16500);
     }
 
     if (master.get_digital(DIGITAL_Y)) { //antitip goal on Y
