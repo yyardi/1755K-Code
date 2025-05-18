@@ -41,18 +41,18 @@ void intake_task() {
       if (colorsort.get_proximity() > threshold) {
         if (hue > 180 && hue < 240 && (isRedTeam == 1)) { //blue is 240, red is 0, but our hooks are purple which is ~300
           isColorSortHappening = true; //Update boolean 
-          pros::delay(130);
+          pros::delay(110);
           intake.move(0);
-          pros::delay(400);
+          pros::delay(470);
           intake.move(0);
           printf("Hue: %d\n", hue);
           printf("Proximity: %d\n", colorsort.get_proximity());
         }
         else if (hue < 50 && (isRedTeam == 0)) { //blue is 240, red is 0
           isColorSortHappening = true; //Update boolean 
-          pros::delay(130); 
+          pros::delay(110); 
           intake.move(0);
-          pros::delay(400);
+          pros::delay(470);
           intake.move(0);
           printf("Hue: %d\n", hue);
           printf("Proximity: %d\n", colorsort.get_proximity());
@@ -187,6 +187,8 @@ void initialize() {
       {"Blue Positive", bluePositive},
       {"Red Negative", redNegative},
       {"Blue Negative", blueNegative},
+      {"Blue 2 Ring", blueCarried},
+      {"Red 2 Ring", redCarried},
       {"Color Test", colorTest},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
@@ -386,7 +388,7 @@ void opcontrol() {
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   ladybrown1.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   lbPID.target_set(0);
-  isRedTeam = 1; //TURN OFF COLOR SORT FOR DRIVER 
+  isRedTeam = 2; //TURN OFF COLOR SORT FOR DRIVER 
   // antijamOn = false; //TURN OFF ANTI JAM FOR DRIVER
   
   doinkerR.set(false);
@@ -425,19 +427,21 @@ void opcontrol() {
     }
 
     if (master.get_digital(DIGITAL_B)) { //Descore Angle
-      lbPID.target_set(13400);
+      lbPID.target_set(15000);
+
     }
 
     if (master.get_digital(DIGITAL_RIGHT)) { //First load stage LB With Right
-      lbPID.target_set(2150);
+      lbPID.target_set(4000);
     }
 
     if (master.get_digital(DIGITAL_UP)) { //Main scoring angle 
-      lbPID.target_set(16500);
+      
+      lbPID.target_set(20000);
     }
 
     if (master.get_digital(DIGITAL_Y)) { //antitip goal on Y
-      lbPID.target_set(23500);
+      lbPID.target_set(24500);
     } 
 
 

@@ -6,9 +6,9 @@
 /////
 
 // These are out of 127
-const int DRIVE_SPEED = 127*0.8;
-const int TURN_SPEED = 110*0.8;
-const int SWING_SPEED = 127*0.8;
+const int DRIVE_SPEED = 127;
+const int TURN_SPEED = 110;
+const int SWING_SPEED = 127;
 
 ///
 // Constants
@@ -433,34 +433,75 @@ void redPositive() {
 }
 
 void bluePositive() {
+  selectBlueTeam();
+  chassis.pid_drive_set(37_in, DRIVE_SPEED, true);
+  chassis.pid_wait_quick_chain();
+  doinkerR.set(true);
+  pros::delay(400);
+  chassis.pid_drive_set(-24_in, DRIVE_SPEED*0.5, true);
+  chassis.pid_wait_quick_chain();
+  doinkerR.set(false);
+  pros::delay(500);
+  chassis.pid_turn_set(-170_deg, TURN_SPEED, true);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-16_in, DRIVE_SPEED*0.4, true);
+  chassis.pid_wait();
+  mogoclamp.set(true);
+  pros::delay(200);
+  intake_speed_high=127;
+  pros::delay(400);
+  intake_speed_high=0;
+
+  chassis.pid_drive_set(5_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(60_deg, TURN_SPEED);
+  chassis.pid_wait();
+  mogoclamp.set(false);
+  chassis.pid_drive_set(19_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  intake_speed_high = 127;
+  intake_speed_low = 127;
+  pros::delay(400);
+  
+
+  chassis.pid_turn_set(-80_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-20_in, DRIVE_SPEED*0.4);
+  chassis.pid_wait();
+  mogoclamp.set(true);
+  intake_speed_high = 127;
+
+  pros::delay(400);
+
+
   
 }
 
 void redNegative() {
   selectRedTeam();
   //Grab Mogo, then usual ring rush with 4 in the mogo
-  chassis.pid_drive_set(-24.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-24.5_in, DRIVE_SPEED*0.4);
   chassis.pid_wait_until(-23.5);
   mogoclamp.set(true);
   chassis.pid_wait_quick_chain();
   
-  pros::delay(50);
-  intake_speed_high = 127;
-  pros::delay(50);
+  pros::delay(75);
   
   //mess with this turn
   chassis.pid_turn_set(136_deg, TURN_SPEED*0.8);
   chassis.pid_wait();
+  intake_speed_high = 127;
   intake_speed_low = 127;
   
-  chassis.pid_drive_set(20_in, DRIVE_SPEED*0.60);
+  chassis.pid_drive_set(19_in, DRIVE_SPEED*0.60);
   chassis.pid_wait();
   pros::delay(50);
   
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(16_in, DRIVE_SPEED);
+  chassis.pid_drive_set(18_in, DRIVE_SPEED);
   chassis.pid_wait();
   //chassis.pid_odom_set(-6_in, DRIVE_SPEED);
   //chassis.pid_wait();
@@ -479,126 +520,97 @@ void redNegative() {
   
   pros::delay(50);
 
-  chassis.pid_turn_set(-60_deg, TURN_SPEED);
+  chassis.pid_turn_set(-60_deg, TURN_SPEED*0.7);
   chassis.pid_wait();
 
   intake_speed_low = 127; 
 
-  chassis.pid_drive_set(40_in, DRIVE_SPEED);
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
   chassis.pid_wait();
-  mogoclamp.set(false);
-  chassis.pid_drive_set(12_in, DRIVE_SPEED*0.5); // slow down the robot so that we don't launch the ring
-  chassis.pid_wait();
-
-  pros::delay(50);
-
-  chassis.pid_drive_set(10_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  lbPID.target_set(2150);
-
-  chassis.pid_drive_set(6_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  intake_speed_high = 0;
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(4_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  lbPID.target_set(23500);
-
-  chassis.pid_drive_set(-4_in, DRIVE_SPEED);
-
-  //lb_wait();
-
-
   
-
-
-
-
-
-
-  /*
-  intake_speed_low = 127;
-  intake_speed_high = 127;
-  chassis.pid_drive_set(10_in, DRIVE_SPEED);
+  chassis.pid_turn_set(-135_deg, TURN_SPEED);
   chassis.pid_wait();
-  */
-  pros::delay(1500);
+  lbPID.target_set(14000);
 
-  // chassis.pid_turn_set(180_deg, TURN_SPEED);
-  // chassis.pid_wait();
+  chassis.pid_drive_set(13_in, DRIVE_SPEED);
+  chassis.pid_wait();
 
-  // chassis.pid_drive_set(34_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  // lbPID.target_set(11000);
-
-
-  // chassis.pid_drive_set(50_in, 70);
-  // chassis.pid_wait();
-
-  // chassis.pid_drive_set(15_in, 70);
-  // chassis.pid_wait();
-
-  // pros::delay(400);
-
-  // lbPID.target_set(2300);
-
-  // chassis.pid_turn_set(6_deg, DRIVE_SPEED);
-  // chassis.pid_wait();
-  
-  // chassis.pid_drive_set(4_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  // lbPID.target_set(19000);
-  // chassis.pid_drive_set(30_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-
-  // //Go to corner, and then intake 2 more rings and LB
-
-  // chassis.pid_odom_set({{11.85_in, 12.85_in, 10_deg}, fwd, DRIVE_SPEED}, true);
-  // chassis.pid_wait();
-
-  // doinker.set(true);
-  // pros::delay(300);
-  // chassis.pid_turn_relative_set(-100_deg, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-
-  //Go to ally stake 
-
-
-
-  
-  // then touch ladder
   intake_speed_high = 0;
   intake_speed_low = 0;
 
 }
 
-void blueNegative() {
+void redCarried() {
   selectRedTeam();
   //Grab Mogo, then usual ring rush with 4 in the mogo
-  chassis.pid_drive_set(-24.5_in, DRIVE_SPEED);
+  chassis.pid_drive_set(-24.5_in, DRIVE_SPEED*0.4);
   chassis.pid_wait_until(-23.5);
   mogoclamp.set(true);
   chassis.pid_wait_quick_chain();
   
-  pros::delay(50);
-  intake_speed_high = 127;
-  pros::delay(50);
+  pros::delay(75);
+
+  
+  chassis.pid_turn_set(-90_deg, TURN_SPEED*0.8);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(120_deg, TURN_SPEED*0.8);
+  chassis.pid_wait();
+  lbPID.target_set(13000);
+
+  chassis.pid_drive_set(37_in, DRIVE_SPEED*0.6);
+  chassis.pid_wait();
+
+  intake_speed_high = 0;
+
+  
+}
+
+void blueCarried() {
+  selectBlueTeam();
+  //Grab Mogo, then usual ring rush with 4 in the mogo
+  chassis.pid_drive_set(-24.5_in, DRIVE_SPEED*0.4);
+  chassis.pid_wait_until(-23.5);
+  mogoclamp.set(true);
+  chassis.pid_wait_quick_chain();
+  
+  pros::delay(75);
+
+  chassis.pid_turn_set(90_deg, TURN_SPEED*0.8);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(26_in, DRIVE_SPEED*0.8);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-120_deg, TURN_SPEED*0.8);
+  chassis.pid_wait();
+  lbPID.target_set(13000);
+
+  chassis.pid_drive_set(37_in, DRIVE_SPEED*0.6);
+  chassis.pid_wait();
+
+  intake_speed_high = 0;
+
+
+}
+
+void blueNegative() {
+  selectBlueTeam();
+  //Grab Mogo, then usual ring rush with 4 in the mogo
+  chassis.pid_drive_set(-24.5_in, DRIVE_SPEED*0.4);
+  chassis.pid_wait_until(-23.5);
+  mogoclamp.set(true);
+  chassis.pid_wait_quick_chain();
+  
+  pros::delay(75);
   
   //mess with this turn
   chassis.pid_turn_set(-136_deg, TURN_SPEED*0.8);
   chassis.pid_wait();
+  intake_speed_high = 127;
   intake_speed_low = 127;
   
-  chassis.pid_drive_set(20_in, DRIVE_SPEED*0.60);
+  chassis.pid_drive_set(19_in, DRIVE_SPEED*0.60);
   chassis.pid_wait();
   pros::delay(50);
   
@@ -624,103 +636,22 @@ void blueNegative() {
   
   pros::delay(50);
 
-  chassis.pid_turn_set(60_deg, TURN_SPEED);
+  chassis.pid_turn_set(60_deg, TURN_SPEED*0.7);
   chassis.pid_wait();
 
   intake_speed_low = 127; 
 
-  chassis.pid_drive_set(40_in, DRIVE_SPEED);
+  chassis.pid_drive_set(20_in, DRIVE_SPEED);
   chassis.pid_wait();
-  mogoclamp.set(false);
-  chassis.pid_drive_set(12_in, DRIVE_SPEED*0.5); // slow down the robot so that we don't launch the ring
-  chassis.pid_wait();
-
-  pros::delay(50);
-
-  chassis.pid_drive_set(10_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  lbPID.target_set(2150);
-
-  chassis.pid_drive_set(6_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  intake_speed_high = 0;
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(4_in, DRIVE_SPEED);
-  chassis.pid_wait();
-
-  lbPID.target_set(23500);
-
-  chassis.pid_drive_set(-4_in, DRIVE_SPEED);
-
-  //lb_wait();
-
-
   
-
-
-
-
-
-
-  /*
-  intake_speed_low = 127;
-  intake_speed_high = 127;
-  chassis.pid_drive_set(10_in, DRIVE_SPEED);
+  chassis.pid_turn_set(135_deg, TURN_SPEED);
   chassis.pid_wait();
-  */
-  pros::delay(1500);
+  lbPID.target_set(14000);
 
-  // chassis.pid_turn_set(180_deg, TURN_SPEED);
-  // chassis.pid_wait();
+  chassis.pid_drive_set(13_in, DRIVE_SPEED);
+  chassis.pid_wait();
 
-  // chassis.pid_drive_set(34_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  // lbPID.target_set(11000);
-
-
-  // chassis.pid_drive_set(50_in, 70);
-  // chassis.pid_wait();
-
-  // chassis.pid_drive_set(15_in, 70);
-  // chassis.pid_wait();
-
-  // pros::delay(400);
-
-  // lbPID.target_set(2300);
-
-  // chassis.pid_turn_set(6_deg, DRIVE_SPEED);
-  // chassis.pid_wait();
-  
-  // chassis.pid_drive_set(4_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-  // lbPID.target_set(19000);
-  // chassis.pid_drive_set(30_in, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-
-  // //Go to corner, and then intake 2 more rings and LB
-
-  // chassis.pid_odom_set({{11.85_in, 12.85_in, 10_deg}, fwd, DRIVE_SPEED}, true);
-  // chassis.pid_wait();
-
-  // doinker.set(true);
-  // pros::delay(300);
-  // chassis.pid_turn_relative_set(-100_deg, DRIVE_SPEED);
-  // chassis.pid_wait();
-
-
-  //Go to ally stake 
-
-
-
-  
-  // then touch ladder
   intake_speed_high = 0;
   intake_speed_low = 0;
+
 }

@@ -7,6 +7,8 @@ void bluePositive();
 void redNegative();
 void blueNegative();
 void colorTest();
+void blueCarried();
+void redCarried();
 void drive_example();
 void turn_example();
 void drive_and_turn();
